@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/* Removed invalid @theme at-rule, moved variables to :root */
+:root {
+    --font-display: "Satoshi", "sans-serif";
+    --breakpoint-3xl: 1920px;
+    --color-avocado-100: oklch(0.99 0 0);
+    --color-avocado-200: oklch(0.98 0.04 113.22);
+    --color-avocado-300: oklch(0.94 0.11 115.03);
+    --color-avocado-400: oklch(0.92 0.19 114.08);
+    --color-avocado-500: oklch(0.84 0.18 117.33);
+    --color-avocado-600: oklch(0.53 0.12 118.34);
+    --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+    --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+    --color-mint-500: oklch(0.72 0.11 178);
+    --spacing: 0.25rem;
+}
+
+@layer utilities {
+    .mt-8 {
+        margin-top: calc(var(--spacing) * 8);
+    }
+
+    .w-17 {
+        width: calc(var(--spacing) * 17);
+    }
+
+    .pr-29 {
+        padding-right: calc(var(--spacing) * 29);
+    }
+}
+
+
+@layer base {
+    h1 {
+        font-size: 1.5rem !important;
+        color: var(--color-mint-500) !important
+    }
+
+    h2 {
+       font-size: 1.2rem !important;
+        color: var(--color-mint-500) !important
+    }
+
+    h3 {
+        font-size: var(--text-lg);
+    }
+    a {
+        color: var(--color-blue-600);
+        text-decoration-line: underline;
+    }
+}
+
+@layer components {
+    .card {
+         background-color: var(--color-white);
+            border-radius: var(--radius-lg);
+            padding: --spacing(6);
+            box-shadow: var(--shadow-xl);
+    }
+}
