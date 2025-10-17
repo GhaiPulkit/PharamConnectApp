@@ -1,0 +1,24 @@
+
+> @pharmaconnectapp/ui@0.1.0 dev /Users/pulkitghai/Personal/PharamConnectApp/apps/ui
+> next dev
+
+ [33m[1m⚠[22m[39m Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/pulkitghai/Personal/pnpm-lock.yaml as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * /Users/pulkitghai/Personal/PharamConnectApp/pnpm-lock.yaml
+
+   [1m[38;2;173;127;168m▲ Next.js 15.5.4[39m[22m
+   - Local:        http://localhost:3000
+   - Network:      http://10.0.0.193:3000
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 1331ms
+ [37m[1m○[22m[39m Compiling /home ...
+ [32m[1m✓[22m[39m Compiled /home in 4.7s (2733 modules)
+ GET /home [32m200[39m in 5508ms
+ [37m[1m○[22m[39m Compiling /_not-found ...
+ [32m[1m✓[22m[39m Compiled /_not-found in 1012ms (2738 modules)
+ GET /logo.svg [33m404[39m in 1184ms
+ GET /home [32m200[39m in 162ms
