@@ -1,0 +1,23 @@
+{
+  "name": "pharma-connect-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.1",
+  "dependencies": {
+    "@chakra-ui/react": "^2.10.9",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "antd": "^5.27.4",
+    "framer-motion": "^12.23.22"
+  },
+  "devDependencies": {
+    "@types/antd": "^0.12.32"
+  }
+}
