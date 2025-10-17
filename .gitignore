@@ -17,4 +17,7 @@ yarn-error.log*
 # Environment files
 .env
 .env.*
-.turbo/cookies/1.cookie
+.turbo/cookies/*
+apps/ui/.next/types/cache-life.d.ts
+.turbo/*
+apps/ui/.next
