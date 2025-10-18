@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ui:dev": "turbo run dev --filter=@pharmaconnectapp/ui"
+    "ui:dev": "turbo run dev --filter=@pharmaconnectapp/ui",
+    "build": "turbo run build --filter=@pharmaconnectapp/ui"
   },
   "keywords": [],
   "author": "",
