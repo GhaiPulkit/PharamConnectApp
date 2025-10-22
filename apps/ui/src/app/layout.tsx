@@ -9,7 +9,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <html lang="en">
             <body>
                 <AppWrappers>
-                    <div className="prose h-screen w-screen overflow-x-hidden ">
+                    <div className="prose h-screen w-screen overflow-x-hidden " style={{ background: 'linear-gradient(270deg, white, #ccc, white)' }}>
                         <Header />
                         {children}
                     </div>

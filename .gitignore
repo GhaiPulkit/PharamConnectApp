@@ -21,3 +21,4 @@ yarn-error.log*
 apps/ui/.next/types/cache-life.d.ts
 .turbo/*
 apps/ui/.next
+apps/ui/.next/*

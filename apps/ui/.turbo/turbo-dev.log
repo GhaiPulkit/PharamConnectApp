@@ -22,3 +22,75 @@
  [32m[1m✓[22m[39m Compiled /_not-found in 1012ms (2738 modules)
  GET /logo.svg [33m404[39m in 1184ms
  GET /home [32m200[39m in 162ms
+ [32m[1m✓[22m[39m Compiled in 574ms (2733 modules)
+ GET /home [32m200[39m in 412ms
+ [37m[1m○[22m[39m Compiling /_not-found ...
+ [32m[1m✓[22m[39m Compiled /_not-found in 560ms (2724 modules)
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/apps/ui/src/components/AppWrappers.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'419503944'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/apps/ui/src/components/Header.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'3702614664'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/client/components/layout-router.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'1728398120'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/client/components/render-from-template-context.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'1944419912'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/client/components/layout-router.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'1728398120'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/client/components/render-from-template-context.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'1944419912'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/lib/framework/boundary-components.js#OutletBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'1843447752'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/client/components/metadata/async-metadata.js#AsyncMetadataOutlet" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'922648584'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/lib/framework/boundary-components.js#ViewportBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'1880364616'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/lib/framework/boundary-components.js#MetadataBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'981464712'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/client/components/builtin/global-error.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'2974543944'[39m
+}
+[Error: An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.] {
+  digest: [32m'2974543944'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/lib/framework/boundary-components.js#ViewportBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'1880364616'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/esm/lib/framework/boundary-components.js#MetadataBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'981464712'[39m
+}
+ [31m[1m⨯[22m[39m Error: Could not find the module "[project]/PharamConnectApp/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/client/components/builtin/global-error.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: [32m'2974543944'[39m
+}
+ [31m[1m⨯[22m[39m [Error: An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.] {
+  digest: [32m'2974543944'[39m
+}
+ [31m[1m⨯[22m[39m [Error: An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.] {
+  digest: [32m'2974543944'[39m
+}
+ [37m[1m○[22m[39m Compiling /_error ...
+ [32m[1m✓[22m[39m Compiled /_error in 1052ms (3064 modules)
+ GET /logo.svg [31m500[39m in 4644ms
