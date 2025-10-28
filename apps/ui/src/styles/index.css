@@ -38,12 +38,13 @@
     }
 
     h2 {
-       font-size: 1.2rem !important;
+       font-size: 2rem !important;
         color: black !important
     }
 
     h3 {
-        font-size: var(--text-lg);
+        font-size: 1.5rem !important;
+         color: black !important
     }
     a {
         color: var(--color-blue-600);

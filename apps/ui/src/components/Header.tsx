@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 
-const Links = ['Home', 'About', 'Services', 'Contact'];
+const Links = ['Home', 'Categories', 'Franchaise', 'Products'];
 
 export default function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,8 +30,8 @@ export default function Header() {
       <Flex h={16} alignItems="center" justifyContent="space-between" maxW="1200px" mx="auto">
         {/* Logo */}
         <HStack spacing={2} alignItems="center">
-          <Image src="/logo.svg" alt="Logo" boxSize="32px" />
-          <Box fontWeight="bold" fontSize="lg">MyBrand</Box>
+          <Image src="/logos/logo.png" alt="PharmaGrid Logo" boxSize="40px" />
+          <Box fontWeight="bold" fontSize="lg">PharmaGrid</Box>
         </HStack>
 
         {/* Desktop Menu */}
