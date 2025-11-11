@@ -54,6 +54,9 @@
         font: 1rem sans-serif;
         color: #111111;
     }
+    input {
+        color:#111111 !important;
+    }
 }
 
 @layer components {

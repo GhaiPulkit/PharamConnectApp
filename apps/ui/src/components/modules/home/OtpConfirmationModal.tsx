@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Modal,
   ModalOverlay,
@@ -6,110 +8,158 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
   Button,
-} from '@chakra-ui/react'
+  Input,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  useToast,
+} from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 type OTPModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  onCloseCallback: () => void;
 };
 
-export default function OTPModal({ isOpen, onClose }: OTPModalProps) {
+const schema = yup.object({
+  firstName: yup.string().required("First name required"),
+  lastName: yup.string().required("Last name required"),
+  email: yup.string().email("Invalid email").required("Email required"),
+  phone: yup.string().required("Phone required"),
+  company: yup.string().required(),
+  otp: yup.string().length(6, "OTP must be 6 digits").required("OTP required"),
+});
+
+
+type FormData = yup.InferType<typeof schema>;
+
+async function verifyOTP(otp: string) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(otp === "123456"), 800);
+  });
+}
+
+export default function OTPModal({ isOpen, onClose, onCloseCallback }: OTPModalProps) {
+  const toast = useToast();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    watch,
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      firstName: "Pulkit",
+      lastName: "Ghai",
+      email: "example@gmail.com",
+      phone: "999009900",
+      company: "Hey",
+      otp: "123456",
+    },
+  });
+
+  const otpValue = watch("otp");
+
+  const onSubmit = async (values: FormData) => {
+    const ok = await verifyOTP(values.otp || "");
+
+    if (!ok) {
+      toast({
+        title: "Invalid OTP",
+        description: "Please enter 123456",
+        status: "error",
+      });
+      return;
+    }
+
+    onCloseCallback();
+    toast({
+      title: "Success!",
+      description: "OTP verified and form submitted.",
+      status: "success",
+    });
+    onClose();
+  };
 
   return (
-    <>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Hey</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    const form = e.currentTarget;
-                    const data = {
-                        firstName: (form.elements.namedItem('firstName') as HTMLInputElement).value,
-                        lastName: (form.elements.namedItem('lastName') as HTMLInputElement).value,
-                        email: (form.elements.namedItem('email') as HTMLInputElement).value,
-                        phone: (form.elements.namedItem('phone') as HTMLInputElement).value,
-                        company: (form.elements.namedItem('company') as HTMLInputElement).value,
-                        otp: (form.elements.namedItem('otp') as HTMLInputElement).value,
-                    };
-                    // TODO: send data to backend / verify OTP
-                    console.log('submit', data);
-                    onClose();
-                }}
-            >
-                <div style={{ display: 'grid', gap: 12 }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                        <label style={{ display: 'flex', flexDirection: 'column' }}>
-                            First name
-                            <input name="firstName" required />
-                        </label>
-                        <label style={{ display: 'flex', flexDirection: 'column' }}>
-                            Last name
-                            <input name="lastName" required />
-                        </label>
-                    </div>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Please submit your details to proceed</ModalHeader>
+        <ModalCloseButton />
+        <form onSubmit={handleSubmit(onSubmit)}>
+        <ModalBody>
+          
+            <div style={{ display: "grid", gap: 16 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
 
-                    <label style={{ display: 'flex', flexDirection: 'column' }}>
-                        Email
-                        <input name="email" type="email" required />
-                    </label>
+                <FormControl isInvalid={!!errors.firstName}>
+                  <FormLabel>First Name</FormLabel>
+                  <Input {...register("firstName")} />
+                  <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
+                </FormControl>
 
-                    <label style={{ display: 'flex', flexDirection: 'column' }}>
-                        Phone number
-                        <input name="phone" type="tel" inputMode="tel" required />
-                    </label>
+                <FormControl isInvalid={!!errors.lastName}>
+                  <FormLabel>Last Name</FormLabel>
+                  <Input {...register("lastName")} />
+                  <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
+                </FormControl>
+              </div>
 
-                    <label style={{ display: 'flex', flexDirection: 'column' }}>
-                        Company
-                        <input name="company" />
-                    </label>
+              <FormControl isInvalid={!!errors.email}>
+                <FormLabel>Email</FormLabel>
+                <Input type="email" {...register("email")} />
+                <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+              </FormControl>
 
-                    <div style={{ height: 1, background: '#eee', margin: '8px 0' }} />
+              <FormControl isInvalid={!!errors.phone}>
+                <FormLabel>Phone Number</FormLabel>
+                <Input type="tel" {...register("phone")} />
+                <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
+              </FormControl>
 
-                    <label style={{ display: 'flex', flexDirection: 'column' }}>
-                        OTP (6 digits)
-                        <input
-                            name="otp"
-                            inputMode="numeric"
-                            pattern="\d{6}"
-                            maxLength={6}
-                            placeholder="Enter OTP"
-                        />
-                    </label>
+              <FormControl>
+                <FormLabel>Company</FormLabel>
+                <Input {...register("company")} />
+              </FormControl>
 
-                    <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-                        <Button
-                            type="button"
-                            onClick={() => {
-                                // TODO: request/send OTP using current form values
-                                // e.g. collect form values and call API to send OTP
-                                console.log('Request OTP clicked');
-                            }}
-                        >
-                            Request OTP
-                        </Button>
+              <div style={{ height: 1, background: "#eee", margin: "8px 0" }} />
 
-                        <Button type="submit" colorScheme="blue">
-                            Verify & Submit
-                        </Button>
-                    </div>
-                </div>
-            </form>
-          </ModalBody>
+              <FormControl isInvalid={!!errors.otp}>
+                <FormLabel>OTP (6 digits)</FormLabel>
+                <Input maxLength={6} inputMode="numeric" {...register("otp")} />
+                <FormErrorMessage>{errors.otp?.message}</FormErrorMessage>
+              </FormControl>
 
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={() => onClose()}>
-              Close
-            </Button>
-            <Button variant='ghost'>Secondary Action</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  )
+            </div>
+
+        </ModalBody>
+
+        <ModalFooter className="flex gap-4">
+          <Button
+            type="button"
+            onClick={() =>
+              toast({
+                title: "OTP Sent",
+                description: "Use 123456 as OTP (mocked).",
+                status: "info",
+              })
+            }
+          >
+            Request OTP
+          </Button>
+
+          <Button type="submit" colorScheme="blue" isLoading={isSubmitting} isDisabled={!otpValue}>
+            Verify & Submit
+          </Button>
+        </ModalFooter>
+                  </form>
+      </ModalContent>
+    </Modal>
+  );
 }
