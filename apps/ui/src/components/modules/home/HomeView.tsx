@@ -38,7 +38,7 @@ const HomeView: React.FC = () => {
 
     const handleOnSubmit = (data: any) => {
         console.log("Form Submitted: ", data);
-        setCriteria(data);
+        setCriteria({formType: selectedCategory, ...data});
         onOpen();
     }
 
@@ -49,11 +49,66 @@ const HomeView: React.FC = () => {
             return;
         }
         setFilteredDataSource(() => {
-            return dataSource?.current.filter(({ interestedInPCD, interestedInPCDMonopoly }) => {
+            return dataSource?.current.filter((item) => {
                 if (!criteria) return true;
                 let match = true;
-                match = criteria?.interestedInPCDMonopoly && match && interestedInPCDMonopoly == criteria?.interestedInPCDMonopoly;
-                match = criteria?.interestedInPCD && match && interestedInPCD == criteria?.interestedInPCD;
+                switch (criteria.formType){
+                    case PHARMA_CATEGORIES.PCD: {
+                        match = criteria?.interestedInPCDMonopoly && match && item.interestedInPCDMonopoly == criteria?.interestedInPCDMonopoly;
+                        match = criteria?.interestedInPCD && match && item.interestedInPCD == criteria?.interestedInPCD;
+                        break;
+                    }
+                    case PHARMA_CATEGORIES.THIRD_PARTY: {
+                    if (criteria.product) {
+                        match =
+                            match &&
+                            !!item.products?.some((p) =>
+                                (p.category ?? "").toLowerCase().includes((criteria.product ?? "").toLowerCase()) ||
+                                (p.composition ?? "").toLowerCase().includes((criteria.product ?? "").toLowerCase())
+                            );
+                    }
+
+                    if (criteria.salt) {
+                        match =
+                            match &&
+                            !!item.products?.some((p) =>
+                                (p.composition ?? "").toLowerCase().includes((criteria.salt ?? "").toLowerCase())
+                            );
+                    }
+                    if (criteria.minOrders) {
+                        match =
+                            match &&
+                            (item.productsCount ?? 0) >= Number(criteria.minOrders);
+                    }
+                    break;
+                    }
+                    case PHARMA_CATEGORIES.PRIVATE_LABEL: {
+                        match = criteria.medicineSystem && match &&
+                                !!item.medicineSystem
+                                    ?.toLowerCase()
+                                    .includes(criteria.medicineSystem.toLowerCase());
+
+                        const needExportCriteria = criteria.needExport.toLowerCase() === "yes";
+                        match = match && item.needExport === needExportCriteria;
+
+                        if (criteria.productListing) {
+                            const searchTerms = criteria.productListing
+                                .toLowerCase()
+                                .split(",")
+                                .map((t: string) => t.trim())
+                                .filter(Boolean);
+                            match =
+                                match &&
+                                !!item.products?.some((p) =>
+                                    searchTerms.some(
+                                        (term: string) => p.composition.toLowerCase().includes(term)
+                                    )
+                                );
+                        }
+                        break;
+                }
+            }
+
                 return match
             });
         });
