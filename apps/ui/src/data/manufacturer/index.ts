@@ -12,7 +12,9 @@ export const MANUFACTURES_LIST: Array<Manufacturer> = [
     productsCount: 120,
     successfulDeliveries: 85,
     interestedInPCD: true,
-    interestedInPCDMonopoly: true
+    interestedInPCDMonopoly: true,
+    medicineSystem: "allopathy",
+    needExport: true
   },
   {
     id: 2,
@@ -234,4 +236,6 @@ export interface Manufacturer {
     successfulDeliveries: number;
     interestedInPCD?: boolean;
     interestedInPCDMonopoly?: boolean;
+    medicineSystem?: string;
+    needExport?: boolean;
 }

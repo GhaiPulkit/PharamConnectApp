@@ -100,7 +100,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
         },
     });
 
-    const { subscribe, watch } = searchForm;
+    const { subscribe, watch, register, handleSubmit, formState: {errors} } = searchForm;
 
     /**
      * Upon changes on any field the field values of other fields will be changed
@@ -126,6 +126,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
             <FormControl variant={'floating'} >
                 <FormLabel className={'!text-center !text-xl text-gray-800'}>Composition</FormLabel>
                 <Select
+                    {...register("salt")}
                     className="!drop-shadow-xl !bg-[white]"
                     placeholder="Select Composition"
                 >
@@ -137,6 +138,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
             <FormControl variant={'floating'} >
                 <FormLabel className={'!text-center !text-xl text-gray-800'}>Product Type</FormLabel>
                 <Select
+                    {...register("product")}
                     className="!drop-shadow-xl !bg-[white]"
                     placeholder="Select Product Type"
                 >
@@ -152,7 +154,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
             </FormControl>
             <FormControl variant={'floating'} >
                 <FormLabel className={'!text-center !text-xl text-gray-800'}>Minimun Orders</FormLabel>
-                <Input className="!drop-shadow-xl !bg-[white]" id='composition' type='string' placeholder='Example, Axotocin 3mg 3w/u' />
+                <Input {...register("minOrders")} className="!drop-shadow-xl !bg-[white]" id='composition' type='string' placeholder='Example, Axotocin 3mg 3w/u' />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
             </FormControl>
             <Button size='lg' className='!bg-[black] !text-[white] mx-auto mt-4' type="submit">Search Products</Button>
