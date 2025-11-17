@@ -16,6 +16,7 @@ import { ROUTES } from "@/constants/route";
 export default function QueryResultsView({ props }: { props: any }) {
     const router = useRouter();
     const { manufacturers, setSelectedManufacturerID, query }: any = useAppPrimaryContext();
+
     // NAVIGATE TO MANUFACTURE PAGE
     const navigateToManufacturer = (id: number) => {
         setSelectedManufacturerID(id)
@@ -25,7 +26,6 @@ export default function QueryResultsView({ props }: { props: any }) {
     const [filteredDataSource, setFilteredDataSource] = useState<any>([]);
 
     useEffect(() => {
-        console.log("Search Criteria Updated: ", query);
         if (!query) {
             return;
         }
@@ -36,6 +36,9 @@ export default function QueryResultsView({ props }: { props: any }) {
                 match = query?.interestedInPCDMonopoly && match && interestedInPCDMonopoly == query?.interestedInPCDMonopoly;
                 match = query?.interestedInPCD && match && interestedInPCD == query?.interestedInPCD;
                 
+                // ADD MORE FOR THIRD PARTY AND PRIVATE
+                // match = query?.interestedInThirdParty && match && interestedInThirdParty == query?.interestedInThirdParty;
+                // match = query?.interestedInPrivateLabels && match && interestedInPrivateLabels == query?.interestedInPrivateLabels;
                 return match
             });
         });
@@ -44,10 +47,6 @@ export default function QueryResultsView({ props }: { props: any }) {
     const goToHome = () => {
         router.push(ROUTES.HOME)
     }
-
-    useEffect(() => {
-        console.log(filteredDataSource)
-    }, [filteredDataSource]);
 
     return (<>
         <div className="h-auto w-full overflow-auto">

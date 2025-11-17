@@ -55,17 +55,17 @@ const PCDQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => v
     return (
         <form onSubmit={handleSubmit((data: PCDFormData) => handleOnSubmit(data))} className="space-y-4">
             <FormControl isInvalid={!!errors.cityDistrict} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">City/District</FormLabel>
+                <FormLabel className="!text-center !text-xl text-gray-800">Which city you are interested in?</FormLabel>
                 <Input {...register("cityDistrict")} placeholder="Enter city or district" />
             </FormControl>
 
             <FormControl isInvalid={!!errors.state} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">State</FormLabel>
+                <FormLabel className="!text-center !text-xl text-gray-800">Which state this city is in?</FormLabel>
                 <Input {...register("state")} placeholder="Enter state" />
             </FormControl>
 
             <FormControl isInvalid={!!errors.state} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Monopoly right?</FormLabel>
+                <FormLabel className="!text-center !text-xl text-gray-800">Monopoly rights?</FormLabel>
                 <Checkbox {...register("interestedInPCDMonopoly")} />
             </FormControl>
             <Button size='lg' className='!bg-[black] !text-[white] mx-auto mt-4' type="submit">Search Products</Button>

@@ -20,10 +20,15 @@ export default function ({ props }: { props: any }) {
     const [selectedCategory, setSelectedCategory] = useState<PHARMA_CATEGORIES>(PHARMA_CATEGORIES.PCD);
 
     const handleOnSubmit = (data: any) => {
+        // THIS DATA MUST BE SAVED SOMEWHERE AND WILL BE USED IN SENDING LEAD TO MANUFACTURER
         console.log("Form Submitted: ", data);
+
+        // ASK FOR OTP IF THE USE ONLY ON 1ST Search
         // onOpen();
-        //step 1: set the query for results in context
+
+        //SET QUERY -  WORKS
         setQuery(data);
+        
         //Navigate to Results page.
         navigateToResults();
     }

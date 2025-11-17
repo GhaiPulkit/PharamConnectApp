@@ -2,12 +2,13 @@
 
 import NoRecordFound from "@/components/common/NoRecordFound";
 import { useAppPrimaryContext } from "@/context/AppContext";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page({ }) {
     const { manufacturers, selectedManufacturerID }: any = useAppPrimaryContext();
     const [manufacturer, setManufacturer] = useState<any>();
-
+    const queryparam = useSearchParams();
     // const manufacturer = {
     //     name: "ABC Manufacturing Co.",
     //     location: "Delhi, India",
@@ -40,12 +41,14 @@ export default function Page({ }) {
     // }
 
     useEffect(() => {
-        selectedManufacturerID && setManufacturer(manufacturers[selectedManufacturerID])
-    }, [selectedManufacturerID])
+        console.log(queryparam?.get("manufacturerId"))
+        setManufacturer(manufacturers.filter(({id}: {id: any}) => id == queryparam?.get("manufacturerId")))
+    }, [queryparam])
 
     useEffect(() => {
-        console.log(manufacturer)
-    }, [manufacturer])
+        console.log(manufacturers)
+    }, [manufacturers])
+
     return (<>
         {manufacturer ? <div className="flex flex-col gap-2 max-w-[1200px] mx-auto py-4">
             <h1 className="text-3xl font-bold">{manufacturer?.name}</h1>
@@ -65,7 +68,7 @@ export default function Page({ }) {
                         </div>
                         {/* heat map section */}
                         <section className="flex flex-col gap-4 py-4 w-full">
-                            {manufacturer?.best_sellers.length > 0 && <h4 className="text-2xl font-bold">Best Sellers</h4>}
+                            {manufacturer?.best_sellers?.length > 0 && <h4 className="text-2xl font-bold">Best Sellers</h4>}
                             {/* <div className="flex">
                                 {manufacturer.best_sellers.map((item) => (
                                     <div key={item.id} className="px-3 py-1 bg-[#ff572290] text-white rounded-full mr-2 text-sm">
