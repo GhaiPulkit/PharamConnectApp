@@ -82,7 +82,8 @@ const ThirdPartyQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: an
 const productFormSchema = yup.object({
     product: yup.string(),
     salt: yup.string(),
-    minOrders: yup.number()
+    minOrders: yup.number(),
+    interestedInThirdPartyProducts: yup.boolean().default(true),
 }).required();
 
 // Infer TypeScript type from schema (optional but helpful)
@@ -96,7 +97,8 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
         defaultValues: {
             product: "",
             salt: "",
-            minOrders: 0
+            minOrders: 0,
+            interestedInThirdPartyProducts: true,
         },
     });
 
@@ -166,6 +168,7 @@ const PrivateLabellingForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) 
         medicineSystem: yup.string().oneOf(['Ayurvedic', 'Allopathy']).required("Please choose a system"),
         productListing: yup.string().required("Product listing is required").min(3, "Provide at least one product"),
         needExport: yup.string().oneOf(['yes', 'no']).required("Please specify export requirement"),
+        interetedInPrivateLabels: yup.boolean().default(true),
     }).required();
 
     type FormData = yup.InferType<typeof schema>;

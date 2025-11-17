@@ -6,6 +6,21 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/(homeView)/welcome/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(homeView)/welcome/page.js"
+    ],
+    "/(homeView)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(homeView)/layout.js"
+    ],
+    "/(homeView)/results/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(homeView)/results/page.js"
+    ],
     "/manufacturer/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -15,6 +30,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/manufacturer/page.js"
+    ],
+    "/(homeView)/manufacturers/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(homeView)/manufacturers/page.js"
     ]
   }
 }

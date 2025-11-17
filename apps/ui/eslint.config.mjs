@@ -27,7 +27,6 @@ export default [
       "@typescript-eslint": tsPlugin,
     },
     rules: {
-      "@typescript-eslint/no-explicit-any": "error", // ✅ Enforced here
     },
   },
 

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",
+    "@faker-js/faker": "^10.1.0",
     "@hookform/resolvers": "^5.2.2",
     "@types/antd": "^1.0.4",
     "antd": "^5.27.4",

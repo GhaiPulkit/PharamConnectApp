@@ -19,17 +19,27 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/constants/route';
+import path from 'path';
 
-const Links = ['Home', 'Categories', 'Franchaise', 'Products'];
+const Links = [{label: 'Home', path:ROUTES.HOME}, {label: 'Browse Manufacturer', path: ROUTES.MANUFACTURERS}, 
+  {label:"Blogs", path:ROUTES.NOT_FOUND}
+];
 
 export default function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
 
+
+  const navigateToLink = (path: any) =>{
+    return router.push(path)
+  }
   return (
     <Box bg="white" px={4} boxShadow="sm" position="sticky" top="0" zIndex="1000">
       <Flex h={16} alignItems="center" justifyContent="space-between" maxW="1200px" mx="auto">
         {/* Logo */}
-        <HStack spacing={2} alignItems="center">
+        <HStack spacing={2} alignItems="center" onClick={()=> navigateToLink(ROUTES.HOME)}>
           <Image src="/logos/logo.png" alt="PharmaGrid Logo" boxSize="40px" />
           <Box fontWeight="bold" fontSize="lg">PharmaGrid</Box>
         </HStack>
@@ -38,14 +48,14 @@ export default function Header() {
         <HStack as="nav" spacing={6} display={{ base: 'none', md: 'flex' }}>
           {Links.map((link) => (
             <Link
-              key={link}
+              key={link.label}
               px={2}
               py={1}
               rounded="md"
               _hover={{ textDecoration: 'none', bg: 'gray.100' }}
-              href={`#${link.toLowerCase()}`}
+              onClick={() => navigateToLink(link.path)}
             >
-              {link}
+              {link.label}
             </Link>
           ))}
         </HStack>
@@ -70,12 +80,12 @@ export default function Header() {
               <Stack as="nav" spacing={4}>
                 {Links.map((link) => (
                   <Link
-                    key={link}
-                    href={`#${link.toLowerCase()}`}
+                    key={link.label}
+                    href={`#${link.label.toLowerCase()}`}
                     onClick={onClose}
                     _hover={{ textDecoration: 'none', color: 'blue.500' }}
                   >
-                    {link}
+                    {link.label}
                   </Link>
                 ))}
               </Stack>

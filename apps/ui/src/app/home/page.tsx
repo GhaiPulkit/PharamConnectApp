@@ -1,6 +1,7 @@
 'use client';
 
 import HomeView from '@/components/modules/home/HomeView';
+import { getManufacturers } from '@/data/manufacturer';
 import * as React from 'react'
 
 export default function Home() {
