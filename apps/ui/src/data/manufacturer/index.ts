@@ -30,17 +30,27 @@ function createCompositions() {
 function createProduct() {
   return {
     p_id: faker.string.uuid(),
-    p_name: faker.company.buzzNoun(),
+    p_name: faker.helpers.arrayElement([
+      "Paracetamol","Amoxicillin","Pantoprazole","Azithromycin"
+    ]),
     composition: faker.helpers.multiple(createCompositions, {
       count: Math.floor(Math.random() * 1),
     }),
-    p_category: category.AYURVEDIC,
-    price: 150,
-    minOrderRequired: 12,
-    packageType: "BOTTLE", // BOTTLE / CAPSULE,
-    packageSize: "200ml" // 1L / 10 tabs /2 tabs
-  }
+    p_category: faker.helpers.arrayElement([category.ALOPATHY, category.AYURVEDIC, category.HOMEOPATHY]),
+    price: faker.number.int({ min: 50, max: 800 }),
+    minOrderRequired: faker.number.int({ min: 1, max: 100 }),
+    productType: faker.helpers.arrayElement([
+      "tablet", "capsule", "syrup", "ointment", "injection"
+    ]),
+    packageType: faker.helpers.arrayElement([   // ✅ Fix field name
+      "ALU-ALU", "ALU-PVC", "BLISTER", "BLISTER-BOX", "STRIP PACK"
+    ]),
+    packageSize: faker.helpers.arrayElement([
+      "10x10", "200 ml", "4x5x10", "60 ml"
+    ])
+  };
 }
+
 
 /**Manufacturer */
 function createRandomManufacturer():any {
@@ -70,7 +80,7 @@ function createRandomManufacturer():any {
 }
 
 enum category {
-  ALOPATHY, AYURVEDIC /// DETAILS NOT AVAILABLE
+  ALOPATHY, AYURVEDIC, HOMEOPATHY
 }
 
 export const getManufacturers = faker.helpers.multiple(createRandomManufacturer, {
