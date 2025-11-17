@@ -168,7 +168,7 @@ const PrivateLabellingForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) 
         medicineSystem: yup.string().oneOf(['Ayurvedic', 'Allopathy']).required("Please choose a system"),
         productListing: yup.string().required("Product listing is required").min(3, "Provide at least one product"),
         needExport: yup.string().oneOf(['yes', 'no']).required("Please specify export requirement"),
-        interetedInPrivateLabels: yup.boolean().default(true),
+        interestedInPrivateLabels: yup.boolean().default(true),
     }).required();
 
     type FormData = yup.InferType<typeof schema>;
