@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import type { Resolver } from "react-hook-form";
 import * as yup from "yup";
 import { useEffect } from "react";
+import { ProductType } from '../../../data/product/productType';
 
 
 /**
@@ -79,12 +80,20 @@ const ThirdPartyQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: an
 
 
 // Yup validation schema
+// const productFormSchema = yup.object({
+//     product: yup.string(),
+//     salt: yup.string(),
+//     minOrders: yup.number(),
+//     interestedInThirdPartyProducts: yup.boolean().default(true),
+// }).required();
 const productFormSchema = yup.object({
-    product: yup.string(),
-    salt: yup.string(),
-    minOrders: yup.number(),
+    composition: yup.string().oneOf(COMPOSITIONS).required("Composition is required"),
+    productType: yup.string().oneOf(PRODUCT_TYPES).required("Product Type is required"),
+    packetSize: yup.string().required("Packet size required"),
+    minOrders: yup.number().min(1, "Minimum 1 order").required(),
     interestedInThirdPartyProducts: yup.boolean().default(true),
-}).required();
+});
+
 
 // Infer TypeScript type from schema (optional but helpful)
 type ProductFormData = yup.InferType<typeof productFormSchema>;
@@ -92,14 +101,15 @@ type ProductFormData = yup.InferType<typeof productFormSchema>;
 const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => void }) => {
 
     const searchForm = useForm<ProductFormData>({
-        resolver: yupResolver(productFormSchema) as Resolver<ProductFormData>,
+        resolver: yupResolver(productFormSchema),
         mode: "onChange",
         defaultValues: {
-            product: "",
-            salt: "",
+            composition: undefined,
+            productType: undefined,
+            packetSize: "",
             minOrders: 0,
-            interestedInThirdPartyProducts: true,
-        },
+            interestedInThirdPartyProducts: true
+        }
     });
 
     const { subscribe, watch } = searchForm;
@@ -124,10 +134,11 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
     }, [subscribe]);
 
     return (<>
-        <form onSubmit={searchForm.handleSubmit((data: ProductFormData) => handleOnSubmit(data))} className="space-y-4">
+        <form onSubmit={searchForm.handleSubmit(handleOnSubmit)} className="space-y-4">
             <FormControl variant={'floating'} >
                 <FormLabel className={'!text-center !text-xl text-gray-800'}>Composition</FormLabel>
                 <Select
+                    {...searchForm.register("composition")}
                     className="!drop-shadow-xl !bg-[white]"
                     placeholder="Select Composition"
                 >
@@ -139,6 +150,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
             <FormControl variant={'floating'} >
                 <FormLabel className={'!text-center !text-xl text-gray-800'}>Product Type</FormLabel>
                 <Select
+                    {...searchForm.register("productType")}
                     className="!drop-shadow-xl !bg-[white]"
                     placeholder="Select Product Type"
                 >
@@ -149,12 +161,12 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
             </FormControl>
             <FormControl variant={'floating'} >
                 <FormLabel className={'!text-center !text-xl text-gray-800'}>Packet Size</FormLabel>
-                <Input className="!drop-shadow-xl !bg-[white]" id='composition' type='string' placeholder='Example, Axotocin 3mg 3w/u' />
+                <Input {...searchForm.register("packetSize")} className="!drop-shadow-xl !bg-[white]" id='composition' type='string' placeholder='Example, Axotocin 3mg 3w/u' />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
             </FormControl>
             <FormControl variant={'floating'} >
                 <FormLabel className={'!text-center !text-xl text-gray-800'}>Minimun Orders</FormLabel>
-                <Input className="!drop-shadow-xl !bg-[white]" id='composition' type='string' placeholder='Example, Axotocin 3mg 3w/u' />
+                <Input className="!drop-shadow-xl !bg-[white]" {...searchForm.register("minOrders")} id='composition' type='number' placeholder='Example, Axotocin 3mg 3w/u' />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
             </FormControl>
             <Button size='lg' className='!bg-[black] !text-[white] mx-auto mt-4' type="submit">Search Products</Button>

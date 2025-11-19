@@ -21,13 +21,17 @@ export default function ({ props }: { props: any }) {
 
     const handleOnSubmit = (data: any) => {
         // THIS DATA MUST BE SAVED SOMEWHERE AND WILL BE USED IN SENDING LEAD TO MANUFACTURER
-        console.log("Form Submitted: ", data);
+        const finalQuery = {
+            category: selectedCategory,   
+            ...data
+        };
+        console.log("Form Submitted: ", finalQuery);
 
         // ASK FOR OTP IF THE USE ONLY ON 1ST Search
         // onOpen();
 
         //SET QUERY -  WORKS
-        setQuery(data);
+        setQuery(finalQuery);
         
         //Navigate to Results page.
         navigateToResults();
@@ -80,7 +84,7 @@ export default function ({ props }: { props: any }) {
             </div>
             <div className="rounded-md  overflow-hidden "  >
                 <div className=" px-[3rem] h-full w-full flex flex-col items-center justify-center gap-4">
-                    <h1 className="text-center font-bold">Your one stop desitination for Pharama Marketplace</h1>
+                    <h1 className="text-center font-bold">Your one stop desitination for Pharma Marketplace</h1>
                     <p className="text-center text-gray-600 italic">Connect with verified manufacturers, traders, and distributors. Find quality pharmaceutical products or offer your manufacturing services.</p>
                 </div>
             </div>

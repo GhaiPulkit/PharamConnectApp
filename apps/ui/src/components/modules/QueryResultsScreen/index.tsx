@@ -8,6 +8,7 @@ import NoRecordFound from "@/components/common/NoRecordFound";
 import { IoReturnDownBack } from "react-icons/io5";
 import { Button } from "@chakra-ui/react";
 import { ROUTES } from "@/constants/route";
+import { PHARMA_CATEGORIES } from "../home/constants";
 
 /**
  * 
@@ -24,26 +25,96 @@ export default function QueryResultsView({ props }: { props: any }) {
     }
 
     const [filteredDataSource, setFilteredDataSource] = useState<any>([]);
-
+	useEffect(() => {
+	console.log("Sample manufacturer", manufacturers);
+	}, []);
     useEffect(() => {
         if (!query) {
             return;
         }
         setFilteredDataSource(() => {
-            return manufacturers?.filter(({ interestedInPCD, interestedInPCDMonopoly }: any) => {
-                if (!query) return true;
-                let match = true;
-                match = query?.interestedInPCDMonopoly && match && interestedInPCDMonopoly == query?.interestedInPCDMonopoly;
-                match = query?.interestedInPCD && match && interestedInPCD == query?.interestedInPCD;
-                
-                // ADD MORE FOR THIRD PARTY AND PRIVATE
-                // match = query?.interestedInThirdParty && match && interestedInThirdParty == query?.interestedInThirdParty;
-                // match = query?.interestedInPrivateLabels && match && interestedInPrivateLabels == query?.interestedInPrivateLabels;
-                return match
-            });
-        });
-    }, [query]);
+        return manufacturers.filter((m: any) => {
 
+            // Filter based on category
+            switch (query.category) {
+
+                case PHARMA_CATEGORIES.PCD: {
+                    let match = true;
+                    match =  query?.interestedInPCD && match && m.interestedInPCD == query?.interestedInPCD;
+                    match = query?.interestedInPCDMonopoly && match && m.interestedInPCDMonopoly == query?.interestedInPCDMonopoly;
+                    return match;
+                }
+
+                case PHARMA_CATEGORIES.THIRD_PARTY: {
+					let match = true;
+
+					if (query.composition) {
+						const comp = query.composition.toLowerCase();
+						match = match && m.products?.some((p: any) =>
+						Array.isArray(p.composition) &&
+						p.composition.some((c: any) =>
+							String(c.composition || "").toLowerCase().includes(comp)
+						)
+						);
+					}
+
+
+					// to be verified
+					// if (query.productType) {
+					// 	match = match && m.products?.some((p: any) =>
+					// 	p.productType?.toLowerCase() === query.productType.toLowerCase()
+					// 	);
+					// }
+
+					// if (query.packetSize) {
+					// 	match = match && m.products?.some((p: any) =>
+					// 	String(p.packageSize || "").toLowerCase().includes(query.packetSize.toLowerCase())
+					// 	);
+					// }
+
+					// if (query.minOrders) {
+					// 	match = match && m.products?.some((p: any) =>
+					// 	p.minOrderRequired >= query.minOrders
+					// 	);
+					// }
+
+					return match;
+					}
+
+                case PHARMA_CATEGORIES.PRIVATE_LABEL: {
+                    let match = true;
+
+                    if (query.medicineSystem) {
+                        match = match && m.medicineSystem === query.medicineSystem;
+                    }
+
+                    if (query.needExport) {
+                        match = match && m.exportAvailable === (query.needExport === "yes");
+                    }
+
+                    if (query.productListing) {
+                        const list = query.productListing
+                            .toLowerCase()
+                            .split(",")
+                            .map((p: string) => p.trim());
+
+                        match = match && list.every((item: string) =>
+                            m.products?.some((p: any) =>
+                                p.name.toLowerCase().includes(item)
+                            )
+                        );
+                    }
+
+                    return match;
+                }
+
+                default:
+                    return true;
+            }
+        });
+    });
+    }, [query]);
+    useEffect(() => console.log(filteredDataSource),[filteredDataSource])
     const goToHome = () => {
         router.push(ROUTES.HOME)
     }
