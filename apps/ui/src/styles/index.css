@@ -54,10 +54,10 @@
         font: 1rem sans-serif;
         color: #111111;
     }
-    input {
-        color: rgb(55, 55, 55) !important;
+    input, select {
+        color: rgb(255, 255, 255) !important;
         font-weight: lighter !important;
-        background-color: aliceblue !important;
+        background-color: rgb(0, 0, 0) !important;
     }
     label {
         color: #008080 !important;

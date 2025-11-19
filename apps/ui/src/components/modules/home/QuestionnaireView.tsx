@@ -65,9 +65,12 @@ const PCDQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => v
                 <Input {...register("state")} placeholder="Enter state" />
             </FormControl>
 
-            <FormControl isInvalid={!!errors.state} variant="floating">
+            <FormControl isInvalid={!!errors.interestedInPCDMonopoly} variant="floating">
                 <FormLabel className="!text-center !text-xl text-gray-800">Monopoly rights?</FormLabel>
-                <Checkbox {...register("interestedInPCDMonopoly")} />
+                <Select {...register("interestedInPCDMonopoly")} placeholder="Select">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </Select>
             </FormControl>
             <Button size='lg' className='!bg-[black] !text-[white] mx-auto mt-4' type="submit">Search Products</Button>
         </form>

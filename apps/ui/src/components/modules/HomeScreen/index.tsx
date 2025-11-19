@@ -76,8 +76,8 @@ export default function ({ props }: { props: any }) {
                         }
                     </div>
                 </section>
-                <section>
-                    <div className="max-w-[700px] mx-auto py-2 flex flex-col gap-8" >
+                <section className="w-full px-[3rem]">
+                <div className="w-[500px] mx-auto py-2 flex flex-col gap-8 " >
                         <View selectedCategory={selectedCategory as PHARMA_CATEGORIES} handleOnSubmit={handleOnSubmit} />
                     </div>
                 </section>
