@@ -5,6 +5,7 @@ import { useAppPrimaryContext } from "@/context/AppContext";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+
 type Manufacturer = {
     id: string | number;
     name: string;

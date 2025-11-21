@@ -1,11 +1,9 @@
 
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 
 import AppWrappers from '@/components/AppWrappers';
 import Header from '@/components/Header';
-import { getManufacturers } from '@/data/manufacturer';
 import React from 'react';
-import { AppPrimaryContextProvider } from '@/context/AppContext';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 

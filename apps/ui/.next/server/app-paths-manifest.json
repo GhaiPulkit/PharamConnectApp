@@ -1,6 +1,10 @@
 {
-  "/(homeView)/results/page": "app/(homeView)/results/page.js",
   "/(homeView)/manufacturers/page": "app/(homeView)/manufacturers/page.js",
+  "/(homeView)/results/page": "app/(homeView)/results/page.js",
   "/(homeView)/welcome/page": "app/(homeView)/welcome/page.js",
-  "/manufacturer/page": "app/manufacturer/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/categories/page": "app/categories/page.js",
+  "/home/page": "app/home/page.js",
+  "/manufacturer/page": "app/manufacturer/page.js",
+  "/page": "app/page.js"
 }
