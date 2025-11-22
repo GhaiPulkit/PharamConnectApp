@@ -4,6 +4,10 @@ import NoRecordFound from "@/components/common/NoRecordFound";
 import { useAppPrimaryContext } from "@/context/AppContext";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { GiMedicines } from "react-icons/gi";
+import { cn } from "../../../utils";
+import { FaArrowAltCircleUp, FaArrowRight } from "react-icons/fa";
+import { productCategories } from "@/components/modules/ManufacturerScreen/ProductTypes";
 
 
 type Manufacturer = {
@@ -101,21 +105,11 @@ export default function Page() {
         <>
             <div className="flex flex-col gap-4 max-w-[1200px] mx-auto py-6">
                 {/* Header / Intro */}
-                <section className="box-wrap rounded-xl drop-shadow p-4 bg-[#ffffffee] backdrop-blur !border !border-[white]">
+                <section className="box-wrap drop-shadow p-4 ">
                     <div className="flex gap-4 items-start">
-                        <div className="rounded aspect-square h-[120px] w-[120px] overflow-hidden border">
-                            <img
-                                src={manufacturer.avatar}
-                                alt={`${manufacturer.name} logo`}
-                                className="h-full w-full object-cover"
-                                onError={(e) =>
-                                    (e.currentTarget.src = "https://www.freeiconspng.com/uploads/blank-logo-design-for-brand-13.png")
-                                }
-                            />
-                        </div>
                         <div className="flex-1">
-                            <h1 className="text-3xl font-bold">{manufacturer.name}</h1>
-                            <p className="text-gray-700 mt-2">{manufacturer.description}</p>
+                            <h1 className="text-3xl font-bold">{'Sun Pharma'}</h1>
+                            <p className="text-gray-700 mt-2">{'A complete solution to your manufacturer needs.'}</p>
                             {manufacturer.introduction && (
                                 <p className="text-gray-600 mt-3">{manufacturer.introduction}</p>
                             )}
@@ -124,83 +118,92 @@ export default function Page() {
                                 <div>Email: {manufacturer.email}</div>
                                 <div>Phone: {manufacturer.phone}</div>
                                 <div>Website: <a href={manufacturer.website} target="_blank" rel="noreferrer" className="text-blue-600 underline">{manufacturer.website}</a></div>
-                                <div>Established: {manufacturer.established}</div>
+                                <div>Est. {manufacturer.established || 1990}</div>
                             </div>
-                            <div className="mt-3 flex gap-2 flex-wrap">
+                            {/* <div className="mt-3 flex gap-2 flex-wrap">
                                 {manufacturer.certifications?.map((c, idx) => (
                                     <span key={idx} className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
                                         {c}
                                     </span>
                                 ))}
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </section>
+                <section className="p-4 flex flex-col gap-2">
+                    <div className="text-lg font-bold !text-[black]">About Us</div>
+                    <p className="text-md font-normal text-[#111111]"> Avecia Healthcare is an expeditiously growing pharmaceutical marketing company with 500+ products. We offer PCD Pharma Franchise for quality pharmaceutical formulations which are both affordable and convenient for mankind.
 
-                {/* Quick Stats */}
-                <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div className="box-wrap p-4 rounded-lg text-center">
-                        <div className="text-sm text-gray-500">Compositions</div>
-                        <div className="text-2xl font-semibold">{manufacturer.compositionAvailable?.length ?? 0}</div>
+Our pharmaceutical products are formulated using high-quality materials sourced from reliable and trusted manufacturers with WHO GMP Certified Unit</p>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 animate-fade-in-scale">
+                    {[{ name: "Compositions", number: 12 }, { name: "Product Types", number: 12 }, { name: "Best Sellers", number: 12 }, { name: "Certifications", number: 12 }].map((item, idx) =>
+                        <div className={cn(`box-wrap flex flex-col gap-2 p-4 rounded-lg !border-[black] !border-r-[5px] !border-b-[5px] text-center bg-[#007F72] rounded-xl drop-shadow-xl`)}>
+                            <div className=" grid grid-cols-[1fr_auto] gap-5 w-full">
+                                <div className="text-sm text-white">{item.name}
+                                    <div className="text-2xl text-white font-semibold">{manufacturer.compositionAvailable?.length ?? 0}</div>
+                                </div>
+                                <div className="flex flex-end"><GiMedicines fontSize={'1.5rem'} color={'white'} /></div></div>
+
+                            <div className=" text-sm text-gray-100 text-right flex flex-end items-center gap-2">View All <FaArrowRight color={'white'} /></div>
+                        </div>)
+                    }
+                </div>
+                </section>
+
+                {/* Types of Products */}
+                <section className="flex flex-col gap-3 p-4">
+                    <div className="text-lg font-bold !text-[black]">Types of Products</div>
+                    <div className="flex gap-3 flex-wrap justify-center animate-fade-in-scale">
+                        {productCategories.map((item: any, idx) =>
+                            <div key={`productType-w-${idx}`} className={cn(`box-wrap w-[150px] h-[150px] flex flex-col gap-2 p-4 rounded-lg !border-[black] !border-r-[5px] !border-b-[5px] text-center bg-[#E9A319] rounded-xl drop-shadow-xl`)}>
+                                <div className="h-full flex items-center justify-center flex-col gap-2">
+                                    <div className="flex flex-end"><item.icon color={'white'} fontSize={'3rem'} /></div>
+                                    <div className="text-sm text-white">{item.name}</div>
+                                    </div>
+
+                                {/* <div className=" text-sm text-gray-100 text-right flex flex-end items-center gap-2">View All <FaArrowRight color={'white'}/></div> */}
+                            </div>)
+                        }
                     </div>
-                    <div className="box-wrap p-4 rounded-lg text-center">
-                        <div className="text-sm text-gray-500">Product Types</div>
-                        <div className="text-2xl font-semibold">{manufacturer.product_types?.length ?? 0}</div>
-                    </div>
-                    <div className="box-wrap p-4 rounded-lg text-center">
-                        <div className="text-sm text-gray-500">Best Sellers</div>
-                        <div className="text-2xl font-semibold">{manufacturer.best_sellers?.length ?? 0}</div>
-                    </div>
-                    <div className="box-wrap p-4 rounded-lg text-center">
-                        <div className="text-sm text-gray-500">Certifications</div>
-                        <div className="text-2xl font-semibold">{manufacturer.certifications?.length ?? 0}</div>
-                    </div>
+
                 </section>
 
                 {/* Compositions */}
-                <section className="flex flex-col gap-3">
-                    <h2 className="text-2xl font-bold">Compositions</h2>
-                    <div className="flex gap-3 flex-wrap">
-                        {manufacturer.compositionAvailable?.map((comp) => (
-                            <div key={comp.id} className="w-[260px]">
-                                <div className="box-wrap p-4 rounded-lg h-full flex flex-col">
-                                    <h3 className="text-lg font-semibold">{comp.composition}</h3>
-                                    <p className="text-sm text-gray-600 mt-1">{comp.category ?? "Uncategorized"}</p>
-                                    <div className="mt-auto text-xs text-gray-400">ID: {comp.id}</div>
-                                </div>
-                            </div>
-                        ))}
+                <section className="flex flex-col gap-3 p-4">
+                    <div className="text-lg font-bold !text-[black]">Compositions</div>
+
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+                            <thead className="bg-gray-100 text-left">
+                                <tr>
+                                    <th className="px-4 py-2 border-b text-sm font-semibold text-gray-700">ID</th>
+                                    <th className="px-4 py-2 border-b text-sm font-semibold text-gray-700">Composition</th>
+                                    <th className="px-4 py-2 border-b text-sm font-semibold text-gray-700">Category</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {manufacturer.compositionAvailable?.map((comp, idx) => (
+                                    <tr key={comp.id + idx} className="hover:bg-gray-50">
+                                        <td className="px-4 py-2 border-b text-xs text-gray-600">{comp.id}</td>
+                                        <td className="px-4 py-2 border-b text-sm font-medium text-gray-800">
+                                            {comp.composition}
+                                        </td>
+                                        <td className="px-4 py-2 border-b text-sm text-gray-600">
+                                            {comp.category ?? "Uncategorized"}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </section>
+
 
                 {/* Product Types */}
-                <section className="flex flex-col gap-3">
-                    <h2 className="text-2xl font-bold">Product Types</h2>
-                    <div className="flex gap-3 flex-wrap">
-                        {manufacturer.product_types?.map((p) => (
-                            <div key={p.id} className="w-[260px]">
-                                <div className="box-wrap p-4 rounded-lg h-full">
-                                    <h3 className="text-lg font-semibold">{p.name}</h3>
-                                    <p className="text-sm text-gray-600 mt-1">{p.description}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+
 
                 {/* Best Sellers */}
-                <section className="flex flex-col gap-3">
-                    <h2 className="text-2xl font-bold">Best Sellers</h2>
-                    <div className="flex gap-3 flex-wrap">
-                        {manufacturer.best_sellers?.map((s) => (
-                            <div key={s.id} className="w-[220px]">
-                                <div className="box-wrap p-4 rounded-lg">
-                                    <h4 className="font-semibold">{s.name}</h4>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
 
                 {/* Footer / Contact CTA */}
                 <section className="box-wrap p-4 rounded-xl text-center">
@@ -212,6 +215,11 @@ export default function Page() {
                         </div>
                     )}
                 </section>
+
+                <div className="absolute bottom-0 right-0 h-[50px] w-auto mx-4 my-4 flex flex-col items-center gap-2 drop-shadow-xl">
+                    <FaArrowAltCircleUp color={'black'} fontSize={'2rem'}/>
+                    <p className="text-[10px]">Back To Top</p>
+                </div>
             </div>
         </>
     );
