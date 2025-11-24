@@ -9,6 +9,7 @@ import { IoReturnDownBack } from "react-icons/io5";
 import { Button } from "@chakra-ui/react";
 import { ROUTES } from "@/constants/route";
 import { PHARMA_CATEGORIES } from "../home/constants";
+import { CATEGORY_MAP } from "@/data/manufacturer";
 
 /**
  * 
@@ -25,9 +26,7 @@ export default function QueryResultsView({ props }: { props: any }) {
     }
 
     const [filteredDataSource, setFilteredDataSource] = useState<any>([]);
-	useEffect(() => {
-	console.log("Sample manufacturer", manufacturers);
-	}, []);
+
     useEffect(() => {
         if (!query) {
             return;
@@ -40,6 +39,9 @@ export default function QueryResultsView({ props }: { props: any }) {
 
                 case PHARMA_CATEGORIES.PCD: {
                     let match = true;
+                    // if (query.cityDistrict || query.state) {
+                    //     match = match && (m.location.toLowerCase() === query.cityDistrict.toLowerCase().trim() || m.location === query.state.toLowerCase().trim());
+                    // }
                     match =  query?.interestedInPCD && match && m.interestedInPCD == query?.interestedInPCD;
                     match = query?.interestedInPCDMonopoly && match && m.interestedInPCDMonopoly == query?.interestedInPCDMonopoly;
                     return match;
@@ -48,35 +50,33 @@ export default function QueryResultsView({ props }: { props: any }) {
                 case PHARMA_CATEGORIES.THIRD_PARTY: {
 					let match = true;
 
-					if (query.composition) {
-						const comp = query.composition.toLowerCase();
+					if (query.salt) {
+						const comp = query.salt.toLowerCase();
 						match = match && m.products?.some((p: any) =>
-						Array.isArray(p.composition) &&
-						p.composition.some((c: any) =>
-							String(c.composition || "").toLowerCase().includes(comp)
+						Array.isArray(p.p_salt) &&
+						p.p_salt.some((c: any) =>
+							String(c.p_salt || "").toLowerCase().includes(comp)
 						)
 						);
 					}
 
+					if (query.productType) {
+						match = match && m.products?.some((p: any) =>
+						p.productType?.toLowerCase() === query.productType.toLowerCase()
+						);
+					}
 
-					// to be verified
-					// if (query.productType) {
-					// 	match = match && m.products?.some((p: any) =>
-					// 	p.productType?.toLowerCase() === query.productType.toLowerCase()
-					// 	);
-					// }
+					if (query.packetSize) {
+						match = match && m.products?.some((p: any) =>
+						String(p.packageSize || "").toLowerCase().includes(query.packetSize.toLowerCase())
+						);
+					}
 
-					// if (query.packetSize) {
-					// 	match = match && m.products?.some((p: any) =>
-					// 	String(p.packageSize || "").toLowerCase().includes(query.packetSize.toLowerCase())
-					// 	);
-					// }
-
-					// if (query.minOrders) {
-					// 	match = match && m.products?.some((p: any) =>
-					// 	p.minOrderRequired >= query.minOrders
-					// 	);
-					// }
+					if (query.minOrders) {
+						match = match && m.products?.some((p: any) =>
+						p.minOrderRequired >= query.minOrders
+						);
+					}
 
 					return match;
 					}
@@ -85,11 +85,16 @@ export default function QueryResultsView({ props }: { props: any }) {
                     let match = true;
 
                     if (query.medicineSystem) {
-                        match = match && m.medicineSystem === query.medicineSystem;
+                        const code = CATEGORY_MAP[query.medicineSystem.toLowerCase() as keyof typeof CATEGORY_MAP];
+                        if (code !== undefined) {
+                            match =
+                                match &&
+                                m.productCategoriesSupported?.includes(code);
+                            }
                     }
 
                     if (query.needExport) {
-                        match = match && m.exportAvailable === (query.needExport === "yes");
+                        match = match && m.exportAvailable === (query.needExport == "yes");
                     }
 
                     if (query.productListing) {
@@ -100,7 +105,7 @@ export default function QueryResultsView({ props }: { props: any }) {
 
                         match = match && list.every((item: string) =>
                             m.products?.some((p: any) =>
-                                p.name.toLowerCase().includes(item)
+                                p.p_name.toLowerCase().includes(item)
                             )
                         );
                     }
@@ -114,7 +119,7 @@ export default function QueryResultsView({ props }: { props: any }) {
         });
     });
     }, [query]);
-    useEffect(() => console.log(filteredDataSource),[filteredDataSource])
+
     const goToHome = () => {
         router.push(ROUTES.HOME)
     }
