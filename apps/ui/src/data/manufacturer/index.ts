@@ -30,8 +30,11 @@ function createCompositions() {
 function createProduct() {
   return {
     p_id: faker.string.uuid(),
+    p_salt: faker.helpers.arrayElement([
+      "Paracetamol","Amoxicillin","Pantoprazole","Azithromycin", "Diclofenac"
+    ]),
     p_name: faker.helpers.arrayElement([
-      "Paracetamol","Amoxicillin","Pantoprazole","Azithromycin"
+      "Crocin","Calpol","Dolo 650","Pacimol", "Metacin", "Amoxil", "Mox", "Softmox", "Wymox", "Pantocid", "Pantozol", "Pantodac", "Azithral", "Zithromax", "Azee", "Azibest"
     ]),
     composition: faker.helpers.multiple(createCompositions, {
       count: Math.floor(Math.random() * 1),
@@ -65,7 +68,7 @@ function createRandomManufacturer():any {
     interestedInPCDMonopoly: faker.datatype.boolean(),
     interestedInPCD: faker.datatype.boolean(),
     interestedInThirdPartyProducts: faker.datatype.boolean(),
-    interetedInPrivateLabels: faker.datatype.boolean(),
+    interestedInPrivateLabels: faker.datatype.boolean(),
     compositionAvailable: faker.helpers.multiple(createCompositions, {
       count: Math.floor(Math.random() * 50),
     }),
@@ -76,7 +79,14 @@ function createRandomManufacturer():any {
     }),
     productCategoriesSupported: [category.ALOPATHY, category.AYURVEDIC],
     sponsored: faker.datatype.boolean(),
+    exportAvailable: faker.datatype.boolean()
   };
+}
+
+export const CATEGORY_MAP = {
+  alopathy: 0,
+  ayurvedic: 1,
+  homeopathy: 2
 }
 
 enum category {
