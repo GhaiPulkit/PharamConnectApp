@@ -8,12 +8,15 @@ import { Button, useBreakpoint, useBreakpointValue, useDisclosure } from "@chakr
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/route";
 import OTPModal from "../home/OtpConfirmationModal";
+import { RootState } from "@/store";
+import { useSelector } from "react-redux";
 
 
 export default function ({ props }: { props: any }) {
     const router = useRouter();
     const breakpoint = useBreakpointValue({ base: 'sm', md: 'md' });
-    const { manufacturers, setQuery, query }: any = useAppPrimaryContext();
+    const { setQuery, query }: any = useAppPrimaryContext();
+
      const { isOpen, onOpen, onClose } = useDisclosure();
      
     // Selected Category DEFUALT IS PCD
@@ -76,7 +79,7 @@ export default function ({ props }: { props: any }) {
                         }
                     </div>
                 </section>
-                <section className="w-full px-[3rem]">
+                <section className="w-full">
                 <div className="w-[500px] mx-auto py-2 flex flex-col gap-8 " >
                         <View selectedCategory={selectedCategory as PHARMA_CATEGORIES} handleOnSubmit={handleOnSubmit} />
                     </div>

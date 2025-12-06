@@ -5,9 +5,11 @@ import { useAppPrimaryContext } from "@/context/AppContext";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GiMedicines } from "react-icons/gi";
-import { cn } from "../../../utils";
+import { cn } from "../../../../utils";
 import { FaArrowAltCircleUp, FaArrowRight } from "react-icons/fa";
 import { productCategories } from "@/components/modules/ManufacturerScreen/ProductTypes";
+import { BsArrowUpRightCircleFill } from "react-icons/bs";
+
 
 
 type Manufacturer = {
@@ -105,14 +107,17 @@ export default function Page() {
         <>
             <div className="flex flex-col gap-4 max-w-[1200px] mx-auto py-6">
                 {/* Header / Intro */}
-                <section className="box-wrap drop-shadow p-4 ">
+                <section className="card box-wrap drop-shadow p-4 ">
                     <div className="flex gap-4 items-start">
-                        <div className="flex-1">
+                        <div className="flex-1 flex flex-col gap-4">
                             <h1 className="text-3xl font-bold">{'Sun Pharma'}</h1>
                             <p className="text-gray-700 mt-2">{'A complete solution to your manufacturer needs.'}</p>
                             {manufacturer.introduction && (
                                 <p className="text-gray-600 mt-3">{manufacturer.introduction}</p>
                             )}
+                        </div>
+                    </div>
+                    <div className="w-full py-4 flex justify-between items-center">
                             <div className="mt-4 text-sm text-gray-500 flex flex-wrap gap-4">
                                 <div>Location: {manufacturer.location}</div>
                                 <div>Email: {manufacturer.email}</div>
@@ -120,34 +125,41 @@ export default function Page() {
                                 <div>Website: <a href={manufacturer.website} target="_blank" rel="noreferrer" className="text-blue-600 underline">{manufacturer.website}</a></div>
                                 <div>Est. {manufacturer.established || 1990}</div>
                             </div>
-                            {/* <div className="mt-3 flex gap-2 flex-wrap">
-                                {manufacturer.certifications?.map((c, idx) => (
-                                    <span key={idx} className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
-                                        {c}
-                                    </span>
-                                ))}
-                            </div> */}
+                        <div
+                            className="rounded-2xl w-fit h-auto overflow-hidden"
+                            style={{
+                                boxShadow:
+                                    'rgb(255 255 255) -1px -12px 30px 6px, rgb(160 160 160) 8px 5px 12px 1px',
+                            }}
+                        >
+                            <div className="w-fit p-[0.15rem] bg-gradient-to-r from-[#ffe4ee] via-[#fff0f4] to-white overflow-visible">
+                                <div className="content h-full w-full bg-[#ffffff70] backdrop-blur-xl rounded-xl px-4 py-2 flex flex-col items-center gap-2">
+                                    <BsArrowUpRightCircleFill color={'grey'}/>
+                                    <span className="text-[8px]"> Website</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </section>
                 <section className="p-4 flex flex-col gap-2">
                     <div className="text-lg font-bold !text-[black]">About Us</div>
                     <p className="text-md font-normal text-[#111111]"> Avecia Healthcare is an expeditiously growing pharmaceutical marketing company with 500+ products. We offer PCD Pharma Franchise for quality pharmaceutical formulations which are both affordable and convenient for mankind.
 
-Our pharmaceutical products are formulated using high-quality materials sourced from reliable and trusted manufacturers with WHO GMP Certified Unit</p>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 animate-fade-in-scale">
-                    {[{ name: "Compositions", number: 12 }, { name: "Product Types", number: 12 }, { name: "Best Sellers", number: 12 }, { name: "Certifications", number: 12 }].map((item, idx) =>
-                        <div className={cn(`box-wrap flex flex-col gap-2 p-4 rounded-lg !border-[black] !border-r-[5px] !border-b-[5px] text-center bg-[#007F72] rounded-xl drop-shadow-xl`)}>
-                            <div className=" grid grid-cols-[1fr_auto] gap-5 w-full">
-                                <div className="text-sm text-white">{item.name}
-                                    <div className="text-2xl text-white font-semibold">{manufacturer.compositionAvailable?.length ?? 0}</div>
-                                </div>
-                                <div className="flex flex-end"><GiMedicines fontSize={'1.5rem'} color={'white'} /></div></div>
+                        Our pharmaceutical products are formulated using high-quality materials sourced from reliable and trusted manufacturers with WHO GMP Certified Unit</p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 animate-fade-in-scale">
+                        {[{ name: "Compositions", number: 12 }, { name: "Product Types", number: 12 }, { name: "Best Sellers", number: 12 }, { name: "Certifications", number: 12 }].map((item, idx) =>
+                            <div key={idx} className={cn(`glass-card bg-[white]`)}>
+                                <div className=" grid grid-cols-[1fr_auto] gap-5 w-full">
+                                    <div className="text-sm text-white">{item.name}
+                                        <div className="text-2xl text-white font-semibold">{manufacturer.compositionAvailable?.length ?? 0}</div>
+                                    </div>
+                                    <div className="flex flex-end"><GiMedicines fontSize={'1.5rem'} color={'white'} /></div></div>
 
-                            <div className=" text-sm text-gray-100 text-right flex flex-end items-center gap-2">View All <FaArrowRight color={'white'} /></div>
-                        </div>)
-                    }
-                </div>
+                                <div className=" text-sm text-gray-100 text-right flex flex-end items-center gap-2">View All <FaArrowRight color={'white'} /></div>
+                            </div>)
+                        }
+                    </div>
                 </section>
 
                 {/* Types of Products */}
@@ -159,7 +171,7 @@ Our pharmaceutical products are formulated using high-quality materials sourced 
                                 <div className="h-full flex items-center justify-center flex-col gap-2">
                                     <div className="flex flex-end"><item.icon color={'white'} fontSize={'3rem'} /></div>
                                     <div className="text-sm text-white">{item.name}</div>
-                                    </div>
+                                </div>
 
                                 {/* <div className=" text-sm text-gray-100 text-right flex flex-end items-center gap-2">View All <FaArrowRight color={'white'}/></div> */}
                             </div>)
@@ -217,7 +229,7 @@ Our pharmaceutical products are formulated using high-quality materials sourced 
                 </section>
 
                 <div className="absolute bottom-0 right-0 h-[50px] w-auto mx-4 my-4 flex flex-col items-center gap-2 drop-shadow-xl">
-                    <FaArrowAltCircleUp color={'black'} fontSize={'2rem'}/>
+                    <FaArrowAltCircleUp color={'black'} fontSize={'2rem'} />
                     <p className="text-[10px]">Back To Top</p>
                 </div>
             </div>

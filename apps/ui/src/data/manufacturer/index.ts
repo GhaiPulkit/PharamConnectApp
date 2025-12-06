@@ -64,7 +64,7 @@ function createRandomManufacturer():any {
     email: faker.internet.email(),
     avatar: faker.image.url(),
     location: faker.location.city(),
-    registeredAt: faker.date.past(),
+    registeredAt: faker.date.past().toDateString(),
     interestedInPCDMonopoly: faker.datatype.boolean(),
     interestedInPCD: faker.datatype.boolean(),
     interestedInThirdPartyProducts: faker.datatype.boolean(),

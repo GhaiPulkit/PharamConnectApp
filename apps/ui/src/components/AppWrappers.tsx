@@ -7,22 +7,23 @@ import React from 'react';
 import "@/styles/index.css"
 import { getManufacturers } from '@/data/manufacturer';
 import { AppPrimaryContextProvider } from '@/context/AppContext';
+import { Provider, useDispatch } from 'react-redux';
+import store, { AppDispatch } from "@/store";
+import { AppActions } from '@/store/modules/appSlice';
 
 export default function AppWrappers({ children }: { children: ReactNode }) {
   const [manufacturers, setManufacturers] = useState<any[]>([]);
   const [selectedManufacturerID, setSelectedManufacturerID] = useState<number> ();
   const [query, setQuery] = useState<Object | undefined>(undefined);
 
-  React.useEffect(() => {
-    setManufacturers(getManufacturers);
-  }, []);
-
   return (
     <ChakraProvider>
       <React.Fragment>
-        <AppPrimaryContextProvider value={{ manufacturers ,setSelectedManufacturerID, selectedManufacturerID,query, setQuery}}>
-          {children}
-        </AppPrimaryContextProvider>
+        <Provider store={store}>
+          <AppPrimaryContextProvider value={{ manufacturers ,setSelectedManufacturerID, selectedManufacturerID,query, setQuery}}>
+            {children}
+          </AppPrimaryContextProvider>
+        </Provider>
       </React.Fragment>
     </ChakraProvider>
   );

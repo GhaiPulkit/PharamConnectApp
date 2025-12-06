@@ -10,7 +10,7 @@ export const ManufacturerShowGrid = ({ manufacturers, navigateToManufacturer }: 
         {manufacturers?.map(({ empty = false, id, compositionAvailable = [], name, description, avatar, products = 0, location }: any, idx: number) => (
 
             !empty ? (
-                <Card className='flex flex-col gap-2 p-[1rem] rounded-xl !border-[1px] !border-[#ffffff] bg-[#ffffff90] p-3 drop-shadow-xl' key={`manufacturer-${idx}`}>
+                <div className='flex flex-col gap-2 card p-3 ' key={`manufacturer-${idx}`}>
                     <div className="w-full p-1 flex flex-col gap-2">
                         <h3 className="text-[grey] capitalize">{name}</h3>
                         <p>{description}</p>
@@ -28,7 +28,7 @@ export const ManufacturerShowGrid = ({ manufacturers, navigateToManufacturer }: 
                         </div>
 
                     </div>
-                </Card>
+                </div>
             ) : <Card className='flex flex-col items-center justify-center rounded-xl !border-[1px] !border-[#ffffff] bg-[#ffffff90] p-3 drop-shadow-xl' key={`manufacturer-${idx}`}>
                 <p className='text-sm text-[lightgray] font-bold italic'> YOUR PROFILE GOES HERE.</p>
             </Card>

@@ -36,7 +36,7 @@ export default function Header() {
     return router.push(path)
   }
   return (
-    <Box bg="white" px={4} boxShadow="sm" position="sticky" top="0" zIndex="1000">
+    <Box bg="#ffffffae" px={4} boxShadow="sm" position="sticky" top="0" zIndex="1000" className='!backdrop-blur-2xl'>
       <Flex h={16} alignItems="center" justifyContent="space-between" maxW="1200px" mx="auto">
         {/* Logo */}
         <HStack spacing={2} alignItems="center" onClick={()=> navigateToLink(ROUTES.HOME)}>

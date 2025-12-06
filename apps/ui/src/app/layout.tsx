@@ -17,16 +17,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             style={{
               margin: 0,
               padding: 0,
-              background: `
-      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.15), transparent 60%),
-      radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1), transparent 70%),
-      linear-gradient(135deg, #f0f3f7, #dfe3e8)
-    `,
               backgroundAttachment: "fixed",
               fontFamily: "sans-serif",
             }}
           >
-            <Header />
+
             {children}
           </div>
         </AppWrappers>

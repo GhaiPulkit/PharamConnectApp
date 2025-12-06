@@ -10,6 +10,7 @@ import type { Resolver } from "react-hook-form";
 import * as yup from "yup";
 import { useEffect } from "react";
 import { ProductType } from '../../../data/product/productType';
+import PrimaryButton from "@/components/common/PrimaryButton";
 
 
 /**
@@ -72,7 +73,8 @@ const PCDQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => v
                     <option value="false">No</option>
                 </Select>
             </FormControl>
-            <Button size='lg' className='!bg-[black] !text-[white] mx-auto mt-4' type="submit">Search Products</Button>
+            <PrimaryButton type='submit' className="" title={"Search"}></PrimaryButton>
+            {/* <Button size='lg' className='!background !text-[grey] mx-auto mt-4' type="submit">Search</Button> */}
         </form>
     );
 }
@@ -172,8 +174,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
                 <Input className="!drop-shadow-xl !bg-[white]" {...searchForm.register("minOrders")} id='composition' type='number' placeholder='Example, Axotocin 3mg 3w/u' />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
             </FormControl>
-            <Button size='lg' className='!bg-[black] !text-[white] mx-auto mt-4' type="submit">Search Products</Button>
-        </form>
+            <PrimaryButton type='submit' className="" title={"Search"}></PrimaryButton>        </form>
     </>)
 
 }
@@ -220,7 +221,6 @@ const PrivateLabellingForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) 
                 </Select>
             </FormControl>
 
-            <Button type="submit" size="lg" className="!bg-[black] !text-[white] mx-auto mt-4">Search Products</Button>
-        </form>
+            <PrimaryButton type='submit' className="" title={"Search"}></PrimaryButton>        </form>
     );
 }

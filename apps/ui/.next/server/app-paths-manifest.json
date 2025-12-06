@@ -1,6 +1,4 @@
 {
-  "/page": "app/page.js",
-  "/manufacturer/page": "app/manufacturer/page.js",
   "/(homeView)/welcome/page": "app/(homeView)/welcome/page.js",
-  "/(homeView)/manufacturers/page": "app/(homeView)/manufacturers/page.js"
+  "/(homeView)/results/page": "app/(homeView)/results/page.js"
 }
