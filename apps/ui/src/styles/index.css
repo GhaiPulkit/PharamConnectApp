@@ -80,22 +80,21 @@
 
 @layer components {
     .card {
-        @apply bg-[#ffffffc4] rounded-2xl shadow-md backdrop-blur-3xl p-6 !border-white !border-1 !p-[2rem];
+        @apply bg-[#f9f9f9c4] rounded-2xl shadow-md backdrop-blur-md p-6 !border-white !border-1 !p-[2rem];
     }
 
     .card-ii {
         /* box-shadow: rgb(255 255 255) -1px -12px 30px 6px, rgb(160 160 160) 8px 5px 12px 1px; */
         position: relative;
-        border: double 1px transparent !important;
-        background-image: linear-gradient(rgb(255, 231, 231) 0 0), linear-gradient(90deg, rgba(255, 255, 255, 0.42), rgb(176, 176, 176), rgb(167, 167, 167), rgb(255, 255, 255)) !important;
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
-        @apply rounded-xl p-8 drop-shadow-xl bg-[#ffffff70] backdrop-blur-xl;
+        border: solid 1px #ffffff !important;
+        background: linear-gradient(135deg, #ffffff, #cacaca);
+        @apply rounded-[20px] px-[2rem] py-[2rem] drop-shadow-2xl;
     }
-    .glass-card{
-        box-shadow: rgb(255 255 255) -1px -12px 30px 6px, rgb(160 160 160) 8px 5px 12px 1px;
+
+    .glass-card {
         @apply rounded-xl p-8 bg-[#ffffff70] backdrop-blur-xl;
     }
+
     .background {
         background: rgb(223, 237, 251);
 
@@ -107,9 +106,8 @@
 
         filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#C9DEF490", endColorstr="#F5CCD490", GradientType=1);
     }
-    .background-2 {
-        
-    }
+
+    .background-2 {}
 
     .scrollbar-hide {
         -ms-overflow-style: none;

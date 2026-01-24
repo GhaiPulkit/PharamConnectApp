@@ -33,6 +33,7 @@ export default function ManufacturerView({ props }: { props: any }) {
     const showResults = () => {
 
     }
+
     return (<>
         <OTPModal isOpen={isOpen} onClose={onClose} onCloseCallback={() => showResults} />
         <div className="w-full px-2  py-1 flex">
@@ -40,9 +41,9 @@ export default function ManufacturerView({ props }: { props: any }) {
         </div>
         < div className="px-[2rem] flex justify-center items-center max-w-[1200px] mx-auto" >
             <div className="flex flex-col gap-8">
-                <div className="flex flex-col items-center justify-center gap-2">
-                    <h1 className="!text-[left]">Top Manufacturers</h1>
-                    <p> Everything You Need to Build Better Products</p>
+                <div className="flex flex-col justify-start items-center gap-2 w-full card">
+                    <h1 className="!text-[left] w-full">Top Manufacturers</h1>
+                    <p className="!text-[left] w-full"> Everything You Need to Build Better Products</p>
                 </div>
                 <ManufacturerShowGrid manufacturers={manufacturers} navigateToManufacturer={navigateToManufacturer} />
             </div>

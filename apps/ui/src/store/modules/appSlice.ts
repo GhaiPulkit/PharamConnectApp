@@ -1,5 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
+import { set } from "react-hook-form";
 
 /* App Global UI slice */
 export const appSlice = createSlice({
@@ -10,7 +11,8 @@ export const appSlice = createSlice({
         toast: null,
 
         // Manufacturer
-        manufacturerList: []
+        manufacturerList: [],
+        selectedManufacturerId: null,
     },
     reducers: {
         setTheme(state, action) {
@@ -27,6 +29,9 @@ export const appSlice = createSlice({
         },
         setManufactuerList(state, action) {
             state.manufacturerList = action.payload
+        },
+        setSelectedManufacturerId(state, action) {
+            state.selectedManufacturerId = action.payload
         }
     },
 });
@@ -36,8 +41,14 @@ const selectManufacturerList = createSelector(
     (ui) => ui.manufacturerList
 );
 
+const selectedManufacturerId = createSelector(
+    (state: RootState) => state.app,
+    (ui) => ui.selectedManufacturerId
+);
+
 export const AppSelector = {
-    selectManufacturerList
+    selectManufacturerList,
+    selectedManufacturerId
 }
 
 export const AppActions = {

@@ -1,4 +1,5 @@
 {
+  "/(homeView)/manufacturers/page": "app/(homeView)/manufacturers/page.js",
   "/(homeView)/results/page": "app/(homeView)/results/page.js",
   "/(homeView)/welcome/page": "app/(homeView)/welcome/page.js"
 }

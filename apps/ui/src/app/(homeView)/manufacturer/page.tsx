@@ -9,8 +9,17 @@ import { cn } from "../../../../utils";
 import { FaArrowAltCircleUp, FaArrowRight } from "react-icons/fa";
 import { productCategories } from "@/components/modules/ManufacturerScreen/ProductTypes";
 import { BsArrowUpRightCircleFill } from "react-icons/bs";
-
-
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { CiLocationOn } from "react-icons/ci";
+import { HiOutlineMail } from "react-icons/hi";
+import { FiPhone } from "react-icons/fi";
+import { CgWebsite } from "react-icons/cg";
+import { IoTrainOutline, IoAirplaneOutline } from "react-icons/io5";
+import { Button, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { FaLeaf } from "react-icons/fa";
+import { LuUsers } from "react-icons/lu";
+import CarouselSideMenuTabs, { CarouselSideMenuItemContentProps } from "@/components/common/SidebarMenuTabs";
 
 type Manufacturer = {
     id: string | number;
@@ -29,10 +38,10 @@ type Manufacturer = {
     established?: string;
 };
 
-export default function Page() {
-    const { manufacturers }: any = useAppPrimaryContext();
+export default function ManufacturerPage() {
     const [manufacturer, setManufacturer] = useState<Manufacturer | undefined>();
     const queryparam = useSearchParams();
+    const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
 
     // fallback sample data when context has no manufacturers
     const sampleManufacturers: Manufacturer[] = [
@@ -94,145 +103,281 @@ export default function Page() {
     useEffect(() => {
         const param = queryparam?.get("manufacturerId");
         const source = Array.isArray(manufacturers) && manufacturers.length ? manufacturers : sampleManufacturers;
+
         // try to find by id or fallback to first
         const found = param
             ? source.find((m: any) => String(m.id) === String(param))
             : source[0];
         setManufacturer(found);
+
     }, [manufacturers, queryparam]);
+
+    useEffect(() => {
+        console.log("Manufacturer data:", manufacturer);
+    }
+        , [manufacturer]);
 
     if (!manufacturer) return <NoRecordFound />;
 
-    return (
-        <>
-            <div className="flex flex-col gap-4 max-w-[1200px] mx-auto py-6">
-                {/* Header / Intro */}
-                <section className="card box-wrap drop-shadow p-4 ">
-                    <div className="flex gap-4 items-start">
-                        <div className="flex-1 flex flex-col gap-4">
-                            <h1 className="text-3xl font-bold">{'Sun Pharma'}</h1>
-                            <p className="text-gray-700 mt-2">{'A complete solution to your manufacturer needs.'}</p>
-                            {manufacturer.introduction && (
-                                <p className="text-gray-600 mt-3">{manufacturer.introduction}</p>
-                            )}
-                        </div>
-                    </div>
-                    <div className="w-full py-4 flex justify-between items-center">
-                            <div className="mt-4 text-sm text-gray-500 flex flex-wrap gap-4">
-                                <div>Location: {manufacturer.location}</div>
-                                <div>Email: {manufacturer.email}</div>
-                                <div>Phone: {manufacturer.phone}</div>
-                                <div>Website: <a href={manufacturer.website} target="_blank" rel="noreferrer" className="text-blue-600 underline">{manufacturer.website}</a></div>
-                                <div>Est. {manufacturer.established || 1990}</div>
-                            </div>
-                        <div
-                            className="rounded-2xl w-fit h-auto overflow-hidden"
-                            style={{
-                                boxShadow:
-                                    'rgb(255 255 255) -1px -12px 30px 6px, rgb(160 160 160) 8px 5px 12px 1px',
-                            }}
-                        >
-                            <div className="w-fit p-[0.15rem] bg-gradient-to-r from-[#ffe4ee] via-[#fff0f4] to-white overflow-visible">
-                                <div className="content h-full w-full bg-[#ffffff70] backdrop-blur-xl rounded-xl px-4 py-2 flex flex-col items-center gap-2">
-                                    <BsArrowUpRightCircleFill color={'grey'}/>
-                                    <span className="text-[8px]"> Website</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                </section>
-                <section className="p-4 flex flex-col gap-2">
-                    <div className="text-lg font-bold !text-[black]">About Us</div>
-                    <p className="text-md font-normal text-[#111111]"> Avecia Healthcare is an expeditiously growing pharmaceutical marketing company with 500+ products. We offer PCD Pharma Franchise for quality pharmaceutical formulations which are both affordable and convenient for mankind.
+    const sideMenuItems: CarouselSideMenuItemContentProps[] = [
+        {
+            title: "About Us",
+            content: (<AboutUs />),
+        },
+        {
+            title: "Categories",
+            content: (<Categories />)
+        },
+        {
+            title: "Product",
+            content: (<Products />)
+        }
+    ]
+    return (<>
+        <div className=" w-full h-full grid grid-rows-[auto_1fr] overflow-y-hidden">
+            <div className="h-[200px] w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+                <span className="!text-white"> Manufacturer Banner</span>
+            </div>
+            <div className="w-full bg-white grid grid-cols-[auto_1fr] mx-auto max-w-[1200px] -mt-[150px] z-10 rounded-lg gap-2 overflow-y-auto">
+                <div className="w-auto h-full flex flex-col p-2">
+                    {/* Todo : Add Image */}
+                </div>
+                <div className="w-full grid grid-rows-[auto_1fr] h-full overflow-y-auto">
 
-                        Our pharmaceutical products are formulated using high-quality materials sourced from reliable and trusted manufacturers with WHO GMP Certified Unit</p>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 animate-fade-in-scale">
-                        {[{ name: "Compositions", number: 12 }, { name: "Product Types", number: 12 }, { name: "Best Sellers", number: 12 }, { name: "Certifications", number: 12 }].map((item, idx) =>
-                            <div key={idx} className={cn(`glass-card bg-[white]`)}>
-                                <div className=" grid grid-cols-[1fr_auto] gap-5 w-full">
-                                    <div className="text-sm text-white">{item.name}
-                                        <div className="text-2xl text-white font-semibold">{manufacturer.compositionAvailable?.length ?? 0}</div>
+                    <section className="w-full !border-b h-[auto] p-2">
+                        <InfoHeader manufacturer={manufacturer} />
+                    </section>
+                    {/* <section className="w-full bg-white p-4 mt-4 hidden">
+                        <Tabs>
+                            <TabList>
+                                <Tab>About Us</Tab>
+                                <Tab>Categories</Tab>
+                                <Tab>Products</Tab>
+                                <Tab>Compositions</Tab>
+                            </TabList>
+                            <TabPanels>
+                                <TabPanel>
+                                    <h3 className="font-bold text-lg mb-2">About Us</h3>
+                                    <p className="leading-[26px] text-md text-gray-700">{"Scout Lifescience Pvt. Ltd. is one of the leading manufacturer supplier and distributor of pharmaceutical products such as GASTROINTESTINAL DRUG PELLETS, CAPSULES, GASTROINTESTINAL DRUG CAPSULES, PAIN MANAGEMENTS DRUG PELLETS & BLENDED PELLETS etc. throughout the nation. We are an ethical drug supplier that believes in providing high-quality medical solutions for various health issues. Our strength is our skilled and professional team that is backed up by modern machinery and innovative technology. And because of that, we are capable of providing high-quality drugs regardless of the size of the order. Our quality control team keeps an eye on every aspect of the manufacturing process from purchase of raw material to dispatch of orders enabling us to become the most ethical franchise provider of PCD Pharma for anti-allergies pharma products. Scout Lifescience Pvt. Ltd. is an ISO 9001:2015 and GMP certified global pharmaceutical company with involved in the areas of product marketing & manufacturing. Our focus on specialty segments in India and simultaneous opening of newer markets abroad will help us achieve a niche in global pharmaceutical arena. We are firmly establishing our brands in each market for sustained growth. Tecnex Pharma has established strong capability of providing latest formulations & will always be one step ahead. Scout Lifescience was incorporated in 2020 but has since established itself as a vibrant marketing organization & now proudly is one of the leading pharmaceutical companies in India. The Company is backed by a team of professional's takes complete responsibilities & dedication in Human Health Care. We provide health care solutions in various therapeutic segments with specialized focus on Analgesics, Antibiotic & Anti-Infective, Anticold & Antiallergic and Antipsychotic Drugs. Apart from these, our range also includes Cardiovascular Drugs, Gastro & Antiemetic & Anti Ulcerant, Haematirics, Hormones, Neurology Supplements and Nutritional Supplements."}</p>
+                                </TabPanel>
+                                <TabPanel>
+                                    <h3 className="font-bold text-lg mb-2">Categories</h3>
+                                    <div className="p-4 grid grid-cols-3 gap-4">
+                                        {manufacturer.product_types?.map(type => (
+                                            <CategoryCircle key={type.id} label={type.name} icon={FaLeaf} />
+                                        ))}
                                     </div>
-                                    <div className="flex flex-end"><GiMedicines fontSize={'1.5rem'} color={'white'} /></div></div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <h3 className="font-bold text-lg mb-2">Products</h3>
+                                    <div className="p-4 grid grid-cols-4 gap-4">
+                                        {manufacturer.best_sellers?.map(product => (
+                                            <ProductBox key={product.id} name={product.name} />
+                                        ))}
+                                    </div>
+                                </TabPanel>
+                                <TabPanel>
+                                    <h3 className="font-bold text-lg mb-2">Compositions Available</h3>
+                                    <div className="space-y-2">
+                                        {manufacturer.compositionAvailable?.map(comp => (
+                                            <div key={comp.id} className="p-2 bg-gray-50 rounded">
+                                                <p className="font-semibold">{comp.composition}</p>
+                                                <p className="text-sm text-gray-600">{comp.category}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+                    </section> */}
+                    <section className="w-full bg-green p-2">
+                        <CarouselSideMenuTabs sideMenuItems={sideMenuItems} />
+                    </section>
 
-                                <div className=" text-sm text-gray-100 text-right flex flex-end items-center gap-2">View All <FaArrowRight color={'white'} /></div>
-                            </div>)
-                        }
-                    </div>
-                </section>
+                    <section className="h-full w-full mt-4 flex flex-col gap-8">
 
-                {/* Types of Products */}
-                <section className="flex flex-col gap-3 p-4">
-                    <div className="text-lg font-bold !text-[black]">Types of Products</div>
-                    <div className="flex gap-3 flex-wrap justify-center animate-fade-in-scale">
-                        {productCategories.map((item: any, idx) =>
-                            <div key={`productType-w-${idx}`} className={cn(`box-wrap w-[150px] h-[150px] flex flex-col gap-2 p-4 rounded-lg !border-[black] !border-r-[5px] !border-b-[5px] text-center bg-[#E9A319] rounded-xl drop-shadow-xl`)}>
-                                <div className="h-full flex items-center justify-center flex-col gap-2">
-                                    <div className="flex flex-end"><item.icon color={'white'} fontSize={'3rem'} /></div>
-                                    <div className="text-sm text-white">{item.name}</div>
-                                </div>
-
-                                {/* <div className=" text-sm text-gray-100 text-right flex flex-end items-center gap-2">View All <FaArrowRight color={'white'}/></div> */}
-                            </div>)
-                        }
-                    </div>
-
-                </section>
-
-                {/* Compositions */}
-                <section className="flex flex-col gap-3 p-4">
-                    <div className="text-lg font-bold !text-[black]">Compositions</div>
-
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
-                            <thead className="bg-gray-100 text-left">
-                                <tr>
-                                    <th className="px-4 py-2 border-b text-sm font-semibold text-gray-700">ID</th>
-                                    <th className="px-4 py-2 border-b text-sm font-semibold text-gray-700">Composition</th>
-                                    <th className="px-4 py-2 border-b text-sm font-semibold text-gray-700">Category</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {manufacturer.compositionAvailable?.map((comp, idx) => (
-                                    <tr key={comp.id + idx} className="hover:bg-gray-50">
-                                        <td className="px-4 py-2 border-b text-xs text-gray-600">{comp.id}</td>
-                                        <td className="px-4 py-2 border-b text-sm font-medium text-gray-800">
-                                            {comp.composition}
-                                        </td>
-                                        <td className="px-4 py-2 border-b text-sm text-gray-600">
-                                            {comp.category ?? "Uncategorized"}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-
-
-                {/* Product Types */}
-
-
-                {/* Best Sellers */}
-
-                {/* Footer / Contact CTA */}
-                <section className="box-wrap p-4 rounded-xl text-center">
-                    <h3 className="text-xl font-bold">Contact {manufacturer.name}</h3>
-                    <p className="text-gray-600 mt-2">For partnership, supply or enquiries reach out at <a className="underline text-blue-600" href={`mailto:${manufacturer.email}`}>{manufacturer.email}</a> or call {manufacturer.phone}</p>
-                    {manufacturer.website && (
-                        <div className="mt-3">
-                            <a className="px-4 py-2 bg-blue-600 text-white rounded" href={manufacturer.website} target="_blank" rel="noreferrer">Visit website</a>
-                        </div>
-                    )}
-                </section>
-
-                <div className="absolute bottom-0 right-0 h-[50px] w-auto mx-4 my-4 flex flex-col items-center gap-2 drop-shadow-xl">
-                    <FaArrowAltCircleUp color={'black'} fontSize={'2rem'} />
-                    <p className="text-[10px]">Back To Top</p>
+                        <section className=" p-2 bg-white">
+                            <h3 className="font-bold text-lg mb-2">Componsitions Available</h3>
+                            <p className="text-gray-700">{manufacturer.introduction || 'N/A'}</p>
+                        </section>
+                        <section className=" p-2 bg-white">
+                            <h3 className="font-bold text-lg mb-2">Testimonials</h3>
+                            <p className="text-gray-700">{manufacturer.introduction || 'N/A'}</p>
+                        </section>
+                    </section>
                 </div>
             </div>
-        </>
-    );
+
+        </div>
+    </>);
+}
+
+
+
+
+const CategoryCircle = ({ label, icon: Icon }: { label: string, icon: React.ElementType }) => {
+    return (
+        <div className="mx-auto p-8 w-[200px] drop-shadow-md aspect-square rounded-full bg-gray-100 flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center">
+                <Icon className="text-[darkgreen] text-4xl" />
+                <span className="text-sm font-bold text-gray-400">{label}</span>
+            </div>
+        </div>
+    )
+}
+
+
+const ProductBox = ({ name, description, onClick, icon }: { name: string; description?: string, onClick?: () => void, icon?: React.ElementType }) => {
+    return (
+        <div className="mx-auto p-8 w-full h-full max-w-[250px] aspect-square rounded-2xl bg-gray-100 !border-r-[10px] !border-b-[10px] border-gray-200 flex flex-col items-center justify-between hover:scale-105 transition-transform cursor-pointer" onClick={onClick}>
+            <div className="grid grid-cols-[auto_1fr] gap-4">
+                <div className="bg-pink-500 w-[50px] aspect-square rounded-full"></div>
+                <div className="flex flex-col items-center justify-start">
+                    <span className="font-bold">{name}</span>
+                    <p className="text-sm text-gray-600">{description || 'Somthng'}</p>
+                </div>
+            </div>
+        </div>)
+};
+
+
+const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
+    return (
+        <div id="info-wrapper" className="">
+            <div className=" p-2 rounded-lg grid grid-cols-[75%_1fr] gap-2">
+                <div className="flex flex-col gap-4 p-2">
+                    <div className="flex flex-wrap gap-2 items-baseline">
+                        <h1>{'Sun Pharma'}</h1><div className="px-4 text-sm text-gray-500">
+                            <span className="font-bold">CEO :</span>
+                            <span className="ml-1">  Mr. Dilip Shanghvi</span>
+                        </div>
+                    </div>
+                    <div className="w-full flex  items-center">
+                        <div className="flex gap-2 items-baseline">
+                            <span className="px-4 text-sm text-blue-500 p-2 bg-blue-100 rounded-full !border-1 !border-[blue-500]">Private Limited Company </span>
+                            <span className="text-sm font-medium text-[#cccccc] flex gap-2 items-baseline"><LuUsers color={'#cccccc'} /> 50-60  Employees</span>
+                        </div>
+                        <span className="px-4 text-sm text-gray-400"><b>GST:</b> 06CPDPS2350K1ZR</span>
+                    </div>
+
+                    <div className="w-full flex gap-4 items-center mt-2 text-gray-400">
+                        {[
+                            { icon: CiLocationOn, value: manufacturer.location || 'N/A' },
+                            { icon: HiOutlineMail, value: manufacturer.email || 'N/A' },
+                            { icon: FiPhone, value: manufacturer.phone || 'N/A' },
+                            { icon: CgWebsite, value: manufacturer.website || 'N/A' },
+                        ].map((contact, index) => (
+                            <div key={index} className="flex items-center gap-2 text-sm">
+                                <contact.icon />
+                                <span>{contact.value}</span>
+                            </div>
+                        ))
+                        }
+                    </div>
+                    <div className="text-gray-400 w-full flex flex-col gap-2 text-sm mt-[10px]">
+                        <span className="text-xs font-semibold text-gray-400"> Export</span>
+                        <div className="flex gap-2">
+                            <span>
+                                International Markets including USA, Europe, Africa, Asia</span>
+                            {[{ icon: IoTrainOutline }, { icon: IoAirplaneOutline }].map((icon, idx) => (
+                                <icon.icon key={idx} className="inline-block ml-2" />
+                            ))}
+                        </div>
+
+
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <span className="text-xs font-semibold text-gray-400">Nature of Business</span>
+                        <div className="flex gap-2">
+                            {['Manufacturer', 'Exporter', ' Supplier', 'Distributor'].map((business, idx) => (
+                                <span key={idx} className="text-sm text-pink-600 bg-pink-100 !border-pink-600 !border-1 px-2 rounded-full py-1">{business}</span>
+                            ))}
+                        </div>
+
+                    </div>
+                </div>
+                <div className="w-full grid grid-rows-[1fr_auto] gap-2 ">
+                    <div className="!border-1 !border-grey w-full rounded-md h-[40px] flex flex-col ">
+                        <input
+                            type="text"
+                            placeholder="Search Products..."
+                            className="w-full h-full px-2 rounded-md"
+                        />
+
+                    </div>
+                    <div className="flex gap-2">
+                        <Button className="!bg-[purple] rounded-md !text-white !px-2 !py-2 !no-wrap">Request Form</Button>
+                        <Button className="!bg-[purple] rounded-md !text-white !px-2 !py-2 !no-wrap">Brochure</Button>
+                        {/* <button className="">Download Brochure</button> */}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    )
+}
+
+const menuItems = [
+    { label: 'Profile', action: () => { console.log('Profile clicked'); } },
+    { label: 'Settings', action: () => { console.log('Settings clicked'); } },
+    { label: 'Logout', action: () => { console.log('Logout clicked'); } },
+];
+
+const AboutUs = () => {
+    return (<section className=" p-2 bg-white">
+        <h3 className="font-bold text-lg mb-2">About Us</h3>
+        <p className="leading-[26px] text-md text-gray-700">{"Scout Lifescience Pvt. Ltd. is one of the leading manufacturer supplier and distributor of pharmaceutical products such as GASTROINTESTINAL DRUG PELLETS, CAPSULES, GASTROINTESTINAL DRUG CAPSULES, PAIN MANAGEMENTS DRUG PELLETS & BLENDED PELLETS etc. throughout the nation. We are an ethical drug supplier that believes in providing high-quality medical solutions for various health issues. Our strength is our skilled and professional team that is backed up by modern machinery and innovative technology. And because of that, we are capable of providing high-quality drugs regardless of the size of the order. Our quality control team keeps an eye on every aspect of the manufacturing process from purchase of raw material to dispatch of orders enabling us to become the most ethical franchise provider of PCD Pharma for anti-allergies pharma products. Scout Lifescience Pvt. Ltd. is an ISO 9001:2015 and GMP certified global pharmaceutical company with involved in the areas of product marketing & manufacturing. Our focus on specialty segments in India and simultaneous opening of newer markets abroad will help us achieve a niche in global pharmaceutical arena. We are firmly establishing our brands in each market for sustained growth. Tecnex Pharma has established strong capability of providing latest formulations & will always be one step ahead. Scout Lifescience was incorporated in 2020 but has since established itself as a vibrant marketing organization & now proudly is one of the leading pharmaceutical companies in India. The Company is backed by a team of professional's takes complete responsibilities & dedication in Human Health Care. We provide health care solutions in various therapeutic segments with specialized focus on Analgesics, Antibiotic & Anti-Infective, Anticold & Antiallergic and Antipsychotic Drugs. Apart from these, our range also includes Cardiovascular Drugs, Gastro & Antiemetic & Anti Ulcerant, Haematirics, Hormones, Neurology Supplements and Nutritional Supplements."}</p>
+    </section>)
+}
+
+const Categories = () => {
+    return (<section className=" p-2 bg-white">
+        <h3 className="font-bold text-lg mb-2">Categories</h3>
+        <div className="p-4 grid grid-cols-3 gap-4">
+            <CategoryCircle label={"C1"} icon={FaLeaf} />
+            <CategoryCircle label={"C2"} icon={FaLeaf} />
+            <CategoryCircle label={"C3"} icon={FaLeaf} />
+        </div>
+    </section>)
+}
+
+const Products = () => {
+    return (<section className=" p-2 bg-white">
+        <h3 className="font-bold text-lg mb-2">Products</h3>
+        <div className="p-4 grid grid-cols-3 gap-4 h-[auto]">
+            {/* Analgesics & Antipyretics */}
+            <ProductBox name="Sun-Parcet 500" description="Paracetamol 500mg - Fast acting relief for fever and pain" />
+            <ProductBox name="Sun-Fenac Plus" description="Diclofenac Sodium 50mg + Paracetamol 325mg" />
+            <ProductBox name="Nimu-Sun Gold" description="Nimesulide 100mg + Paracetamol 325mg Tablet" />
+
+            {/* Antibiotics & Anti-Infectives */}
+            <ProductBox name="Amoxy-Sun 500" description="Amoxicillin 500mg Broad Spectrum Antibiotic" />
+            <ProductBox name="Sun-Clav 625" description="Amoxicillin 500mg + Potassium Clavulanate 125mg" />
+            <ProductBox name="Azith-Sun 500" description="Azithromycin 500mg USP - 3 Day Course" />
+            <ProductBox name="Cef-Sun 200" description="Cefixime 200mg Dispersible Tablet" />
+            <ProductBox name="Oflox-Sun OZ" description="Ofloxacin 200mg + Ornidazole 500mg" />
+
+            {/* Cardiovascular & Anti-Diabetic */}
+            <ProductBox name="Telmi-Sun 40" description="Telmisartan 40mg - Blood Pressure Management" />
+            <ProductBox name="Amlod-Sun 5" description="Amlodipine 5mg Calcium Channel Blocker" />
+            <ProductBox name="Glim-Sun M2" description="Glimepiride 2mg + Metformin 500mg SR" />
+
+            {/* Gastrointestinal */}
+            <ProductBox name="Pant-Sun 40" description="Pantoprazole 40mg Gastro-Resistant Tablets" />
+            <ProductBox name="Sun-DSR" description="Pantoprazole 40mg + Domperidone 30mg Sustained Release" />
+            <ProductBox name="Om-Sun 20" description="Omeprazole 20mg Antacid Capsules" />
+            <ProductBox name="Gel-Sun Antacid" description="Magnesium Hydroxide + Aluminium Hydroxide Gel" />
+
+            {/* Vitamins & Supplements */}
+            <ProductBox name="Sun-Vit Multivitamin" description="Essential Vitamins, Minerals & Antioxidants" />
+            <ProductBox name="Cal-Sun D3" description="Calcium Carbonate 500mg + Vitamin D3 250 IU" />
+            <ProductBox name="B-Sun Complex" description="Vitamin B-Complex with B12 and Vitamin C" />
+
+            {/* Respiratory & Allergy */}
+            <ProductBox name="Lev-Sun M" description="Levocetirizine 5mg + Montelukast 10mg" />
+            <ProductBox name="Cough-Sun Expectorant" description="Terbutaline + Guaiphenesin + Bromhexine Syrup" />
+
+        </div>
+    </section>)
 }

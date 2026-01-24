@@ -1,16 +1,18 @@
 'use client';
 
+import PrimaryButton from "@/components/common/PrimaryButton";
 import { Button, Card, Grid } from "@chakra-ui/react";
 import { CiLocationOn } from "react-icons/ci";
 
 
 export const ManufacturerShowGrid = ({ manufacturers, navigateToManufacturer }: { manufacturers: any, navigateToManufacturer: (id: number) => any }) => {
+
     return <Grid templateColumns='repeat(3, 1fr)' gap={4}>
 
         {manufacturers?.map(({ empty = false, id, compositionAvailable = [], name, description, avatar, products = 0, location }: any, idx: number) => (
 
             !empty ? (
-                <div className='flex flex-col gap-2 card p-3 ' key={`manufacturer-${idx}`}>
+                <div className='flex flex-col gap-2 card' key={`manufacturer-${idx}`}>
                     <div className="w-full p-1 flex flex-col gap-2">
                         <h3 className="text-[grey] capitalize">{name}</h3>
                         <p>{description}</p>
@@ -24,7 +26,7 @@ export const ManufacturerShowGrid = ({ manufacturers, navigateToManufacturer }: 
                         </div>
                         <div className="action-wrapper grid grid-cols-2">
                             <div className="text-xs font-light text-[black] flex items-center gap-1"> <CiLocationOn />{location}</div>
-                            <Button onClick={() => navigateToManufacturer(id)}>View</Button>
+                            <div className="flex justify-end"><PrimaryButton onClick={() => navigateToManufacturer(id)} title={'View'}></PrimaryButton></div>
                         </div>
 
                     </div>
