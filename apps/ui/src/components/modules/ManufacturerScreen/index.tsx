@@ -9,6 +9,7 @@ import { ROUTES } from "@/constants/route";
 import OTPModal from "../home/OtpConfirmationModal";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { ManufacturerListStatic } from "@/data/manufacturer";
 
 /**
  * 
@@ -18,8 +19,9 @@ export default function ManufacturerView({ props }: { props: any }) {
     const router = useRouter();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { setSelectedManufacturerID }: any = useAppPrimaryContext();
-    const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
-
+    // const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
+    const manufacturers = ManufacturerListStatic;
+    console.log(manufacturers)
     // NAVIGATE TO MANUFACTURE PAGE
     const navigateToManufacturer = (id: number) => {
         setSelectedManufacturerID(id)
