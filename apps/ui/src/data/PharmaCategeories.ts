@@ -163,3 +163,7 @@ export const PHARAM_MANUFACTURERS_CATEGORIED = [
         id:"generic-medicines"
     }
 ]
+
+export const PCD_FRANCHISE_TYPES = [
+    'Ayurvedic', 'Allopathic', 'Homoeopathic', 'Veterinary', 'Dermatology', 'Gynaecology', 'Neuropsychiatry', 'Orthopeadic Surgery', 'Pediatric Range'
+] as const;

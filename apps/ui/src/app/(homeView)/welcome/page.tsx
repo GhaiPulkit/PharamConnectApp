@@ -18,13 +18,14 @@ import { GiPill } from "react-icons/gi";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import { BsArrowUpRightCircleFill } from "react-icons/bs";
 import _ from "lodash";
+import { SEARCH_OPTIONS, SEARCH_OPTIONS_LIST } from '../../../components/modules/home/constants';
 
 export default function HomePage() {
     useDataInit();
     const router = useRouter();
     const breakpoint = useBreakpointValue({ base: 'sm', md: 'md' });
     const { setQuery, query }: any = useAppPrimaryContext();
-
+    const [searchOption, setSearchOption] = useState<SEARCH_OPTIONS>(SEARCH_OPTIONS.franchise)
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     // Selected Category DEFUALT IS PCD
@@ -66,38 +67,7 @@ export default function HomePage() {
                         <PrimaryButton className="" onClick={() => {
                             window.location.href = '/manufacturers';
                         }} title={"Know More"}></PrimaryButton>
-                    </VStack>
-                    <VStack>
-                        <div className="w-full p-[2rem] rounded-4xl backdrop-blur-xl bg-[#ffffff40] !border-[white] !border-[1px]  drop-shadow-lg">
-                            <label className="!text-2xl !font-bold p-4">Tell us what you are looking for?</label>
-                            <section className='flex flex-col gap-4'>
-                                <div className='flex gap-2 w-full p-2 grid grid-cols-3 gap-6 mt-4'>
-                                    {
-                                        PHARMA_CATEGORY_LIST.map(([key, value], idx: number) => {
-                                            // value may be either the enum value or an object containing the enum; normalize it
-                                            const categoryValue = (value && typeof value === 'object' && 'selectedCategory' in value) ? (value as any).selectedCategory : value;
-
-                                            return (
-                                                <div
-                                                    key={`category-${idx}`}
-                                                >
-                                                    <PrimaryButton className="!p-4 w-full !aspect-[1/1]" icon={BsArrowUpRightCircleFill} title={key.split("_").join(' ')} isActive={_.isEqual(value, selectedCategory)} onClick={() => setSelectedCategory(categoryValue)} />
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                </div>
-                                <div className="p-2">
-                                    <View selectedCategory={selectedCategory as PHARMA_CATEGORIES} handleOnSubmit={handleOnSubmit} />
-                                </div>
-
-                            </section>
-
-                        </div>
-                    </VStack>
-                </div>
-                <section className="w-full">
-                    <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6">
                         <h2> How PharmaGrid works?</h2>
                         <div className="grid grid-cols-3 gap-6">
                             <div className="p-6 rounded-xl bg-white border-white !border-1 bg-gradient-to-r from-grey-300 via-grey-500 to-white" style={{
@@ -127,14 +97,88 @@ export default function HomePage() {
 
                         </div>
                     </div>
+                    </VStack>
+                    <VStack>
+                        <div className="w-full p-[2rem] rounded-4xl backdrop-blur-xl bg-[#ffffff40] !border-[white] !border-[1px]  drop-shadow-lg">
+                            <div className="flex">
+                                <label className="!text-2xl !font-bold p-4 flex-grow">Tell us what you are looking for?</label>
+                                <div className="flex">{SEARCH_OPTIONS_LIST.map(([key, value], idx: number) => {
+                                    const searchValue = (value && typeof value === 'object' && 'searchoption' in value) ? (value as any).searchOption : value;
+                                    return (
+                                    <div key={idx}>
+                                        <PrimaryButton title={key} isActive={_.isEqual(value, searchOption)} onClick={() => setSearchOption(searchValue)} />
+                                    </div>
+                                )})}
+                                </div>
+                            </div>
+                            {searchOption == SEARCH_OPTIONS.franchise ? <section className='flex flex-col gap-4'>
+                                <div className='flex gap-2 w-full p-2 grid grid-cols-3 gap-6 mt-4'>
+                                    {
+                                        PHARMA_CATEGORY_LIST.map(([key, value], idx: number) => {
+                                            // value may be either the enum value or an object containing the enum; normalize it
+                                            const categoryValue = (value && typeof value === 'object' && 'selectedCategory' in value) ? (value as any).selectedCategory : value;
+
+                                            return (
+                                                <div
+                                                    key={`category-${idx}`}
+                                                >
+                                                    <PrimaryButton className="!p-4 w-full !aspect-[1/1]" icon={BsArrowUpRightCircleFill} title={value.split("_").join(' ')} isActive={_.isEqual(value, selectedCategory)} onClick={() => setSelectedCategory(categoryValue)} />
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                                <div className="p-2">
+                                    <View selectedSearchOption={searchOption as SEARCH_OPTIONS} selectedCategory={selectedCategory as PHARMA_CATEGORIES} handleOnSubmit={handleOnSubmit} />
+                                </div>
+
+                            </section> :  <section className='flex flex-col gap-4'>TO be done</section>
+}
+                        </div>
+                    </VStack>
+                </div>
+                <section className="w-full">
+                    {/* <div className="flex flex-col gap-6">
+                        <h2> How PharmaGrid works?</h2>
+                        <div className="grid grid-cols-3 gap-6">
+                            <div className="p-6 rounded-xl bg-white border-white !border-1 bg-gradient-to-r from-grey-300 via-grey-500 to-white" style={{
+                                boxShadow:
+                                    'rgb(255 255 255) -1px -12px 30px 6px, rgb(160 160 160) 8px 5px 12px 1px',
+                            }}>
+                                <span className="text-xs font-bold text-[grey]">Step 1</span>
+                                <h3>Search</h3>
+                                <p>Tell us what you are looking for?</p>
+                            </div>
+                            <div className="p-6 rounded-xl bg-white  border-white !border-1 bg-gradient-to-r from-grey-300 via-grey-500 to-white" style={{
+                                boxShadow:
+                                    'rgb(255 255 255) -1px -12px 30px 6px, rgb(160 160 160) 8px 5px 12px 1px',
+                            }}>
+                                <span className="text-xs font-bold text-[grey]">Step 2</span>
+                                <h3>Validate Your Email/Phone Number</h3>
+                                <p>Quickly Validate your phone number or e-mail</p>
+                            </div>
+                            <div className="p-6 rounded-xl bg-white  border-white !border-1 bg-gradient-to-r from-grey-300 via-grey-500 to-white" style={{
+                                boxShadow:
+                                    'rgb(255 255 255) -1px -12px 30px 6px, rgb(160 160 160) 8px 5px 12px 1px',
+                            }}>
+                                <span className="text-xs font-bold text-[grey]">Step 3</span>
+                                <h3>Browse Manufacturers List of Products & Services</h3>
+                                <p>Explore a wide range of pharmaceutical products and manufacturing services.</p>
+                            </div>
+
+                        </div>
+                    </div> */}
                 </section>
                 <section className="w-full">
                     <div className="flex flex-col gap-6">
-                        <h2> Top Manufacturer</h2>
+                        <h2> Top Manufacturers</h2>
                         <div className="grid grid-cols-3 gap-6">
                             <PrimaryButton className="!p-4 w-full" icon={GiPill} iconSize={'2rem'} title={'Capsule, Injection etc.'} onClick={() => null} />
-                            <PrimaryButton className="!p-4 w-full" icon={GiPill} iconSize={'2rem'} title={'Compositions'} onClick={() => null} />
-                            <PrimaryButton className="!p-4 w-full" icon={GiPill} iconSize={'2rem'} title={'Products'} onClick={() => null} />
+                            <PrimaryButton className="!p-4 w-full" icon={GiPill} iconSize={'2rem'} title={'Hand Sanitizers'} onClick={() => null} />
+                            <PrimaryButton className="!p-4 w-full" icon={GiPill} iconSize={'2rem'} title={'Face Masks'} onClick={() => null} />
+                            <PrimaryButton className="!p-4 w-full" icon={GiPill} iconSize={'2rem'} title={'Vetinerary Manufacturers'} onClick={() => null} />
+                            <PrimaryButton className="!p-4 w-full" icon={GiPill} iconSize={'2rem'} title={'Cosmetic Manufacturers'} onClick={() => null} />
+                            <PrimaryButton className="!p-4 w-full" icon={GiPill} iconSize={'2rem'} title={'Pharma Distributors'} onClick={() => null} />
                         </div>
                     </div>
                 </section>

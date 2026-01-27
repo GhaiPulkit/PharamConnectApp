@@ -3,7 +3,7 @@
 import { COMPOSITIONS } from "@/data/product/composition"
 import { PRODUCT_TYPES } from "@/data/product/productType"
 import { Button, Checkbox, FormControl, FormLabel, Input, Select } from "@chakra-ui/react"
-import { PHARMA_CATEGORIES } from "./constants"
+import { PHARMA_CATEGORIES, SEARCH_OPTIONS } from "./constants"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import type { Resolver } from "react-hook-form";
@@ -11,6 +11,7 @@ import * as yup from "yup";
 import { useEffect } from "react";
 import { ProductType } from '../../../data/product/productType';
 import PrimaryButton from "@/components/common/PrimaryButton";
+import { PCD_FRANCHISE_TYPES } from "@/data/PharmaCategeories";
 
 
 /**
@@ -18,16 +19,19 @@ import PrimaryButton from "@/components/common/PrimaryButton";
  * @param param0 
  * @returns 
  */
-export default function View({ selectedCategory, handleOnSubmit }: { selectedCategory?: PHARMA_CATEGORIES, handleOnSubmit: (data: any) => void }) {
+export default function View({ selectedCategory, handleOnSubmit, selectedSearchOption }: { selectedCategory?: PHARMA_CATEGORIES, handleOnSubmit: (data: any) => void, selectedSearchOption?:SEARCH_OPTIONS }) {
     return (<>
         {
-            selectedCategory === PHARMA_CATEGORIES.PCD && <PCDQuestionnaire handleOnSubmit={handleOnSubmit} />
+           selectedSearchOption === SEARCH_OPTIONS.franchise && selectedCategory === PHARMA_CATEGORIES.PCD && <PCDQuestionnaire handleOnSubmit={handleOnSubmit} />
         }
         {
-            selectedCategory === PHARMA_CATEGORIES.THIRD_PARTY && <ThirdPartyQuestionnaire handleOnSubmit={handleOnSubmit} />
+           selectedSearchOption === SEARCH_OPTIONS.franchise && selectedCategory === PHARMA_CATEGORIES.THIRD_PARTY && <ThirdPartyQuestionnaire handleOnSubmit={handleOnSubmit} />
         }
         {
-            selectedCategory === PHARMA_CATEGORIES.PRIVATE_LABEL && <PrivateLabellingForm handleOnSubmit={handleOnSubmit} />
+           selectedSearchOption === SEARCH_OPTIONS.franchise && selectedCategory === PHARMA_CATEGORIES.PRIVATE_LABEL && <PrivateLabellingForm handleOnSubmit={handleOnSubmit} />
+        }
+        {
+            selectedSearchOption === SEARCH_OPTIONS.medicine && <PrivateLabellingForm handleOnSubmit={handleOnSubmit} />
         }
     </>)
 }
@@ -35,6 +39,7 @@ export default function View({ selectedCategory, handleOnSubmit }: { selectedCat
 const pcdSchema = yup.object({
     cityDistrict: yup.string().required("City/District is required"),
     state: yup.string().required("State is required"),
+    franchiseType: yup.string().oneOf(PCD_FRANCHISE_TYPES).required("Please choose a franchise type"),
     interestedInPCDMonopoly: yup.boolean().required(),
     interestedInPCD: yup.boolean().default(true),
 }).required();
@@ -49,6 +54,7 @@ const PCDQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => v
         defaultValues: {
             cityDistrict: "",
             state: "",
+            franchiseType: PCD_FRANCHISE_TYPES[0],
             interestedInPCDMonopoly: false,
             interestedInPCD: true,
         },
@@ -64,6 +70,19 @@ const PCDQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => v
             <FormControl isInvalid={!!errors.state} variant="floating">
                 <FormLabel className="!text-center !text-xl text-gray-800">Which state this city is in?</FormLabel>
                 <Input {...register("state")} placeholder="Enter state" />
+            </FormControl>
+
+            <FormControl variant={'floating'} >
+                <FormLabel className={'!text-center !text-xl text-gray-800'}>Franchise Type</FormLabel>
+                <Select
+                    {...register("franchiseType")}
+                    className="!drop-shadow-xl !bg-[white]"
+                    placeholder="Select Franchise Type"
+                >
+                    {PCD_FRANCHISE_TYPES.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                    ))}
+                </Select>
             </FormControl>
 
             <FormControl isInvalid={!!errors.interestedInPCDMonopoly} variant="floating">

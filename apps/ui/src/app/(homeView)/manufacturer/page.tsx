@@ -15,11 +15,13 @@ import { CiLocationOn } from "react-icons/ci";
 import { HiOutlineMail } from "react-icons/hi";
 import { FiPhone } from "react-icons/fi";
 import { CgWebsite } from "react-icons/cg";
-import { IoTrainOutline, IoAirplaneOutline } from "react-icons/io5";
+import { IoTrainOutline, IoAirplaneOutline, IoCarOutline, IoBoat } from "react-icons/io5";
 import { Button, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { FaLeaf } from "react-icons/fa";
 import { LuUsers } from "react-icons/lu";
 import CarouselSideMenuTabs, { CarouselSideMenuItemContentProps } from "@/components/common/SidebarMenuTabs";
+import { PHARMA_CATEGORIES } from "@/data/PharmaCategeories";
+import { ManufacturerListStatic } from "@/data/manufacturer";
 
 type Manufacturer = {
     id: string | number;
@@ -31,7 +33,7 @@ type Manufacturer = {
     email?: string;
     phone?: string;
     website?: string;
-    compositionAvailable?: { id: number; composition: string; category?: string }[];
+    compositionAvailable?: { id: string | number; composition: string[]; category?: string }[];
     product_types?: { id: number; name: string; description?: string }[];
     best_sellers?: { id: number; name: string }[];
     certifications?: string[];
@@ -41,10 +43,11 @@ type Manufacturer = {
 export default function ManufacturerPage() {
     const [manufacturer, setManufacturer] = useState<Manufacturer | undefined>();
     const queryparam = useSearchParams();
-    const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
+    // const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
+    const manufacturers = ManufacturerListStatic; // Access transformed state
 
     // fallback sample data when context has no manufacturers
-    const sampleManufacturers: Manufacturer[] = [
+    const sampleManufacturers = [
         {
             id: "1",
             name: "Pulsetech Pharma Ltd.",
@@ -108,7 +111,7 @@ export default function ManufacturerPage() {
         const found = param
             ? source.find((m: any) => String(m.id) === String(param))
             : source[0];
-        setManufacturer(found);
+        setManufacturer(found as Manufacturer | undefined);
 
     }, [manufacturers, queryparam]);
 
@@ -196,10 +199,16 @@ export default function ManufacturerPage() {
                     </section>
 
                     <section className="h-full w-full mt-4 flex flex-col gap-8">
-
                         <section className=" p-2 bg-white">
-                            <h3 className="font-bold text-lg mb-2">Componsitions Available</h3>
-                            <p className="text-gray-700">{manufacturer.introduction || 'N/A'}</p>
+                            <h3 className="font-bold text-lg mb-2">Compositions Available</h3>
+                            {manufacturer.compositionAvailable?.map((composition, index) => (
+                                composition.composition?.map((item, itemIndex) => (
+                                    <p key={`${index}-${itemIndex}`} className="text-gray-700">
+                                    {item || 'N/A'}
+                                    </p>
+                                ))
+                            ))}
+
                         </section>
                         <section className=" p-2 bg-white">
                             <h3 className="font-bold text-lg mb-2">Testimonials</h3>
@@ -243,14 +252,15 @@ const ProductBox = ({ name, description, onClick, icon }: { name: string; descri
 
 
 const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
+    console.log(manufacturer)
     return (
         <div id="info-wrapper" className="">
             <div className=" p-2 rounded-lg grid grid-cols-[75%_1fr] gap-2">
                 <div className="flex flex-col gap-4 p-2">
                     <div className="flex flex-wrap gap-2 items-baseline">
-                        <h1>{'Sun Pharma'}</h1><div className="px-4 text-sm text-gray-500">
+                        <h1>{manufacturer.name}</h1><div className="px-4 text-sm text-gray-500">
                             <span className="font-bold">CEO :</span>
-                            <span className="ml-1">  Mr. Dilip Shanghvi</span>
+                            <span className="ml-1">{manufacturer.ceo}</span>
                         </div>
                     </div>
                     <div className="w-full flex  items-center">
@@ -258,14 +268,14 @@ const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
                             <span className="px-4 text-sm text-blue-500 p-2 bg-blue-100 rounded-full !border-1 !border-[blue-500]">Private Limited Company </span>
                             <span className="text-sm font-medium text-[#cccccc] flex gap-2 items-baseline"><LuUsers color={'#cccccc'} /> 50-60  Employees</span>
                         </div>
-                        <span className="px-4 text-sm text-gray-400"><b>GST:</b> 06CPDPS2350K1ZR</span>
+                        <span className="px-4 text-sm text-gray-400"><b>GST:</b>{manufacturer.gst}</span>
                     </div>
 
                     <div className="w-full flex gap-4 items-center mt-2 text-gray-400">
                         {[
                             { icon: CiLocationOn, value: manufacturer.location || 'N/A' },
-                            { icon: HiOutlineMail, value: manufacturer.email || 'N/A' },
-                            { icon: FiPhone, value: manufacturer.phone || 'N/A' },
+                            // { icon: HiOutlineMail, value: manufacturer.email || 'N/A' },
+                            // { icon: FiPhone, value: manufacturer.phone || 'N/A' },
                             { icon: CgWebsite, value: manufacturer.website || 'N/A' },
                         ].map((contact, index) => (
                             <div key={index} className="flex items-center gap-2 text-sm">
@@ -279,9 +289,9 @@ const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
                         <span className="text-xs font-semibold text-gray-400"> Export</span>
                         <div className="flex gap-2">
                             <span>
-                                International Markets including USA, Europe, Africa, Asia</span>
-                            {[{ icon: IoTrainOutline }, { icon: IoAirplaneOutline }].map((icon, idx) => (
-                                <icon.icon key={idx} className="inline-block ml-2" />
+                                {manufacturer.exporter ? "International Markets including USA, Europe, Africa, Asia" : "Do not export"}</span>
+                            {[{ icon: IoTrainOutline, name: "train" }, { icon: IoAirplaneOutline, name: "air" }, { icon:IoCarOutline, name: "road" }, { icon: IoBoat, name: "cargo" }].map((icon, idx) => (
+                                <icon.icon key={idx} className="inline-block ml-2" /> // use the if logic to map with manufacturer.export
                             ))}
                         </div>
 
@@ -290,8 +300,8 @@ const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
                     <div className="flex flex-col gap-2">
                         <span className="text-xs font-semibold text-gray-400">Nature of Business</span>
                         <div className="flex gap-2">
-                            {['Manufacturer', 'Exporter', ' Supplier', 'Distributor'].map((business, idx) => (
-                                <span key={idx} className="text-sm text-pink-600 bg-pink-100 !border-pink-600 !border-1 px-2 rounded-full py-1">{business}</span>
+                            {['wholesaler', 'exporter', ' supplier', 'distributor', 'servie provider', 'trader'].map((business, idx) => (
+                                <span key={idx} className="text-sm text-pink-600 bg-pink-100 !border-pink-600 !border-1 px-2 rounded-full py-1">{business === manufacturer.business.lower() && business}</span>
                             ))}
                         </div>
 
@@ -335,9 +345,12 @@ const Categories = () => {
     return (<section className=" p-2 bg-white">
         <h3 className="font-bold text-lg mb-2">Categories</h3>
         <div className="p-4 grid grid-cols-3 gap-4">
-            <CategoryCircle label={"C1"} icon={FaLeaf} />
+            {PHARMA_CATEGORIES.map(item => (
+                <CategoryCircle key={item.id} label={item.name} icon={FaLeaf} />)
+            )}
+            {/* <CategoryCircle label={"C1"} icon={FaLeaf} />
             <CategoryCircle label={"C2"} icon={FaLeaf} />
-            <CategoryCircle label={"C3"} icon={FaLeaf} />
+            <CategoryCircle label={"C3"} icon={FaLeaf} /> */}
         </div>
     </section>)
 }
