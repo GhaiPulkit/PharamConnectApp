@@ -37,7 +37,7 @@ export default function Header() {
   }
   return (
     <Box bg="#ffffffae" px={4} boxShadow="sm" position="sticky" top="0" zIndex="1000" className='!backdrop-blur-2xl'>
-      <Flex h={16} alignItems="center" justifyContent="space-between" maxW="1200px" mx="auto">
+      <Flex h={16} alignItems="center" justifyContent="space-between" mx="auto">
         {/* Logo */}
         <HStack spacing={2} alignItems="center" onClick={()=> navigateToLink(ROUTES.HOME)}>
           <Image src="/logos/logo.png" alt="PharmaGrid Logo" boxSize="40px" />
@@ -52,6 +52,7 @@ export default function Header() {
               px={2}
               py={1}
               rounded="md"
+              className='text-sm'
               _hover={{ textDecoration: 'none', bg: 'gray.100' }}
               onClick={() => navigateToLink(link.path)}
             >

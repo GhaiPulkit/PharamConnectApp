@@ -3,7 +3,7 @@
 import { COMPOSITIONS } from "@/data/product/composition"
 import { PRODUCT_TYPES } from "@/data/product/productType"
 import { Button, Checkbox, FormControl, FormLabel, Input, Select } from "@chakra-ui/react"
-import { PHARMA_CATEGORIES } from "./constants"
+import { PHARMA_CATEGORIES, SEARCH_OPTIONS } from "./constants"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import type { Resolver } from "react-hook-form";
@@ -11,6 +11,7 @@ import * as yup from "yup";
 import { useEffect } from "react";
 import { ProductType } from '../../../data/product/productType';
 import PrimaryButton from "@/components/common/PrimaryButton";
+import { PCD_FRANCHISE_TYPES } from "@/data/PharmaCategeories";
 
 
 /**
@@ -18,16 +19,19 @@ import PrimaryButton from "@/components/common/PrimaryButton";
  * @param param0 
  * @returns 
  */
-export default function View({ selectedCategory, handleOnSubmit }: { selectedCategory?: PHARMA_CATEGORIES, handleOnSubmit: (data: any) => void }) {
+export default function View({ selectedCategory, handleOnSubmit, selectedSearchOption }: { selectedCategory?: PHARMA_CATEGORIES, handleOnSubmit: (data: any) => void, selectedSearchOption?:SEARCH_OPTIONS }) {
     return (<>
         {
-            selectedCategory === PHARMA_CATEGORIES.PCD && <PCDQuestionnaire handleOnSubmit={handleOnSubmit} />
+           selectedSearchOption === SEARCH_OPTIONS.franchise && selectedCategory === PHARMA_CATEGORIES.PCD && <PCDQuestionnaire handleOnSubmit={handleOnSubmit} />
         }
         {
-            selectedCategory === PHARMA_CATEGORIES.THIRD_PARTY && <ThirdPartyQuestionnaire handleOnSubmit={handleOnSubmit} />
+           selectedSearchOption === SEARCH_OPTIONS.franchise && selectedCategory === PHARMA_CATEGORIES.THIRD_PARTY && <ThirdPartyQuestionnaire handleOnSubmit={handleOnSubmit} />
         }
         {
-            selectedCategory === PHARMA_CATEGORIES.PRIVATE_LABEL && <PrivateLabellingForm handleOnSubmit={handleOnSubmit} />
+           selectedSearchOption === SEARCH_OPTIONS.franchise && selectedCategory === PHARMA_CATEGORIES.PRIVATE_LABEL && <PrivateLabellingForm handleOnSubmit={handleOnSubmit} />
+        }
+        {
+            selectedSearchOption === SEARCH_OPTIONS.medicine && <PrivateLabellingForm handleOnSubmit={handleOnSubmit} />
         }
     </>)
 }
@@ -35,6 +39,7 @@ export default function View({ selectedCategory, handleOnSubmit }: { selectedCat
 const pcdSchema = yup.object({
     cityDistrict: yup.string().required("City/District is required"),
     state: yup.string().required("State is required"),
+    franchiseType: yup.string().oneOf(PCD_FRANCHISE_TYPES).required("Please choose a franchise type"),
     interestedInPCDMonopoly: yup.boolean().required(),
     interestedInPCD: yup.boolean().default(true),
 }).required();
@@ -49,6 +54,7 @@ const PCDQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => v
         defaultValues: {
             cityDistrict: "",
             state: "",
+            franchiseType: PCD_FRANCHISE_TYPES[0],
             interestedInPCDMonopoly: false,
             interestedInPCD: true,
         },
@@ -57,17 +63,30 @@ const PCDQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => v
     return (
         <form onSubmit={handleSubmit((data: PCDFormData) => handleOnSubmit(data))} className="space-y-4">
             <FormControl isInvalid={!!errors.cityDistrict} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Which city you are interested in?</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Which city you are interested in?</span>
                 <Input {...register("cityDistrict")} placeholder="Enter city or district" />
             </FormControl>
 
             <FormControl isInvalid={!!errors.state} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Which state this city is in?</FormLabel>
+                 <span className="!text-center text-xs font-[800] !text-gray-600">Which state this city is in?</span>
                 <Input {...register("state")} placeholder="Enter state" />
             </FormControl>
 
+            <FormControl variant={'floating'} >
+                 <span className="!text-center text-xs font-[800] !text-gray-600">Franchise Type</span>
+                <Select
+                    {...register("franchiseType")}
+                    className="!drop-shadow-xl !bg-[white]"
+                    placeholder="Select Franchise Type"
+                >
+                    {PCD_FRANCHISE_TYPES.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                    ))}
+                </Select>
+            </FormControl>
+
             <FormControl isInvalid={!!errors.interestedInPCDMonopoly} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Monopoly rights?</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Monopoly rights?</span>
                 <Select {...register("interestedInPCDMonopoly")} placeholder="Select">
                     <option value="true">Yes</option>
                     <option value="false">No</option>
@@ -141,7 +160,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
     return (<>
         <form onSubmit={searchForm.handleSubmit(handleOnSubmit)} className="space-y-4">
             <FormControl variant={'floating'} >
-                <FormLabel className={'!text-center !text-xl text-gray-800'}>Composition</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Composition</span>
                 <Select
                     {...searchForm.register("composition")}
                     className="!drop-shadow-xl !bg-[white]"
@@ -153,7 +172,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
                 </Select>
             </FormControl>
             <FormControl variant={'floating'} >
-                <FormLabel className={'!text-center !text-xl text-gray-800'}>Product Type</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Product Type</span>
                 <Select
                     {...searchForm.register("productType")}
                     className="!drop-shadow-xl !bg-[white]"
@@ -165,12 +184,12 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
                 </Select>
             </FormControl>
             <FormControl variant={'floating'} >
-                <FormLabel className={'!text-center !text-xl text-gray-800'}>Packet Size</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Packet Size</span>
                 <Input {...searchForm.register("packetSize")} className="!drop-shadow-xl !bg-[white]" id='composition' type='string' placeholder='Example, Axotocin 3mg 3w/u' />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
             </FormControl>
             <FormControl variant={'floating'} >
-                <FormLabel className={'!text-center !text-xl text-gray-800'}>Minimun Orders</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Minimun Orders</span>
                 <Input className="!drop-shadow-xl !bg-[white]" {...searchForm.register("minOrders")} id='composition' type='number' placeholder='Example, Axotocin 3mg 3w/u' />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
             </FormControl>
@@ -201,7 +220,7 @@ const PrivateLabellingForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) 
     return (
         <form onSubmit={handleSubmit((data: FormData) => handleOnSubmit(data))} className="space-y-4">
             <FormControl isInvalid={!!errors.medicineSystem} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Choose System</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Choose System</span>
                 <Select {...register("medicineSystem")} placeholder="Select system">
                     <option value="Ayurvedic">Ayurvedic</option>
                     <option value="Allopathy">Allopathy</option>
@@ -209,12 +228,12 @@ const PrivateLabellingForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) 
             </FormControl>
 
             <FormControl isInvalid={!!errors.productListing} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Product Listing</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Product Listing</span>
                 <Input {...register("productListing")} placeholder="Comma separated product names" />
             </FormControl>
 
             <FormControl isInvalid={!!errors.needExport} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Need to export?</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Need to export?</span>
                 <Select {...register("needExport")} placeholder="Select">
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
