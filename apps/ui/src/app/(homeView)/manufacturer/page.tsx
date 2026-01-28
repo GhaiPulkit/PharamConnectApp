@@ -301,7 +301,7 @@ const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
                         <span className="text-xs font-semibold text-gray-400">Nature of Business</span>
                         <div className="flex gap-2">
                             {['wholesaler', 'exporter', ' supplier', 'distributor', 'servie provider', 'trader'].map((business, idx) => (
-                                <span key={idx} className="text-sm text-pink-600 bg-pink-100 !border-pink-600 !border-1 px-2 rounded-full py-1">{business === manufacturer.business.lower() && business}</span>
+                                <span key={idx} className="text-sm text-pink-600 bg-pink-100 !border-pink-600 !border-1 px-2 rounded-full py-1">{business === manufacturer.business?.lower() && business}</span>
                             ))}
                         </div>
 

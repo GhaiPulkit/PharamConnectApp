@@ -63,17 +63,17 @@ const PCDQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => v
     return (
         <form onSubmit={handleSubmit((data: PCDFormData) => handleOnSubmit(data))} className="space-y-4">
             <FormControl isInvalid={!!errors.cityDistrict} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Which city you are interested in?</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Which city you are interested in?</span>
                 <Input {...register("cityDistrict")} placeholder="Enter city or district" />
             </FormControl>
 
             <FormControl isInvalid={!!errors.state} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Which state this city is in?</FormLabel>
+                 <span className="!text-center text-xs font-[800] !text-gray-600">Which state this city is in?</span>
                 <Input {...register("state")} placeholder="Enter state" />
             </FormControl>
 
             <FormControl variant={'floating'} >
-                <FormLabel className={'!text-center !text-xl text-gray-800'}>Franchise Type</FormLabel>
+                 <span className="!text-center text-xs font-[800] !text-gray-600">Franchise Type</span>
                 <Select
                     {...register("franchiseType")}
                     className="!drop-shadow-xl !bg-[white]"
@@ -86,7 +86,7 @@ const PCDQuestionnaire = ({ handleOnSubmit }: { handleOnSubmit: (data: any) => v
             </FormControl>
 
             <FormControl isInvalid={!!errors.interestedInPCDMonopoly} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Monopoly rights?</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Monopoly rights?</span>
                 <Select {...register("interestedInPCDMonopoly")} placeholder="Select">
                     <option value="true">Yes</option>
                     <option value="false">No</option>
@@ -160,7 +160,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
     return (<>
         <form onSubmit={searchForm.handleSubmit(handleOnSubmit)} className="space-y-4">
             <FormControl variant={'floating'} >
-                <FormLabel className={'!text-center !text-xl text-gray-800'}>Composition</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Composition</span>
                 <Select
                     {...searchForm.register("composition")}
                     className="!drop-shadow-xl !bg-[white]"
@@ -172,7 +172,7 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
                 </Select>
             </FormControl>
             <FormControl variant={'floating'} >
-                <FormLabel className={'!text-center !text-xl text-gray-800'}>Product Type</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Product Type</span>
                 <Select
                     {...searchForm.register("productType")}
                     className="!drop-shadow-xl !bg-[white]"
@@ -184,12 +184,12 @@ const ProductDetailsForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) =>
                 </Select>
             </FormControl>
             <FormControl variant={'floating'} >
-                <FormLabel className={'!text-center !text-xl text-gray-800'}>Packet Size</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Packet Size</span>
                 <Input {...searchForm.register("packetSize")} className="!drop-shadow-xl !bg-[white]" id='composition' type='string' placeholder='Example, Axotocin 3mg 3w/u' />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
             </FormControl>
             <FormControl variant={'floating'} >
-                <FormLabel className={'!text-center !text-xl text-gray-800'}>Minimun Orders</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Minimun Orders</span>
                 <Input className="!drop-shadow-xl !bg-[white]" {...searchForm.register("minOrders")} id='composition' type='number' placeholder='Example, Axotocin 3mg 3w/u' />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
             </FormControl>
@@ -220,7 +220,7 @@ const PrivateLabellingForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) 
     return (
         <form onSubmit={handleSubmit((data: FormData) => handleOnSubmit(data))} className="space-y-4">
             <FormControl isInvalid={!!errors.medicineSystem} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Choose System</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Choose System</span>
                 <Select {...register("medicineSystem")} placeholder="Select system">
                     <option value="Ayurvedic">Ayurvedic</option>
                     <option value="Allopathy">Allopathy</option>
@@ -228,12 +228,12 @@ const PrivateLabellingForm = ({ handleOnSubmit }: { handleOnSubmit: (data: any) 
             </FormControl>
 
             <FormControl isInvalid={!!errors.productListing} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Product Listing</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Product Listing</span>
                 <Input {...register("productListing")} placeholder="Comma separated product names" />
             </FormControl>
 
             <FormControl isInvalid={!!errors.needExport} variant="floating">
-                <FormLabel className="!text-center !text-xl text-gray-800">Need to export?</FormLabel>
+                <span className="!text-center text-xs font-[800] !text-gray-600">Need to export?</span>
                 <Select {...register("needExport")} placeholder="Select">
                     <option value="yes">Yes</option>
                     <option value="no">No</option>

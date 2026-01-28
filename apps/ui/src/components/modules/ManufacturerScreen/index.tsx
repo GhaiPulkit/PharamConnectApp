@@ -38,17 +38,27 @@ export default function ManufacturerView({ props }: { props: any }) {
 
     return (<>
         <OTPModal isOpen={isOpen} onClose={onClose} onCloseCallback={() => showResults} />
-        <div className="w-full px-2  py-1 flex">
-            <Button leftIcon={<IoReturnDownBack />} onClick={goToHome}>Back</Button>
-        </div>
-        < div className="px-[2rem] flex justify-center items-center max-w-[1200px] mx-auto" >
-            <div className="flex flex-col gap-8">
-                <div className="flex flex-col justify-start items-center gap-2 w-full card">
-                    <h1 className="!text-[left] w-full">Top Manufacturers</h1>
-                    <p className="!text-[left] w-full"> Everything You Need to Build Better Products</p>
+        <div className=" w-full flex flex-col gap-2">
+            <div className="relative w-full px-2 py-1 flex h-[100px]">
+                <div className="flex justify-center items-center w-full">
+                    <h1 className="w-full !text-center">Top Manufacturers</h1>
                 </div>
-                <ManufacturerShowGrid manufacturers={manufacturers} navigateToManufacturer={navigateToManufacturer} />
+
+                <div className="absolute !bg-blue">
+                    <Button leftIcon={<IoReturnDownBack />} onClick={goToHome}>Back</Button>
+                </div>
+
             </div>
-        </div >
+            <div className="flex justify-center items-center w-full">
+                <span className="text-md text-gray-400 !text-center">Review all the manufacturers</span>
+            </div>
+            < div className="px-[2rem] flex justify-center items-center max-w-[1200px] mx-auto mt-[1rem]" >
+                <div className="flex flex-col gap-8">
+                    <ManufacturerShowGrid manufacturers={manufacturers} navigateToManufacturer={navigateToManufacturer} />
+                    <div className="h-[200px]"></div>
+                </div>
+            </div >
+        </div>
+
     </>)
 }

@@ -1,7 +1,7 @@
 export enum PHARMA_CATEGORIES {
-    PCD = 'PCD/Pharma_Franchise',
-    THIRD_PARTY = 'Third_Party Manufacturing',
-    PRIVATE_LABEL = 'Private_Label Manufacturing',
+    PCD = 'Propaganda Cum Distribution',
+    THIRD_PARTY = 'Third Party Manufacturing',
+    PRIVATE_LABEL = 'Private Label Manufacturing',
 }
 
 export const PHARMA_CATEGORY_LIST = Object.entries(PHARMA_CATEGORIES);
