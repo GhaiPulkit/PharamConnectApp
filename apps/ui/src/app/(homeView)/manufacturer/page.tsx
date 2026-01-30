@@ -21,30 +21,31 @@ import { FaLeaf } from "react-icons/fa";
 import { LuUsers } from "react-icons/lu";
 import CarouselSideMenuTabs, { CarouselSideMenuItemContentProps } from "@/components/common/SidebarMenuTabs";
 import { PHARMA_CATEGORIES } from "@/data/PharmaCategeories";
-import { ManufacturerListStatic } from "@/data/manufacturer";
+import { Manufacturer, ManufacturerListStatic } from "@/data/manufacturer";
+import React from "react";
 
-type Manufacturer = {
-    id: string | number;
-    name: string;
-    avatar?: string;
-    description?: string;
-    introduction?: string;
-    location?: string;
-    email?: string;
-    phone?: string;
-    website?: string;
-    compositionAvailable?: { id: string | number; composition: string[]; category?: string }[];
-    product_types?: { id: number; name: string; description?: string }[];
-    best_sellers?: { id: number; name: string }[];
-    certifications?: string[];
-    established?: string;
-};
+// type Manufacturer = {
+//     id: string | number;
+//     name: string;
+//     avatar?: string;
+//     description?: string;
+//     introduction?: string;
+//     location?: string;
+//     email?: string;
+//     phone?: string;
+//     website?: string;
+//     compositionAvailable?: { id: string | number; composition: string[]; category?: string }[];
+//     product_types?: { id: number; name: string; description?: string }[];
+//     best_sellers?: { id: number; name: string }[];
+//     certifications?: string[];
+//     established?: string;
+// };
 
 export default function ManufacturerPage() {
     const [manufacturer, setManufacturer] = useState<Manufacturer | undefined>();
     const queryparam = useSearchParams();
-    // const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
-    const manufacturers = ManufacturerListStatic; // Access transformed state
+    const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
+    // const manufacturers = ManufacturerListStatic; // Access transformed state
 
     // fallback sample data when context has no manufacturers
     const sampleManufacturers = [
@@ -117,8 +118,7 @@ export default function ManufacturerPage() {
 
     useEffect(() => {
         console.log("Manufacturer data:", manufacturer);
-    }
-        , [manufacturer]);
+    }, [manufacturer]);
 
     if (!manufacturer) return <NoRecordFound />;
 
@@ -126,7 +126,7 @@ export default function ManufacturerPage() {
     const sideMenuItems: CarouselSideMenuItemContentProps[] = [
         {
             title: "About Us",
-            content: (<AboutUs />),
+            content: (<AboutUs description={manufacturer.about || ""}/>),
         },
         {
             title: "Categories",
@@ -135,6 +135,10 @@ export default function ManufacturerPage() {
         {
             title: "Product",
             content: (<Products />)
+        },
+        {
+            title: "Compositions",
+            content: (<Compositions manufacturer={manufacturer}/>)
         }
     ]
     return (<>
@@ -199,7 +203,7 @@ export default function ManufacturerPage() {
                     </section>
 
                     <section className="h-full w-full mt-4 flex flex-col gap-8">
-                        <section className=" p-2 bg-white">
+                        {/* <section className=" p-2 bg-white">
                             <h3 className="font-bold text-lg mb-2">Compositions Available</h3>
                             {manufacturer.compositionAvailable?.map((composition, index) => (
                                 composition.composition?.map((item, itemIndex) => (
@@ -209,10 +213,10 @@ export default function ManufacturerPage() {
                                 ))
                             ))}
 
-                        </section>
+                        </section> */}
                         <section className=" p-2 bg-white">
                             <h3 className="font-bold text-lg mb-2">Testimonials</h3>
-                            <p className="text-gray-700">{manufacturer.introduction || 'N/A'}</p>
+                            <p className="text-gray-700">{'N/A'}</p>
                         </section>
                     </section>
                 </div>
@@ -248,6 +252,14 @@ const ProductBox = ({ name, description, onClick, icon }: { name: string; descri
                 </div>
             </div>
         </div>)
+};
+
+const CompositionList = ({ label }: { label: string }) => {
+    return (
+        <li className="text-sm text-gray-800 leading-relaxed border-b border-gray-100 py-1">
+            • {label}
+        </li>
+    );
 };
 
 
@@ -300,8 +312,17 @@ const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
                     <div className="flex flex-col gap-2">
                         <span className="text-xs font-semibold text-gray-400">Nature of Business</span>
                         <div className="flex gap-2">
-                            {['wholesaler', 'exporter', ' supplier', 'distributor', 'servie provider', 'trader'].map((business, idx) => (
-                                <span key={idx} className="text-sm text-pink-600 bg-pink-100 !border-pink-600 !border-1 px-2 rounded-full py-1">{business === manufacturer.business?.lower() && business}</span>
+                            {manufacturer.businessNature.map((business: string, idx: any) => (
+                                <span key={idx} className="text-sm text-pink-600 bg-pink-100 !border-pink-600 !border-1 px-2 rounded-full py-1">{business}</span>
+                            ))}
+                        </div>
+
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <span className="text-xs font-semibold text-gray-400">Additional Services</span>
+                        <div className="flex gap-2">
+                            {['wholesaler', 'exporter', 'supplier', 'distributor', 'service provider', 'trader'].map((business, idx) => (
+                                manufacturer[business] && <span key={idx} className="text-sm text-pink-600 bg-pink-100 !border-pink-600 !border-1 px-2 rounded-full py-1">{business}</span>
                             ))}
                         </div>
 
@@ -334,10 +355,11 @@ const menuItems = [
     { label: 'Logout', action: () => { console.log('Logout clicked'); } },
 ];
 
-const AboutUs = () => {
+const AboutUs = ({ description }: { description: string }) => {
     return (<section className=" p-2 bg-white">
         <h3 className="font-bold text-lg mb-2">About Us</h3>
-        <p className="leading-[26px] text-md text-gray-700">{"Scout Lifescience Pvt. Ltd. is one of the leading manufacturer supplier and distributor of pharmaceutical products such as GASTROINTESTINAL DRUG PELLETS, CAPSULES, GASTROINTESTINAL DRUG CAPSULES, PAIN MANAGEMENTS DRUG PELLETS & BLENDED PELLETS etc. throughout the nation. We are an ethical drug supplier that believes in providing high-quality medical solutions for various health issues. Our strength is our skilled and professional team that is backed up by modern machinery and innovative technology. And because of that, we are capable of providing high-quality drugs regardless of the size of the order. Our quality control team keeps an eye on every aspect of the manufacturing process from purchase of raw material to dispatch of orders enabling us to become the most ethical franchise provider of PCD Pharma for anti-allergies pharma products. Scout Lifescience Pvt. Ltd. is an ISO 9001:2015 and GMP certified global pharmaceutical company with involved in the areas of product marketing & manufacturing. Our focus on specialty segments in India and simultaneous opening of newer markets abroad will help us achieve a niche in global pharmaceutical arena. We are firmly establishing our brands in each market for sustained growth. Tecnex Pharma has established strong capability of providing latest formulations & will always be one step ahead. Scout Lifescience was incorporated in 2020 but has since established itself as a vibrant marketing organization & now proudly is one of the leading pharmaceutical companies in India. The Company is backed by a team of professional's takes complete responsibilities & dedication in Human Health Care. We provide health care solutions in various therapeutic segments with specialized focus on Analgesics, Antibiotic & Anti-Infective, Anticold & Antiallergic and Antipsychotic Drugs. Apart from these, our range also includes Cardiovascular Drugs, Gastro & Antiemetic & Anti Ulcerant, Haematirics, Hormones, Neurology Supplements and Nutritional Supplements."}</p>
+        <p className="leading-[26px] text-md text-gray-700">{description}</p>
+        {/* <p className="leading-[26px] text-md text-gray-700">{"Scout Lifescience Pvt. Ltd. is one of the leading manufacturer supplier and distributor of pharmaceutical products such as GASTROINTESTINAL DRUG PELLETS, CAPSULES, GASTROINTESTINAL DRUG CAPSULES, PAIN MANAGEMENTS DRUG PELLETS & BLENDED PELLETS etc. throughout the nation. We are an ethical drug supplier that believes in providing high-quality medical solutions for various health issues. Our strength is our skilled and professional team that is backed up by modern machinery and innovative technology. And because of that, we are capable of providing high-quality drugs regardless of the size of the order. Our quality control team keeps an eye on every aspect of the manufacturing process from purchase of raw material to dispatch of orders enabling us to become the most ethical franchise provider of PCD Pharma for anti-allergies pharma products. Scout Lifescience Pvt. Ltd. is an ISO 9001:2015 and GMP certified global pharmaceutical company with involved in the areas of product marketing & manufacturing. Our focus on specialty segments in India and simultaneous opening of newer markets abroad will help us achieve a niche in global pharmaceutical arena. We are firmly establishing our brands in each market for sustained growth. Tecnex Pharma has established strong capability of providing latest formulations & will always be one step ahead. Scout Lifescience was incorporated in 2020 but has since established itself as a vibrant marketing organization & now proudly is one of the leading pharmaceutical companies in India. The Company is backed by a team of professional's takes complete responsibilities & dedication in Human Health Care. We provide health care solutions in various therapeutic segments with specialized focus on Analgesics, Antibiotic & Anti-Infective, Anticold & Antiallergic and Antipsychotic Drugs. Apart from these, our range also includes Cardiovascular Drugs, Gastro & Antiemetic & Anti Ulcerant, Haematirics, Hormones, Neurology Supplements and Nutritional Supplements."}</p> */}
     </section>)
 }
 
@@ -394,3 +416,58 @@ const Products = () => {
         </div>
     </section>)
 }
+
+const extractCompositionName = (value: string) => {
+    return value
+        .replace(/\s+\d+(\.\d+)?\s*(mcg|mg|g|iu)?$/i, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+};
+
+// const uniqueCompositionNames = React.useMemo(() => {
+//     if (!manufacturer?.compositionAvailable) return [];
+
+//     const allNames = manufacturer.compositionAvailable.flatMap(c =>
+//         c.composition?.map(extractCompositionName) ?? []
+//     );
+
+//     return Array.from(new Set(allNames));
+// }, [manufacturer]);
+
+const Compositions = ({ manufacturer }: {manufacturer: Manufacturer}) => {
+    const uniqueCompositionNames = React.useMemo(() => {
+        if (!manufacturer?.compositionAvailable) return [];
+
+        const allNames = manufacturer.compositionAvailable.flatMap(c =>
+            c.composition?.map(extractCompositionName) ?? []
+        );
+
+        return Array.from(new Set(allNames));
+    }, [manufacturer]);
+
+    return (
+        <section className="p-2 bg-white">
+            <h3 className="font-bold text-lg mb-3">Compositions Available</h3>
+
+            <ul
+                className="
+                    grid
+                    grid-cols-1
+                    sm:grid-cols-2
+                    md:grid-cols-3
+                    gap-x-8
+                    gap-y-2
+                "
+            >
+                {uniqueCompositionNames.map((name, index) => (
+                    <CompositionList
+                        key={name}   // stable key now
+                        label={name}
+                    />
+                ))}
+            </ul>
+        </section>
+    );
+};
+    

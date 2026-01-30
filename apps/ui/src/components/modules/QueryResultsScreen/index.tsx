@@ -9,7 +9,7 @@ import { IoReturnDownBack } from "react-icons/io5";
 import { Button } from "@chakra-ui/react";
 import { ROUTES } from "@/constants/route";
 import { PHARMA_CATEGORIES } from "../home/constants";
-import { CATEGORY_MAP } from "@/data/manufacturer";
+import { CATEGORY_MAP, Manufacturer } from "@/data/manufacturer";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import PrimaryButton from "@/components/common/PrimaryButton";
@@ -31,13 +31,14 @@ export default function QueryResultsView({ props }: { props: any }) {
     }
 
     const [filteredDataSource, setFilteredDataSource] = useState<any>([]);
-
+    useEffect(() => {}, [])
+    
     useEffect(() => {
         if (!query) {
             return;
         }
         setFilteredDataSource(() => {
-            return manufacturerList.filter((m: any) => {
+            return (manufacturerList as unknown as Manufacturer[]).filter((m: any) => {
                 // Filter based on category
                 switch (query.category) {
 

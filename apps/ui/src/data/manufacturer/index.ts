@@ -118,6 +118,7 @@ export type ProductType =
 export interface Manufacturer {
   id: string;
   name: string;
+  about?: string;
   email: string;
   avatar?: string; 
   ceo?: string;
@@ -168,6 +169,7 @@ export const ManufacturerListStatic: Manufacturer[] = [
   {
     "id": "edd95d58-3aba-4ac9-9b9f-99ef71919311",
     "name": "Kivonyx Healthcare",
+    "about": "Kivonyx Healthcare Pvt Ltd is a group Company of Octavius Pharma Pvt. Ltd. focused on the Domestic (Indian) and International market. Our products are promoted to the Medical Professionals through a trained team of Professional Representatives and distributed through a network of Distributors and Stockiest. Quality and Innovation have been our foundations for success over all these years. Kivonyx Healthcare Pvt Ltd. is a growing pharmaceutical formulation manufacturing and marketing company having wide range of pharmaceutical products like antibiotics, Vitamins, Minerals, Anti-Fungal, Anti-Ulcer & more. We always provide highest quality medicine for our customers and we have greatly promoted the culture of WHO GMP throughout the company. We are looking to expand our reach throughout India by continuously adding new distributors and agents by offering Pharma Franchise/PCD model in various states for our pharmaceutical products. We are using world class manufacturing facilities at Gujarat and Himachal Pradesh for manufacturing of our products. Kivonyx Healthcare is all set to meet the upcoming challenges in the field of healthcare. A highly qualified and devoted workforce has always been an asset to the company.",
     "legalStatus": "Private Limited Company (Pvt. Ltd.)",
     "email": "Osborne_Batz-Zboncak@hotmail.com",
     "avatar": "https://picsum.photos/seed/SMwThLnf/1120/3483",
@@ -205,7 +207,7 @@ export const ManufacturerListStatic: Manufacturer[] = [
             "composition": [
                 "Methylcobalamin 1500mcg",
                 "L-Methyl Folate 1mg",
-                "Pyridoxal-5- Phosphate 0.5mg",
+                "Pyridoxal-5-Phosphate 0.5mg",
                 "Vitamin D3 2000 IU"
             ],
             "category": 0
@@ -306,7 +308,7 @@ export const ManufacturerListStatic: Manufacturer[] = [
             "composition": [
                 "Methylcobalamin 1500mcg",
                 "L-Methyl Folate 1mg",
-                "Pyridoxal-5- Phosphate 0.5mg",
+                "Pyridoxal-5-Phosphate 0.5mg",
                 "Vitamin D3 2000 IU"
             ],
             "p_category": 0,
