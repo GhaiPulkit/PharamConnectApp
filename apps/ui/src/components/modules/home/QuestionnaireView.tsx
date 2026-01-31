@@ -19,20 +19,20 @@ import { PCD_FRANCHISE_TYPES } from "@/data/PharmaCategeories";
  * @param param0 
  * @returns 
  */
-export default function View({ selectedCategory, handleOnSubmit, selectedSearchOption }: { selectedCategory?: PHARMA_CATEGORIES, handleOnSubmit: (data: any) => void, selectedSearchOption?:SEARCH_OPTIONS }) {
+export default function View({ selectedCategory, handleOnSubmit }: { selectedCategory?: PHARMA_CATEGORIES, handleOnSubmit: (data: any) => void }) {
     return (<>
         {
-           selectedSearchOption === SEARCH_OPTIONS.franchise && selectedCategory === PHARMA_CATEGORIES.PCD && <PCDQuestionnaire handleOnSubmit={handleOnSubmit} />
+           selectedCategory === PHARMA_CATEGORIES.PCD && <PCDQuestionnaire handleOnSubmit={handleOnSubmit} />
         }
         {
-           selectedSearchOption === SEARCH_OPTIONS.franchise && selectedCategory === PHARMA_CATEGORIES.THIRD_PARTY && <ThirdPartyQuestionnaire handleOnSubmit={handleOnSubmit} />
+           selectedCategory === PHARMA_CATEGORIES.THIRD_PARTY && <ThirdPartyQuestionnaire handleOnSubmit={handleOnSubmit} />
         }
         {
-           selectedSearchOption === SEARCH_OPTIONS.franchise && selectedCategory === PHARMA_CATEGORIES.PRIVATE_LABEL && <PrivateLabellingForm handleOnSubmit={handleOnSubmit} />
+           selectedCategory === PHARMA_CATEGORIES.PRIVATE_LABEL && <PrivateLabellingForm handleOnSubmit={handleOnSubmit} />
         }
-        {
+        {/* {
             selectedSearchOption === SEARCH_OPTIONS.medicine && <PrivateLabellingForm handleOnSubmit={handleOnSubmit} />
-        }
+        } */}
     </>)
 }
 

@@ -18,14 +18,14 @@ import { GiPill } from "react-icons/gi";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import { BsArrowUpRightCircleFill } from "react-icons/bs";
 import _ from "lodash";
-import { SEARCH_OPTIONS, SEARCH_OPTIONS_LIST } from '../../../components/modules/home/constants';
+// import { SEARCH_OPTIONS, SEARCH_OPTIONS_LIST } from '../../../components/modules/home/constants';
 
 export default function HomePage() {
     useDataInit();
     const router = useRouter();
     const breakpoint = useBreakpointValue({ base: 'sm', md: 'md' });
     const { setQuery, query }: any = useAppPrimaryContext();
-    const [searchOption, setSearchOption] = useState<SEARCH_OPTIONS>(SEARCH_OPTIONS.franchise)
+    // const [searchOption, setSearchOption] = useState<SEARCH_OPTIONS>(SEARCH_OPTIONS.franchise)
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     // Selected Category DEFUALT IS PCD
@@ -104,7 +104,7 @@ export default function HomePage() {
                     <div className="w-full p-[2rem] rounded-4xl backdrop-blur-xl bg-[#ffffff40] !border-[white] !border-[1px]  drop-shadow-lg">
                         <div className="flex">
                             <label className="!text-xl !font-bold p-4 flex-grow">Tell us what you are looking for?</label>
-                            <div className="flex">{SEARCH_OPTIONS_LIST.map(([key, value], idx: number) => {
+                            {/* <div className="flex">{SEARCH_OPTIONS_LIST.map(([key, value], idx: number) => {
                                 const searchValue = (value && typeof value === 'object' && 'searchoption' in value) ? (value as any).searchOption : value;
                                 return (
                                     <div key={idx}>
@@ -112,9 +112,9 @@ export default function HomePage() {
                                     </div>
                                 )
                             })}
-                            </div>
+                            </div> */}
                         </div>
-                        {searchOption == SEARCH_OPTIONS.franchise ? <section className='flex flex-col gap-4'>
+                        <section className='flex flex-col gap-4'>
                             <div className='flex gap-2 w-full p-2 grid grid-cols-3 gap-6 mt-4'>
                                 {
                                     PHARMA_CATEGORY_LIST.map(([key, value], idx: number) => {
@@ -133,11 +133,10 @@ export default function HomePage() {
                                 }
                             </div>
                             <div className="p-2 mt-2">
-                                <View selectedSearchOption={searchOption as SEARCH_OPTIONS} selectedCategory={selectedCategory as PHARMA_CATEGORIES} handleOnSubmit={handleOnSubmit} />
+                                <View selectedCategory={selectedCategory as PHARMA_CATEGORIES} handleOnSubmit={handleOnSubmit} />
                             </div>
 
-                        </section> : <section className='flex flex-col gap-4'>TO be done</section>
-                        }
+                        </section>
                     </div>
                 </VStack>
             </div>

@@ -1,341 +1,795 @@
-'use client';
-
-import { useState } from 'react';
 import {
-  Button, VStack, FormControl, FormLabel, Input, Select, Slider, SliderTrack,
-  SliderFilledTrack, SliderThumb, SliderMark, Badge, Flex, Text, useDisclosure,
-  Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent,
-  DrawerCloseButton, Box, HStack, useBreakpointValue, Progress, Tag, SimpleGrid,
-  useToast, IconButton, Tooltip, RadioGroup, Radio, CheckboxGroup, Checkbox,
-} from '@chakra-ui/react';
-import { FiPlusCircle, FiCheckCircle, FiArrowRight, FiClock, FiDollarSign } from 'react-icons/fi';
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalCloseButton,
+  Box,
+  Flex,
+  Text,
+  Progress,
+  Button,
+  VStack,
+  HStack,
+  SimpleGrid,
+  FormControl,
+  FormLabel,
+  Select,
+  Input,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  RadioGroup,
+  Radio,
+  CheckboxGroup,
+  Checkbox,
+  Tag,
+  useBreakpointValue,
+} from "@chakra-ui/react";
+import { FiArrowRight, FiPlusCircle, FiDollarSign } from "react-icons/fi";
 
-const BUSINESS_TYPES = ['Retail Chemist', 'Wholesale Distributor', 'Hospital Pharmacy', 'Medical Representative', 'Corporate Chain'];
-const EXPERIENCE_ROLES = ['Pharmacy Operations', 'Sales & Distribution', 'Regulatory Compliance', 'Quality Control'];
-const PACKAGING_PREFERENCES = ['Blister', 'Strip', 'Alu-Alu', 'Mono Carton'];
+type FormData = {
+  businessType: string;
+  city: string;
+  urgency: number;
+  contactWindow: string;
+  hasLicenses: string;
+  volumeTier: string;
+  productFocus: string[];
+  packaging: string[];
+  budgetTier: string;
+  name: string;
+  mobile: string;
+  email: string;
+  firm: string;
+  experienceRoles: string[];
+  drugLicenseStatus: string;
+};
 
-export default function PharmaOpportunityForm() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    businessType: '',
-    city: '',
-    urgency: 2, // 1=ASAP, 2=15days, 3=30days
-    contactWindow: 'flexible',
-    hasLicenses: 'partial',
-    experience: [] as string[],
-    volumeTier: 'medium',
-    productFocus: [] as string[],
-    packaging: [] as string[],
-    quantityRange: [1000, 10000],
-    budgetTier: '1-5L',
-    mobile: '',
-    name: '',
+type CreateOpportunityModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+
+  step: number;
+  totalSteps: number;
+  progress: number;
+
+  formData: FormData;
+
+  updateField: (field: Partial<FormData>) => void;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+  submitOpportunity: () => void;
+
+  BUSINESS_TYPES: string[];
+  PACKAGING_PREFERENCES: string[];
+  EXPERIENCE_ROLES: string[];
+};
+
+export default function CreateOpportunityModal({
+  isOpen,
+  onClose,
+  step,
+  totalSteps,
+  progress,
+  formData,
+  updateField,
+  setStep,
+  submitOpportunity,
+  BUSINESS_TYPES,
+  PACKAGING_PREFERENCES,
+  EXPERIENCE_ROLES,
+}: CreateOpportunityModalProps) {
+  const modalSize = useBreakpointValue({
+    base: "full",
+    md: "3xl",
+    lg: "4xl",
   });
-  
-  const totalSteps = 4;
-  const progress = ((step - 1) / (totalSteps - 1)) * 100;
-  const toast = useToast();
-
-  const updateField = (updates: any) => {
-    setFormData(prev => ({ ...prev, ...updates }));
-  };
-
-  const submitOpportunity = () => {
-    console.log('🚀 Pharma Opportunity:', formData);
-    toast({
-      title: '✅ Opportunity Published!',
-      description: "Top manufacturers matched. Expect calls within 2 hours.",
-      status: 'success',
-      duration: 4000,
-      position: 'top'
-    });
-    onClose();
-    setStep(1);
-  };
 
   return (
-    <>
-      {/* Hero CTA */}
-      <Box position="fixed" bottom={6} left={6} right={6} zIndex={1000} maxW="container.sm" mx="auto">
-        <Button
-          onClick={onOpen}
-          w="full"
-          h={16}
-          size="xl"
-          colorScheme="purple"
-          leftIcon={<FiPlusCircle />}
-          boxShadow="2xl"
-          borderRadius="3xl"
-          fontSize="lg"
-          fontWeight="extrabold"
-          _hover={{ transform: 'translateY(-2px)', boxShadow: '3xl' }}
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size={modalSize}
+      isCentered
+      motionPreset="scale"
+      scrollBehavior="inside"
+    >
+      <ModalOverlay backdropFilter="blur(6px)" bg="blackAlpha.600" />
+
+      <ModalContent borderRadius={{ base: "0", md: "3xl" }} overflow="hidden">
+        {/* HEADER */}
+        <ModalHeader
+          bg="white"
+          p={6}
+          borderBottom="1px solid"
+          borderColor="gray.200"
         >
-          Create Pharma Opportunity
-        </Button>
-      </Box>
+          <Flex align="center" gap={4}>
+            <Box bg="purple.500" p={3} borderRadius="full" color="white">
+              <FiPlusCircle size={22} />
+            </Box>
 
-      <Drawer isOpen={isOpen} onClose={onClose} placement="bottom" size="full">
-        <DrawerOverlay />
-        <DrawerContent borderTopRadius="3xl" bg="gray.50">
-          <DrawerHeader p={8} bg="white" borderBottom="1px" borderColor="gray.200">
-            <Flex align="center" gap={4} mb={4}>
-              <Box bg="purple.500" p={3} borderRadius="full" color="white">
-                <FiPlusCircle size={24} />
-              </Box>
-              <Box>
-                <Text fontSize="2xl" fontWeight="black" color="gray.900">
-                  Create Opportunity
-                </Text>
-                <Text fontSize="sm" color="gray.600">Step {step} of {totalSteps}</Text>
-              </Box>
-            </Flex>
-            <Progress value={progress} size="md" borderRadius="full" />
-            <DrawerCloseButton size="lg" top={4} right={4} />
-          </DrawerHeader>
+            <Box>
+              <Text fontSize="xl" fontWeight="black">
+                Create Opportunity
+              </Text>
+              <Text fontSize="sm" color="gray.600">
+                Step {step} of {totalSteps}
+              </Text>
+            </Box>
+          </Flex>
 
-          <DrawerBody p={8}>
-            {step === 1 && (
-              <VStack spacing={8} align="stretch">
-                <FormControl>
-                  <FormLabel fontWeight="bold" fontSize="lg" color="gray.800">
-                    Your Business Type
-                  </FormLabel>
-                  <Select 
-                    value={formData.businessType}
-                    onChange={e => updateField({ businessType: e.target.value })}
-                    size="lg"
-                  >
-                    <option value="">Choose your business...</option>
-                    {BUSINESS_TYPES.map(type => (
-                      <option key={type}>{type}</option>
-                    ))}
-                  </Select>
-                </FormControl>
+          <Progress value={progress} mt={4} size="sm" borderRadius="full" />
 
-                <FormControl>
-                  <FormLabel fontWeight="bold">Primary Location</FormLabel>
-                  <Input 
-                    placeholder="Enter city/district" 
-                    value={formData.city}
-                    onChange={e => updateField({ city: e.target.value })}
-                    size="lg"
-                  />
-                </FormControl>
+          <ModalCloseButton top={4} right={4} />
+        </ModalHeader>
 
-                <FormControl>
-                  <FormLabel fontWeight="bold">When do you need products?</FormLabel>
-                  <Slider 
+        {/* BODY */}
+        <ModalBody p={{ base: 5, md: 8 }} bg="gray.50">
+          {step === 1 && (
+            <VStack spacing={7} align="stretch">
+              <FormControl>
+                <FormLabel fontWeight="bold">Your Business Type</FormLabel>
+                <Select
+                  size="lg"
+                  value={formData.businessType}
+                  onChange={(e) =>
+                    updateField({ businessType: e.target.value })
+                  }
+                >
+                  <option value="">Choose your business...</option>
+                  {BUSINESS_TYPES.map((type) => (
+                    <option key={type}>{type}</option>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel fontWeight="bold">Primary Location</FormLabel>
+                <Input
+                  size="lg"
+                  placeholder="Enter city / district"
+                  value={formData.city}
+                  onChange={(e) => updateField({ city: e.target.value })}
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel fontWeight="bold">
+                  When do you need products?
+                </FormLabel>
+
+                <Box px={2}>
+                  <Slider
                     value={formData.urgency}
-                    onChange={val => updateField({ urgency: val })}
-                    min={1} max={3} step={1}
-                    w="full"
+                    min={1}
+                    max={3}
+                    step={1}
+                    onChange={(val) => updateField({ urgency: val })}
                   >
-                    <SliderTrack bg="gray.200">
+                    <SliderTrack bg="gray.200" h="6px" borderRadius="full">
                       <SliderFilledTrack bg="purple.500" />
                     </SliderTrack>
-                    <SliderThumb boxSize={6} border="3px solid white" bg="purple.500">
-                      <Box fontSize="xs" color="white" fontWeight="bold">
-                        {['ASAP', '15 Days', '30 Days'][formData.urgency - 1]}
-                      </Box>
-                    </SliderThumb>
+
+                    <SliderThumb
+                      bg="purple.500"
+                      boxSize={5}
+                      border="3px solid white"
+                      _focus={{ boxShadow: "0 0 0 4px rgba(128,90,213,0.4)" }}
+                    />
                   </Slider>
-                </FormControl>
 
-                <FormControl>
-                  <FormLabel fontWeight="bold">Best time to call</FormLabel>
-                  <RadioGroup value={formData.contactWindow} onChange={val => updateField({ contactWindow: val })}>
-                    <HStack spacing={6}>
-                      <Radio value="morning">🌅 9AM-12PM</Radio>
-                      <Radio value="afternoon">☀️ 1PM-5PM</Radio>
-                      <Radio value="evening">🌙 6PM-9PM</Radio>
-                      <Radio value="flexible">⏰ Anytime</Radio>
-                    </HStack>
-                  </RadioGroup>
-                </FormControl>
-              </VStack>
-            )}
+                  {/* LABEL BELOW SLIDER */}
+                  <Flex justify="space-between" mt={2} px={1}>
+                    {["ASAP", "15 Days", "30 Days"].map((label, index) => {
+                      const value = index + 1;
+                      const isActive = formData.urgency === value;
 
-            {step === 2 && (
-              <VStack spacing={8} align="stretch">
+                      return (
+                        <Text
+                          key={label}
+                          fontSize="sm"
+                          fontWeight={isActive ? "bold" : "medium"}
+                          color={isActive ? "purple.600" : "gray.500"}
+                          transition="all 0.2s"
+                        >
+                          {label}
+                        </Text>
+                      );
+                    })}
+                  </Flex>
+                </Box>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel fontWeight="bold">Best time to call</FormLabel>
+                <RadioGroup
+                  value={formData.contactWindow}
+                  onChange={(val) => updateField({ contactWindow: val })}
+                >
+                  <SimpleGrid columns={{ base: 2, md: 4 }} spacing={3}>
+                    <Radio value="morning">🌅 9–12</Radio>
+                    <Radio value="afternoon">☀️ 1–5</Radio>
+                    <Radio value="evening">🌙 6–9</Radio>
+                    <Radio value="flexible">⏰ Anytime</Radio>
+                  </SimpleGrid>
+                </RadioGroup>
+              </FormControl>
+            </VStack>
+          )}
+
+          {step === 2 && (
+            <VStack spacing={7} align="stretch">
+              {/* Expereience Role of the user */}
+              <FormControl>
+                <FormLabel fontWeight="bold">Your Experience Roles</FormLabel>
+                <SimpleGrid columns={2} spacing={3}>
+                  {EXPERIENCE_ROLES.map((role) => {
+                    const isSelected = formData.experienceRoles.includes(role);
+                    return (
+                      <Button
+                        key={role}
+                        size="lg"
+                        variant={isSelected ? "solid" : "outline"}
+                        colorScheme="purple"
+                        onClick={() => {
+                          if (isSelected) {
+                            // Remove role if already selected
+                            updateField({
+                              experienceRoles: formData.experienceRoles.filter(
+                                (r) => r !== role,
+                              ),
+                            });
+                          } else {
+                            // Add role
+                            updateField({
+                              experienceRoles: [
+                                ...formData.experienceRoles,
+                                role,
+                              ],
+                            });
+                          }
+                        }}
+                      >
+                        {role}
+                      </Button>
+                    );
+                  })}
+                </SimpleGrid>
+              </FormControl>
+
+              {/* HStack for GST + Drug License */}
+              <HStack spacing={8} align="start">
+                {/* GST Status */}
                 <FormControl>
-                  <FormLabel fontWeight="bold" fontSize="lg">
-                    Business Readiness
-                  </FormLabel>
-                  <RadioGroup value={formData.hasLicenses} onChange={val => updateField({ hasLicenses: val })}>
-                    <VStack align="start" spacing={3} mt={2}>
-                      <Radio value="complete">✅ Complete (GST + Drug License)</Radio>
-                      <Radio value="partial">⚠️ Partial (GST or Applied)</Radio>
-                      <Radio value="startup">🚀 New Business</Radio>
+                  <FormLabel fontWeight="bold">GST Status</FormLabel>
+                  <RadioGroup
+                    value={formData.hasLicenses}
+                    onChange={(val) => updateField({ hasLicenses: val })}
+                  >
+                    <VStack align="start" spacing={3}>
+                      <Radio value="complete">Already have</Radio>
+                      <Radio value="partial">Do not have</Radio>
+                      <Radio value="startup">Applied</Radio>
                     </VStack>
                   </RadioGroup>
                 </FormControl>
 
+                {/* Drug License Status */}
                 <FormControl>
-                  <FormLabel fontWeight="bold">Team Expertise</FormLabel>
-                  <CheckboxGroup value={formData.experience} onChange={vals => updateField({ experience: vals as string[] })}>
-                    <SimpleGrid columns={{ base: 2, md: 2 }} gap={3} mt={2}>
-                      {EXPERIENCE_ROLES.map(role => (
-                        <Checkbox key={role} size="lg">{role}</Checkbox>
-                      ))}
-                    </SimpleGrid>
-                  </CheckboxGroup>
+                  <FormLabel fontWeight="bold">Drug License Status</FormLabel>
+                  <RadioGroup
+                    value={formData.drugLicenseStatus}
+                    onChange={(val) => updateField({ drugLicenseStatus: val })}
+                  >
+                    <VStack align="start" spacing={3}>
+                      <Radio value="complete">Already have</Radio>
+                      <Radio value="partial">Do not have</Radio>
+                      <Radio value="applied">Applied</Radio>
+                    </VStack>
+                  </RadioGroup>
                 </FormControl>
+              </HStack>
 
-                <FormControl>
-                  <FormLabel fontWeight="bold">Current Monthly Volume</FormLabel>
-                  <SimpleGrid columns={{ base: 3, md: 4 }} gap={3} mt={2}>
-                    {['< ₹1L', '₹1-5L', '₹5-20L', '₹20L+'].map(tier => (
-                      <Button
-                        key={tier}
-                        variant={formData.volumeTier === tier ? 'solid' : 'outline'}
-                        colorScheme="purple"
-                        size="lg"
-                        onClick={() => updateField({ volumeTier: tier })}
-                        borderRadius="2xl"
-                      >
-                        {tier}
-                      </Button>
-                    ))}
-                  </SimpleGrid>
-                </FormControl>
-              </VStack>
-            )}
-
-            {step === 3 && (
-              <VStack spacing={8} align="stretch">
-                <FormControl>
-                  <FormLabel fontWeight="bold" fontSize="lg">Therapy Areas Needed</FormLabel>
-                  <CheckboxGroup value={formData.productFocus} onChange={vals => updateField({ productFocus: vals as string[] })}>
-                    <SimpleGrid columns={{ base: 2, md: 3 }} gap={3} mt={3}>
-                      {['Anti-Infectives', 'Gastro', 'Cardiac', 'Diabetic Care', 'Dermatology', 'Pain Management', 'Vitamins'].map(cat => (
-                        <Checkbox key={cat} size="lg" borderRadius="md">{cat}</Checkbox>
-                      ))}
-                    </SimpleGrid>
-                  </CheckboxGroup>
-                </FormControl>
-
-                <FormControl>
-                  <FormLabel fontWeight="bold">Packaging Preferences</FormLabel>
-                  <CheckboxGroup value={formData.packaging} onChange={vals => updateField({ packaging: vals as string[] })}>
-                    <HStack wrap="wrap" gap={3} mt={3}>
-                      {PACKAGING_PREFERENCES.map(pack => (
-                        <Tag
-                          key={pack}
-                          size="lg"
-                          colorScheme="purple"
-                          borderRadius="full"
-                          cursor="pointer"
-                          onClick={() => {
-                            const newVal = formData.packaging.includes(pack)
-                              ? formData.packaging.filter(p => p !== pack)
-                              : [...formData.packaging, pack];
-                            updateField({ packaging: newVal });
-                          }}
-                        >
-                          <Checkbox size="sm" isChecked={formData.packaging.includes(pack)} /> {pack}
-                        </Tag>
-                      ))}
-                    </HStack>
-                  </CheckboxGroup>
-                </FormControl>
-
-                <FormControl>
-                  <FormLabel fontWeight="bold">Target Quantity</FormLabel>
-                  <Slider
-                    value={formData.urgency} // ✅ single number
-                    onChange={(val: number) => updateField({ urgency: val })}
-                    min={1} 
-                    max={3} 
-                    step={1}
+              {/* Current Monthly Volume */}
+              <FormControl>
+                <FormLabel fontWeight="bold">
+                  Your Current Monthly Volume
+                </FormLabel>
+                <SimpleGrid columns={2} spacing={3}>
+                  {["< ₹1L", "₹1-5L", "₹5-20L", "₹20L+"].map((tier) => (
+                    <Button
+                      key={tier}
+                      size="lg"
+                      variant={
+                        formData.volumeTier === tier ? "solid" : "outline"
+                      }
+                      colorScheme="purple"
+                      onClick={() => updateField({ volumeTier: tier })}
                     >
-                    <SliderTrack bg="gray.200">
-                        <SliderFilledTrack bg="purple.500" />
-                    </SliderTrack>
-                    <SliderThumb boxSize={6} bg="purple.500">
-                        <Box fontSize="xs" color="white" fontWeight="bold">
-                        {['ASAP', '15 Days', '30 Days'][formData.urgency - 1]}
-                        </Box>
-                    </SliderThumb>
-                    </Slider>
-                </FormControl>
+                      {tier}
+                    </Button>
+                  ))}
+                </SimpleGrid>
+              </FormControl>
+            </VStack>
+          )}
 
-                <FormControl>
-                  <FormLabel fontWeight="bold">Budget Range</FormLabel>
-                  <SimpleGrid columns={{ base: 2, md: 3 }} gap={3} mt={2}>
-                    {['₹1-3L', '₹3-10L', '₹10L+', 'Discuss'].map(budget => (
-                      <Button
-                        key={budget}
-                        variant={formData.budgetTier === budget ? 'solid' : 'outline'}
-                        colorScheme="green"
-                        size="lg"
-                        onClick={() => updateField({ budgetTier: budget })}
-                        leftIcon={<FiDollarSign />}
-                        borderRadius="2xl"
-                      >
-                        {budget}
-                      </Button>
+          {step === 3 && (
+            <VStack spacing={7} align="stretch">
+              <FormControl>
+                <FormLabel fontWeight="bold">Therapy Areas Needed</FormLabel>
+                <CheckboxGroup
+                  value={formData.productFocus}
+                  onChange={(vals) =>
+                    updateField({ productFocus: vals as string[] })
+                  }
+                >
+                  <SimpleGrid columns={2} spacing={3}>
+                    {[
+                      "Anti-Infectives",
+                      "Gastro",
+                      "Cardiac",
+                      "Diabetic Care",
+                      "Dermatology",
+                      "Pain Management",
+                      "Vitamins",
+                    ].map((cat) => (
+                      <Checkbox key={cat} value={cat}>
+                        {cat}
+                      </Checkbox>
                     ))}
                   </SimpleGrid>
-                </FormControl>
-              </VStack>
-            )}
+                </CheckboxGroup>
+              </FormControl>
 
-            {step === 4 && (
-              <VStack spacing={6} align="stretch" p={4} bg="white" borderRadius="2xl" boxShadow="lg">
-                <Text fontSize="lg" fontWeight="bold" color="gray.800">
-                  Quick Contact Details
-                </Text>
-                <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-                  <Input 
-                    placeholder="Your Name" 
-                    value={formData.name}
-                    onChange={e => updateField({ name: e.target.value })}
-                    size="lg"
-                  />
-                  <Input 
-                    type="tel"
-                    placeholder="Mobile Number *" 
-                    value={formData.mobile}
-                    onChange={e => updateField({ mobile: e.target.value })}
-                    size="lg"
-                  />
+              <FormControl>
+                <FormLabel fontWeight="bold">Packaging Preferences</FormLabel>
+                <HStack wrap="wrap" spacing={3}>
+                  {PACKAGING_PREFERENCES.map((pack) => {
+                    const selected = formData.packaging.includes(pack);
+                    return (
+                      <Tag
+                        key={pack}
+                        size="lg"
+                        colorScheme="purple"
+                        variant={selected ? "solid" : "subtle"}
+                        cursor="pointer"
+                        onClick={() =>
+                          updateField({
+                            packaging: selected
+                              ? formData.packaging.filter((p) => p !== pack)
+                              : [...formData.packaging, pack],
+                          })
+                        }
+                      >
+                        {pack}
+                      </Tag>
+                    );
+                  })}
+                </HStack>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel fontWeight="bold">Budget Range</FormLabel>
+                <SimpleGrid columns={2} spacing={3}>
+                  {["₹1-3L", "₹3-10L", "₹10L+", "Discuss"].map((budget) => (
+                    <Button
+                      key={budget}
+                      size="lg"
+                      variant={
+                        formData.budgetTier === budget ? "solid" : "outline"
+                      }
+                      colorScheme="green"
+                      onClick={() => updateField({ budgetTier: budget })}
+                    >
+                      {budget}
+                    </Button>
+                  ))}
                 </SimpleGrid>
-              </VStack>
-            )}
-          </DrawerBody>
+              </FormControl>
+            </VStack>
+          )}
 
-          <DrawerFooter p={8} bg="white" borderTop="1px" borderColor="gray.200">
-            <Flex w="full" gap={4}>
-              {step > 1 && (
-                <Button 
-                  flex={1} 
-                  onClick={() => setStep(s => s - 1)}
-                  variant="ghost" 
-                  leftIcon={<FiArrowRight className="rotate-180" />}
+          {step === 4 && (
+            <VStack
+              spacing={5}
+              bg="white"
+              p={6}
+              borderRadius="2xl"
+              boxShadow="md"
+            >
+              <Text fontWeight="bold" fontSize="lg">
+                Quick Contact Details
+              </Text>
+
+              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+                <Input
                   size="lg"
-                >
-                  Previous
-                </Button>
-              )}
-              <Button 
-                flex={2}
-                colorScheme={step === 4 ? "purple" : "blue"}
+                  placeholder="Your Name *"
+                  value={formData.name}
+                  onChange={(e) => updateField({ name: e.target.value })}
+                />
+                <Input
+                  size="lg"
+                  type="tel"
+                  placeholder="Mobile Number *"
+                  value={formData.mobile}
+                  onChange={(e) => updateField({ mobile: e.target.value })}
+                />
+                <Input
+                  size="lg"
+                  type="tel"
+                  placeholder="Email *"
+                  value={formData.email}
+                  onChange={(e) => updateField({ email: e.target.value })}
+                />
+                <Input
+                  size="lg"
+                  type="tel"
+                  placeholder="Company Name *"
+                  value={formData.firm}
+                  onChange={(e) => updateField({ firm: e.target.value })}
+                />
+              </SimpleGrid>
+            </VStack>
+          )}
+        </ModalBody>
+
+        {/* FOOTER */}
+        <ModalFooter bg="white" borderTop="1px solid" borderColor="gray.200">
+          <Flex w="full" gap={4}>
+            {step > 1 && (
+              <Button
+                flex={1}
                 size="lg"
-                rightIcon={<FiArrowRight />}
-                onClick={step === 4 ? submitOpportunity : () => setStep(s => s + 1)}
-                boxShadow="xl"
+                variant="ghost"
+                onClick={() => setStep((s) => s - 1)}
               >
-                {step === 4 ? 'Publish Opportunity' : 'Continue'}
+                Previous
               </Button>
-            </Flex>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </>
+            )}
+
+            <Button
+              flex={2}
+              size="lg"
+              colorScheme="purple"
+              rightIcon={<FiArrowRight />}
+              onClick={
+                step === 4 ? submitOpportunity : () => setStep((s) => s + 1)
+              }
+            >
+              {step === 4 ? "Publish Opportunity" : "Continue"}
+            </Button>
+          </Flex>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
 
+//  --------------------------------------------- example -------------------------------------------------------------------------
+
+// 'use client';
+
+// import { useState } from 'react';
+// import {
+//   Button, VStack, FormControl, FormLabel, Input, Select, Slider, SliderTrack,
+//   SliderFilledTrack, SliderThumb, SliderMark, Badge, Flex, Text, useDisclosure,
+//   Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent,
+//   DrawerCloseButton, Box, HStack, useBreakpointValue, Progress, Tag, SimpleGrid,
+//   useToast, IconButton, Tooltip, RadioGroup, Radio, CheckboxGroup, Checkbox,
+// } from '@chakra-ui/react';
+// import { FiPlusCircle, FiCheckCircle, FiArrowRight, FiClock, FiDollarSign } from 'react-icons/fi';
+
+// const BUSINESS_TYPES = ['Retail Chemist', 'Wholesale Distributor', 'Hospital Pharmacy', 'Medical Representative', 'Corporate Chain'];
+// const EXPERIENCE_ROLES = ['Pharmacy Operations', 'Sales & Distribution', 'Regulatory Compliance', 'Quality Control'];
+// const PACKAGING_PREFERENCES = ['Blister', 'Strip', 'Alu-Alu', 'Mono Carton'];
+
+// export default function PharmaOpportunityForm({ isOpen, onClose, onOpen }: { isOpen: boolean, onClose: () => void, onOpen: () => void}) {
+//   const [step, setStep] = useState(1);
+//   const [formData, setFormData] = useState({
+//     businessType: '',
+//     city: '',
+//     urgency: 2, // 1=ASAP, 2=15days, 3=30days
+//     contactWindow: 'flexible',
+//     hasLicenses: 'partial',
+//     experience: [] as string[],
+//     volumeTier: 'medium',
+//     productFocus: [] as string[],
+//     packaging: [] as string[],
+//     quantityRange: [1000, 10000],
+//     budgetTier: '1-5L',
+//     mobile: '',
+//     name: '',
+//   });
+
+//   const totalSteps = 4;
+//   const progress = ((step - 1) / (totalSteps - 1)) * 100;
+//   const toast = useToast();
+
+//   const updateField = (updates: any) => {
+//     setFormData(prev => ({ ...prev, ...updates }));
+//   };
+
+//   const submitOpportunity = () => {
+//     console.log('🚀 Pharma Opportunity:', formData);
+//     toast({
+//       title: '✅ Opportunity Published!',
+//       description: "Top manufacturers matched. Expect calls within 2 hours.",
+//       status: 'success',
+//       duration: 4000,
+//       position: 'top'
+//     });
+//     onClose();
+//     setStep(1);
+//   };
+
+//   return (
+//     <>
+//       <Drawer isOpen={isOpen} onClose={onClose} placement="bottom" size="full">
+//         <DrawerOverlay />
+//         <DrawerContent borderTopRadius="3xl" bg="gray.50">
+//           <DrawerHeader p={8} bg="white" borderBottom="1px" borderColor="gray.200">
+//             <Flex align="center" gap={4} mb={4}>
+//               <Box bg="purple.500" p={3} borderRadius="full" color="white">
+//                 <FiPlusCircle size={24} />
+//               </Box>
+//               <Box>
+//                 <Text fontSize="2xl" fontWeight="black" color="gray.900">
+//                   Create Opportunity
+//                 </Text>
+//                 <Text fontSize="sm" color="gray.600">Step {step} of {totalSteps}</Text>
+//               </Box>
+//             </Flex>
+//             <Progress value={progress} size="md" borderRadius="full" />
+//             <DrawerCloseButton size="lg" top={4} right={4} />
+//           </DrawerHeader>
+
+//           <DrawerBody p={8}>
+//             {step === 1 && (
+//               <VStack spacing={8} align="stretch">
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold" fontSize="lg" color="gray.800">
+//                     Your Business Type
+//                   </FormLabel>
+//                   <Select
+//                     value={formData.businessType}
+//                     onChange={e => updateField({ businessType: e.target.value })}
+//                     size="lg"
+//                   >
+//                     <option value="">Choose your business...</option>
+//                     {BUSINESS_TYPES.map(type => (
+//                       <option key={type}>{type}</option>
+//                     ))}
+//                   </Select>
+//                 </FormControl>
+
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold">Primary Location</FormLabel>
+//                   <Input
+//                     placeholder="Enter city/district"
+//                     value={formData.city}
+//                     onChange={e => updateField({ city: e.target.value })}
+//                     size="lg"
+//                   />
+//                 </FormControl>
+
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold">When do you need products?</FormLabel>
+//                   <Slider
+//                     value={formData.urgency}
+//                     onChange={val => updateField({ urgency: val })}
+//                     min={1} max={3} step={1}
+//                     w="full"
+//                   >
+//                     <SliderTrack bg="gray.200">
+//                       <SliderFilledTrack bg="purple.500" />
+//                     </SliderTrack>
+//                     <SliderThumb boxSize={6} border="3px solid white" bg="purple.500">
+//                       <Box fontSize="xs" color="white" fontWeight="bold">
+//                         {['ASAP', '15 Days', '30 Days'][formData.urgency - 1]}
+//                       </Box>
+//                     </SliderThumb>
+//                   </Slider>
+//                 </FormControl>
+
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold">Best time to call</FormLabel>
+//                   <RadioGroup value={formData.contactWindow} onChange={val => updateField({ contactWindow: val })}>
+//                     <HStack spacing={6}>
+//                       <Radio value="morning">🌅 9AM-12PM</Radio>
+//                       <Radio value="afternoon">☀️ 1PM-5PM</Radio>
+//                       <Radio value="evening">🌙 6PM-9PM</Radio>
+//                       <Radio value="flexible">⏰ Anytime</Radio>
+//                     </HStack>
+//                   </RadioGroup>
+//                 </FormControl>
+//               </VStack>
+//             )}
+
+//             {step === 2 && (
+//               <VStack spacing={8} align="stretch">
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold" fontSize="lg">
+//                     Business Readiness
+//                   </FormLabel>
+//                   <RadioGroup value={formData.hasLicenses} onChange={val => updateField({ hasLicenses: val })}>
+//                     <VStack align="start" spacing={3} mt={2}>
+//                       <Radio value="complete">✅ Complete (GST + Drug License)</Radio>
+//                       <Radio value="partial">⚠️ Partial (GST or Applied)</Radio>
+//                       <Radio value="startup">🚀 New Business</Radio>
+//                     </VStack>
+//                   </RadioGroup>
+//                 </FormControl>
+
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold">Team Expertise</FormLabel>
+//                   <CheckboxGroup value={formData.experience} onChange={vals => updateField({ experience: vals as string[] })}>
+//                     <SimpleGrid columns={{ base: 2, md: 2 }} gap={3} mt={2}>
+//                       {EXPERIENCE_ROLES.map(role => (
+//                         <Checkbox key={role} size="lg">{role}</Checkbox>
+//                       ))}
+//                     </SimpleGrid>
+//                   </CheckboxGroup>
+//                 </FormControl>
+
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold">Current Monthly Volume</FormLabel>
+//                   <SimpleGrid columns={{ base: 3, md: 4 }} gap={3} mt={2}>
+//                     {['< ₹1L', '₹1-5L', '₹5-20L', '₹20L+'].map(tier => (
+//                       <Button
+//                         key={tier}
+//                         variant={formData.volumeTier === tier ? 'solid' : 'outline'}
+//                         colorScheme="purple"
+//                         size="lg"
+//                         onClick={() => updateField({ volumeTier: tier })}
+//                         borderRadius="2xl"
+//                       >
+//                         {tier}
+//                       </Button>
+//                     ))}
+//                   </SimpleGrid>
+//                 </FormControl>
+//               </VStack>
+//             )}
+
+//             {step === 3 && (
+//               <VStack spacing={8} align="stretch">
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold" fontSize="lg">Therapy Areas Needed</FormLabel>
+//                   <CheckboxGroup value={formData.productFocus} onChange={vals => updateField({ productFocus: vals as string[] })}>
+//                     <SimpleGrid columns={{ base: 2, md: 3 }} gap={3} mt={3}>
+//                       {['Anti-Infectives', 'Gastro', 'Cardiac', 'Diabetic Care', 'Dermatology', 'Pain Management', 'Vitamins'].map(cat => (
+//                         <Checkbox key={cat} size="lg" borderRadius="md">{cat}</Checkbox>
+//                       ))}
+//                     </SimpleGrid>
+//                   </CheckboxGroup>
+//                 </FormControl>
+
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold">Packaging Preferences</FormLabel>
+//                   <CheckboxGroup value={formData.packaging} onChange={vals => updateField({ packaging: vals as string[] })}>
+//                     <HStack wrap="wrap" gap={3} mt={3}>
+//                       {PACKAGING_PREFERENCES.map(pack => (
+//                         <Tag
+//                           key={pack}
+//                           size="lg"
+//                           colorScheme="purple"
+//                           borderRadius="full"
+//                           cursor="pointer"
+//                           onClick={() => {
+//                             const newVal = formData.packaging.includes(pack)
+//                               ? formData.packaging.filter(p => p !== pack)
+//                               : [...formData.packaging, pack];
+//                             updateField({ packaging: newVal });
+//                           }}
+//                         >
+//                           <Checkbox size="sm" isChecked={formData.packaging.includes(pack)} /> {pack}
+//                         </Tag>
+//                       ))}
+//                     </HStack>
+//                   </CheckboxGroup>
+//                 </FormControl>
+
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold">Target Quantity</FormLabel>
+//                   <Slider
+//                     value={formData.urgency} // ✅ single number
+//                     onChange={(val: number) => updateField({ urgency: val })}
+//                     min={1}
+//                     max={3}
+//                     step={1}
+//                     >
+//                     <SliderTrack bg="gray.200">
+//                         <SliderFilledTrack bg="purple.500" />
+//                     </SliderTrack>
+//                     <SliderThumb boxSize={6} bg="purple.500">
+//                         <Box fontSize="xs" color="white" fontWeight="bold">
+//                         {['ASAP', '15 Days', '30 Days'][formData.urgency - 1]}
+//                         </Box>
+//                     </SliderThumb>
+//                     </Slider>
+//                 </FormControl>
+
+//                 <FormControl>
+//                   <FormLabel fontWeight="bold">Budget Range</FormLabel>
+//                   <SimpleGrid columns={{ base: 2, md: 3 }} gap={3} mt={2}>
+//                     {['₹1-3L', '₹3-10L', '₹10L+', 'Discuss'].map(budget => (
+//                       <Button
+//                         key={budget}
+//                         variant={formData.budgetTier === budget ? 'solid' : 'outline'}
+//                         colorScheme="green"
+//                         size="lg"
+//                         onClick={() => updateField({ budgetTier: budget })}
+//                         leftIcon={<FiDollarSign />}
+//                         borderRadius="2xl"
+//                       >
+//                         {budget}
+//                       </Button>
+//                     ))}
+//                   </SimpleGrid>
+//                 </FormControl>
+//               </VStack>
+//             )}
+
+//             {step === 4 && (
+//               <VStack spacing={6} align="stretch" p={4} bg="white" borderRadius="2xl" boxShadow="lg">
+//                 <Text fontSize="lg" fontWeight="bold" color="gray.800">
+//                   Quick Contact Details
+//                 </Text>
+//                 <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+//                   <Input
+//                     placeholder="Your Name"
+//                     value={formData.name}
+//                     onChange={e => updateField({ name: e.target.value })}
+//                     size="lg"
+//                   />
+//                   <Input
+//                     type="tel"
+//                     placeholder="Mobile Number *"
+//                     value={formData.mobile}
+//                     onChange={e => updateField({ mobile: e.target.value })}
+//                     size="lg"
+//                   />
+//                 </SimpleGrid>
+//               </VStack>
+//             )}
+//           </DrawerBody>
+
+//           <DrawerFooter p={8} bg="white" borderTop="1px" borderColor="gray.200">
+//             <Flex w="full" gap={4}>
+//               {step > 1 && (
+//                 <Button
+//                   flex={1}
+//                   onClick={() => setStep(s => s - 1)}
+//                   variant="ghost"
+//                   leftIcon={<FiArrowRight className="rotate-180" />}
+//                   size="lg"
+//                 >
+//                   Previous
+//                 </Button>
+//               )}
+//               <Button
+//                 flex={2}
+//                 colorScheme={step === 4 ? "purple" : "blue"}
+//                 size="lg"
+//                 rightIcon={<FiArrowRight />}
+//                 onClick={step === 4 ? submitOpportunity : () => setStep(s => s + 1)}
+//                 boxShadow="xl"
+//               >
+//                 {step === 4 ? 'Publish Opportunity' : 'Continue'}
+//               </Button>
+//             </Flex>
+//           </DrawerFooter>
+//         </DrawerContent>
+//       </Drawer>
+//     </>
+//   );
+// }
 
 //  ------------------------------------------------- pharmahopers look alike form ----------------------------------------------------
 
@@ -353,7 +807,7 @@ export default function PharmaOpportunityForm() {
 // import { FiPlusCircle, FiX, FiCheckCircle } from 'react-icons/fi';
 
 // const PRODUCT_CATEGORIES = [
-//   'Cough Syrup', 'Antacid', 'Antibiotics', 'Eye Drops', 'Derma', 
+//   'Cough Syrup', 'Antacid', 'Antibiotics', 'Eye Drops', 'Derma',
 //   'PCD Pharma', 'Critical Care', 'Cardiac Diabetic', 'Ayurvedic'
 // ];
 
@@ -617,7 +1071,7 @@ export default function PharmaOpportunityForm() {
 //                   Previous
 //                 </Button>
 //               )}
-              
+
 //               <HStack spacing={3}>
 //                 <Button
 //                   variant="outline"
@@ -655,11 +1109,7 @@ export default function PharmaOpportunityForm() {
 //   );
 // }
 
-
-
 // ----------------------------------- options --------------------------------------------------------------------
-
-
 
 // 'use client';
 
@@ -707,7 +1157,6 @@ export default function PharmaOpportunityForm() {
 //   interestedInPCD?: boolean;
 // };
 
-
 // // Props
 // type PostRequirementCTAProps = {
 //   manufacturer?: {
@@ -717,7 +1166,6 @@ export default function PharmaOpportunityForm() {
 //     category?: string;
 //   };
 // };
-
 
 // // ----------------------- SCHEMA -----------------------
 
@@ -764,7 +1212,6 @@ export default function PharmaOpportunityForm() {
 //   resolver: yupResolver(requirementSchema),
 //   mode: "onChange",
 // });
-
 
 //   const watchCategory = watch("category");
 

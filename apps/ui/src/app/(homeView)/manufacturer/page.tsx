@@ -16,13 +16,14 @@ import { HiOutlineMail } from "react-icons/hi";
 import { FiPhone } from "react-icons/fi";
 import { CgWebsite } from "react-icons/cg";
 import { IoTrainOutline, IoAirplaneOutline, IoCarOutline, IoBoat } from "react-icons/io5";
-import { Button, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { Button, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure } from "@chakra-ui/react";
 import { FaLeaf } from "react-icons/fa";
 import { LuUsers } from "react-icons/lu";
 import CarouselSideMenuTabs, { CarouselSideMenuItemContentProps } from "@/components/common/SidebarMenuTabs";
 import { PHARMA_CATEGORIES } from "@/data/PharmaCategeories";
 import { Manufacturer, ManufacturerListStatic } from "@/data/manufacturer";
 import React from "react";
+import CreateOpportunityModal from "@/app/categories/components/PostRequirementCTA";
 
 // type Manufacturer = {
 //     id: string | number;
@@ -42,6 +43,9 @@ import React from "react";
 // };
 
 export default function ManufacturerPage() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredProducts, setFilteredProducts] = useState<Manufacturer['products'] | []>([]);
+    const [isSearching, setIsSearching] = useState(false);
     const [manufacturer, setManufacturer] = useState<Manufacturer | undefined>();
     const queryparam = useSearchParams();
     const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
@@ -113,13 +117,41 @@ export default function ManufacturerPage() {
             ? source.find((m: any) => String(m.id) === String(param))
             : source[0];
         setManufacturer(found as Manufacturer | undefined);
-
+        setFilteredProducts((found as Manufacturer)?.products || []);
     }, [manufacturers, queryparam]);
 
     useEffect(() => {
         console.log("Manufacturer data:", manufacturer);
+        console.log("Products data:", filteredProducts);
     }, [manufacturer]);
 
+    const handleSearch = (query: string) => {
+        const trimmedQuery = query.trim();
+        setSearchQuery(trimmedQuery);
+
+        if (!trimmedQuery) {
+            // Reset to all products if query is empty
+            setFilteredProducts(manufacturer?.products || []);
+            setIsSearching(false);
+            return;
+        }
+
+        const filtered = (manufacturer?.products || []).filter(p =>
+            p.p_name.toLowerCase().split(/[\s-]+/).includes(query.toLowerCase()) || 
+            p.composition.some(c => (
+                c.toLowerCase().split(/[\s-]+/).includes(query.toLowerCase())
+            ))
+        );
+
+        setFilteredProducts(filtered);
+        setIsSearching(true);
+    };
+
+    useEffect(() => {
+        console.log(searchQuery)
+        console.log(filteredProducts)
+        console.log(isSearching)
+    }, [searchQuery, filteredProducts, isSearching])
     if (!manufacturer) return <NoRecordFound />;
 
 
@@ -134,7 +166,7 @@ export default function ManufacturerPage() {
         },
         {
             title: "Product",
-            content: (<Products />)
+            content: (<Products products={filteredProducts}/>)
         },
         {
             title: "Compositions",
@@ -153,7 +185,12 @@ export default function ManufacturerPage() {
                 <div className="w-full grid grid-rows-[auto_1fr] h-full overflow-y-auto">
 
                     <section className="w-full !border-b h-[auto] p-2">
-                        <InfoHeader manufacturer={manufacturer} />
+                        <InfoHeader
+                            manufacturer={manufacturer}
+                            searchQuery={searchQuery}
+                            onSearch={handleSearch}
+                        />
+
                     </section>
                     {/* <section className="w-full bg-white p-4 mt-4 hidden">
                         <Tabs>
@@ -198,27 +235,32 @@ export default function ManufacturerPage() {
                             </TabPanels>
                         </Tabs>
                     </section> */}
-                    <section className="w-full bg-green p-2">
-                        <CarouselSideMenuTabs sideMenuItems={sideMenuItems} />
-                    </section>
-
-                    <section className="h-full w-full mt-4 flex flex-col gap-8">
-                        {/* <section className=" p-2 bg-white">
-                            <h3 className="font-bold text-lg mb-2">Compositions Available</h3>
-                            {manufacturer.compositionAvailable?.map((composition, index) => (
-                                composition.composition?.map((item, itemIndex) => (
-                                    <p key={`${index}-${itemIndex}`} className="text-gray-700">
-                                    {item || 'N/A'}
-                                    </p>
-                                ))
-                            ))}
-
-                        </section> */}
-                        <section className=" p-2 bg-white">
-                            <h3 className="font-bold text-lg mb-2">Testimonials</h3>
-                            <p className="text-gray-700">{'N/A'}</p>
+                    {isSearching ? (
+                        <>
+                            <Products products={filteredProducts} searchQuery={searchQuery.toUpperCase()} />
+                        </>
+                    )
+                     : (<>
+                        <section className="w-full bg-green p-2">
+                            <CarouselSideMenuTabs sideMenuItems={sideMenuItems} />
                         </section>
-                    </section>
+                        <section className="h-full w-full mt-4 flex flex-col gap-8">
+                            {/* <section className=" p-2 bg-white">
+                                <h3 className="font-bold text-lg mb-2">Compositions Available</h3>
+                                {manufacturer.compositionAvailable?.map((composition, index) => (
+                                    composition.composition?.map((item, itemIndex) => (
+                                        <p key={`${index}-${itemIndex}`} className="text-gray-700">
+                                        {item || 'N/A'}
+                                        </p>
+                                    ))
+                                ))}
+
+                            </section> */}
+                            <section className=" p-2 bg-white">
+                                <h3 className="font-bold text-lg mb-2">Testimonials</h3>
+                                <p className="text-gray-700">{'N/A'}</p>
+                            </section>
+                        </section></>)}
                 </div>
             </div>
 
@@ -241,7 +283,7 @@ const CategoryCircle = ({ label, icon: Icon }: { label: string, icon: React.Elem
 }
 
 
-const ProductBox = ({ name, description, onClick, icon }: { name: string; description?: string, onClick?: () => void, icon?: React.ElementType }) => {
+const ProductBox = ({ name, description, onClick, icon }: { name: string; description?: React.ReactNode, onClick?: () => void, icon?: React.ElementType }) => {
     return (
         <div className="mx-auto p-8 w-full h-full max-w-[250px] aspect-square rounded-2xl bg-gray-100 !border-r-[10px] !border-b-[10px] border-gray-200 flex flex-col items-center justify-between hover:scale-105 transition-transform cursor-pointer" onClick={onClick}>
             <div className="grid grid-cols-[auto_1fr] gap-4">
@@ -262,9 +304,83 @@ const CompositionList = ({ label }: { label: string }) => {
     );
 };
 
+type FormData = {
+  businessType: string;
+  city: string;
+  urgency: number;
+  contactWindow: string;
+  hasLicenses: string;
+  volumeTier: string;
+  productFocus: string[];
+  packaging: string[];
+  budgetTier: string;
+  name: string;
+  mobile: string;
+  email: string;
+  firm: string;
+  experienceRoles: string[];
+  drugLicenseStatus: string;
+};
 
-const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
-    console.log(manufacturer)
+interface InfoHeaderProps {
+    manufacturer: Manufacturer | any;
+    searchQuery: string;
+    onSearch: (query: string) => void;
+}
+
+const InfoHeader = ({ manufacturer, searchQuery, onSearch }: InfoHeaderProps) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [step, setStep] = useState(1);
+    const totalSteps = 4;
+    const BUSINESS_TYPES = [
+        "Distributor",
+        "Pharmacy",
+        "Hospital",
+        "Clinic",
+    ];
+    const PACKAGING_PREFERENCES = [
+        "Blister",
+        "Bottle",
+        "Strip",
+        "Bulk",
+    ];
+    const EXPERIENCE_ROLES = [
+        'Pharmacy Operations', 
+        'Sales & Distribution', 
+        'Regulatory Compliance', 
+        'Quality Control'
+    ];
+
+    const [formData, setFormData] = useState<FormData>({
+        businessType: "",
+        city: "",
+        urgency: 1,
+        contactWindow: "",
+        hasLicenses: "",
+        volumeTier: "",
+        productFocus: [], 
+        packaging: [],      
+        budgetTier: "",
+        name: "",
+        mobile: "",
+        firm: "",
+        email: "",
+        experienceRoles:[],
+        drugLicenseStatus: ""
+    });
+
+
+    const updateField = (field: Partial<typeof formData>) => {
+        setFormData((prev) => ({ ...prev, ...field }));
+    };
+
+    const progress = (step / totalSteps) * 100;
+
+    const submitOpportunity = () => {
+        console.log("FINAL DATA 👉", formData);
+        onClose();
+        setStep(1); // reset after submit (optional)
+    };
     return (
         <div id="info-wrapper" className="">
             <div className=" p-2 rounded-lg grid grid-cols-[75%_1fr] gap-2">
@@ -334,12 +450,29 @@ const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
                             type="text"
                             placeholder="Search Products..."
                             className="w-full h-full px-2 rounded-md"
+                            value={searchQuery}
+                            onChange={(e) => onSearch(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && onSearch(searchQuery)}
                         />
 
                     </div>
                     <div className="flex gap-2">
-                        <Button className="!bg-[purple] rounded-md !text-white !px-2 !py-2 !no-wrap">Request Form</Button>
+                        <Button className="!bg-[purple] rounded-md !text-white !px-2 !py-2 !no-wrap" onClick={onOpen}>Request Form</Button>
                         <Button className="!bg-[purple] rounded-md !text-white !px-2 !py-2 !no-wrap">Brochure</Button>
+                        <CreateOpportunityModal 
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            step={step}
+                            setStep={setStep}
+                            totalSteps={totalSteps}
+                            progress={progress}
+                            formData={formData}
+                            updateField={updateField}
+                            submitOpportunity={submitOpportunity}
+                            BUSINESS_TYPES={BUSINESS_TYPES}
+                            PACKAGING_PREFERENCES={PACKAGING_PREFERENCES}
+                            EXPERIENCE_ROLES={EXPERIENCE_ROLES}
+                        />
                         {/* <button className="">Download Brochure</button> */}
                     </div>
                 </div>
@@ -377,44 +510,73 @@ const Categories = () => {
     </section>)
 }
 
-const Products = () => {
-    return (<section className=" p-2 bg-white">
-        <h3 className="font-bold text-lg mb-2">Products</h3>
-        <div className="p-4 grid grid-cols-3 gap-4 h-[auto]">
-            {/* Analgesics & Antipyretics */}
-            <ProductBox name="Sun-Parcet 500" description="Paracetamol 500mg - Fast acting relief for fever and pain" />
-            <ProductBox name="Sun-Fenac Plus" description="Diclofenac Sodium 50mg + Paracetamol 325mg" />
-            <ProductBox name="Nimu-Sun Gold" description="Nimesulide 100mg + Paracetamol 325mg Tablet" />
+const Products = ({ products, searchQuery }: { products?: Manufacturer['products'], searchQuery?: string}) => {
+     if (!products || products.length === 0) {
+        return (
+            <section className="p-2 bg-white">
+                <h3 className="font-bold text-lg mb-2">Products</h3>
+                <p>No products found having {searchQuery}</p>
+            </section>
+        );
+    }
+    // code to add dynamic product data
+    if (products.length > 0 ) {
+        return (
+            <section className="p-2 bg-white">
+                <h3 className="font-bold text-lg mb-2">{searchQuery} - Products</h3>
+                <div className="p-4 grid grid-cols-3 gap-4 h-[auto]">
+                    {products.map(p => (
+                        <ProductBox
+                            key={p.p_id}
+                            name={p.p_name}
+                            description={p.composition.map((c, idx) => (
+                               <div key={idx} className="text-sm text-gray-600">
+                                    • {c}
+                                </div> 
+                            ))}
+                        />
+                    ))}
+                </div>
+            </section>
+        );
+    }
+    // return (<section className=" p-2 bg-white">
+    //     <h3 className="font-bold text-lg mb-2">Products</h3>
+    //     <div className="p-4 grid grid-cols-3 gap-4 h-[auto]">
+    //         {/* Analgesics & Antipyretics */}
+    //         <ProductBox name="Sun-Parcet 500" description="Paracetamol 500mg - Fast acting relief for fever and pain" />
+    //         <ProductBox name="Sun-Fenac Plus" description="Diclofenac Sodium 50mg + Paracetamol 325mg" />
+    //         <ProductBox name="Nimu-Sun Gold" description="Nimesulide 100mg + Paracetamol 325mg Tablet" />
 
-            {/* Antibiotics & Anti-Infectives */}
-            <ProductBox name="Amoxy-Sun 500" description="Amoxicillin 500mg Broad Spectrum Antibiotic" />
-            <ProductBox name="Sun-Clav 625" description="Amoxicillin 500mg + Potassium Clavulanate 125mg" />
-            <ProductBox name="Azith-Sun 500" description="Azithromycin 500mg USP - 3 Day Course" />
-            <ProductBox name="Cef-Sun 200" description="Cefixime 200mg Dispersible Tablet" />
-            <ProductBox name="Oflox-Sun OZ" description="Ofloxacin 200mg + Ornidazole 500mg" />
+    //         {/* Antibiotics & Anti-Infectives */}
+    //         <ProductBox name="Amoxy-Sun 500" description="Amoxicillin 500mg Broad Spectrum Antibiotic" />
+    //         <ProductBox name="Sun-Clav 625" description="Amoxicillin 500mg + Potassium Clavulanate 125mg" />
+    //         <ProductBox name="Azith-Sun 500" description="Azithromycin 500mg USP - 3 Day Course" />
+    //         <ProductBox name="Cef-Sun 200" description="Cefixime 200mg Dispersible Tablet" />
+    //         <ProductBox name="Oflox-Sun OZ" description="Ofloxacin 200mg + Ornidazole 500mg" />
 
-            {/* Cardiovascular & Anti-Diabetic */}
-            <ProductBox name="Telmi-Sun 40" description="Telmisartan 40mg - Blood Pressure Management" />
-            <ProductBox name="Amlod-Sun 5" description="Amlodipine 5mg Calcium Channel Blocker" />
-            <ProductBox name="Glim-Sun M2" description="Glimepiride 2mg + Metformin 500mg SR" />
+    //         {/* Cardiovascular & Anti-Diabetic */}
+    //         <ProductBox name="Telmi-Sun 40" description="Telmisartan 40mg - Blood Pressure Management" />
+    //         <ProductBox name="Amlod-Sun 5" description="Amlodipine 5mg Calcium Channel Blocker" />
+    //         <ProductBox name="Glim-Sun M2" description="Glimepiride 2mg + Metformin 500mg SR" />
 
-            {/* Gastrointestinal */}
-            <ProductBox name="Pant-Sun 40" description="Pantoprazole 40mg Gastro-Resistant Tablets" />
-            <ProductBox name="Sun-DSR" description="Pantoprazole 40mg + Domperidone 30mg Sustained Release" />
-            <ProductBox name="Om-Sun 20" description="Omeprazole 20mg Antacid Capsules" />
-            <ProductBox name="Gel-Sun Antacid" description="Magnesium Hydroxide + Aluminium Hydroxide Gel" />
+    //         {/* Gastrointestinal */}
+    //         <ProductBox name="Pant-Sun 40" description="Pantoprazole 40mg Gastro-Resistant Tablets" />
+    //         <ProductBox name="Sun-DSR" description="Pantoprazole 40mg + Domperidone 30mg Sustained Release" />
+    //         <ProductBox name="Om-Sun 20" description="Omeprazole 20mg Antacid Capsules" />
+    //         <ProductBox name="Gel-Sun Antacid" description="Magnesium Hydroxide + Aluminium Hydroxide Gel" />
 
-            {/* Vitamins & Supplements */}
-            <ProductBox name="Sun-Vit Multivitamin" description="Essential Vitamins, Minerals & Antioxidants" />
-            <ProductBox name="Cal-Sun D3" description="Calcium Carbonate 500mg + Vitamin D3 250 IU" />
-            <ProductBox name="B-Sun Complex" description="Vitamin B-Complex with B12 and Vitamin C" />
+    //         {/* Vitamins & Supplements */}
+    //         <ProductBox name="Sun-Vit Multivitamin" description="Essential Vitamins, Minerals & Antioxidants" />
+    //         <ProductBox name="Cal-Sun D3" description="Calcium Carbonate 500mg + Vitamin D3 250 IU" />
+    //         <ProductBox name="B-Sun Complex" description="Vitamin B-Complex with B12 and Vitamin C" />
 
-            {/* Respiratory & Allergy */}
-            <ProductBox name="Lev-Sun M" description="Levocetirizine 5mg + Montelukast 10mg" />
-            <ProductBox name="Cough-Sun Expectorant" description="Terbutaline + Guaiphenesin + Bromhexine Syrup" />
+    //         {/* Respiratory & Allergy */}
+    //         <ProductBox name="Lev-Sun M" description="Levocetirizine 5mg + Montelukast 10mg" />
+    //         <ProductBox name="Cough-Sun Expectorant" description="Terbutaline + Guaiphenesin + Bromhexine Syrup" />
 
-        </div>
-    </section>)
+    //     </div>
+    // </section>)
 }
 
 const extractCompositionName = (value: string) => {
