@@ -13,13 +13,13 @@ export const ManufacturerShowGrid = ({ manufacturers, navigateToManufacturer }: 
         {manufacturers?.map(({ empty = false, id, compositionAvailable = [], name, description, avatar, products = 0, location }: any, idx: number) => (
 
             !empty ? (
-                <div className='flex flex-col gap-2 bg-gray-200 !border-1 !border-gray-100 p-4 rounded-md drop-shadow-xl' key={`manufacturer-${idx}`}>
-                    <div className="w-full p-1 flex flex-col gap-2">
+                <div className='flex flex-col gap-2 bg-white !border-1 !border-gray-100 p-[20px] rounded-md drop-shadow-xl' key={`manufacturer-${idx}`}>
+                    <div className="w-full p-1 flex flex-col gap-3">
                         <div className="h-auto grid grid-cols-[1fr_auto]">
                             <img className="!h-[50px] rounded-full aspect-square object-fit" src={"./logos/cropped-welldone-logo.webp"} onError={(e) => e.currentTarget.src = "https://www.freeiconspng.com/uploads/blank-logo-design-for-brand-13.png"} alt="" />
                             <div className="text-xs font-bold rounded-2xl !bg-teal-50 w-full h-fit p-1 px-4 !text-teal-800 !border-teal-100 !border-1 flex gap-2"> <FaStar /> Sponsored</div>
                         </div>
-                        <span className="!text-gray-500 capitalize text-2xl">{name}</span>
+                        <span className="!text-gray-500 capitalize text-xl">{name}</span>
                         <p className="text-xs font-medium text-gray-500">{description || 'Description Goes here'}</p>
 
                         <div className="action-w grid grid-cols-[repeat(2,1fr)] gap-4 my-2">

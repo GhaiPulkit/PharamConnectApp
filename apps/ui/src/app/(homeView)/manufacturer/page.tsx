@@ -166,11 +166,32 @@ export default function ManufacturerPage() {
         },
         {
             title: "Product",
-            content: (<Products products={filteredProducts}/>)
+            content: (<Products />)
         },
         {
             title: "Compositions",
-            content: (<Compositions manufacturer={manufacturer}/>)
+            content: (
+                <section className="h-full w-full mt-4 flex flex-col gap-8">
+                    <section className=" p-2 bg-white">
+                        <h3 className="font-bold text-lg mb-2">Compositions Available</h3>
+                        <div className="grid grid-cols-[repeat(4,1fr)] gap-2">
+                            {manufacturer.compositionAvailable?.map((composition, index) => (
+                                composition.composition?.map((item, itemIndex) => (
+                                    <>
+                                        <div key={`${index}-${itemIndex}`} className="px-4 py-2 text-[12px] leading-[16px] bg-gray-50">
+                                            {item || 'N/A'}
+                                        </div>
+                                    </>
+
+                                ))
+                            ))}
+                        </div>
+
+
+                    </section>
+                </section>
+            )
+
         }
     ]
     return (<>
@@ -273,10 +294,10 @@ export default function ManufacturerPage() {
 
 const CategoryCircle = ({ label, icon: Icon }: { label: string, icon: React.ElementType }) => {
     return (
-        <div className="mx-auto p-8 w-[200px] drop-shadow-md aspect-square rounded-full bg-gray-100 flex flex-col items-center justify-center">
-            <div className="flex flex-col items-center justify-center">
-                <Icon className="text-[darkgreen] text-4xl" />
-                <span className="text-sm font-bold text-gray-400">{label}</span>
+        <div className="mx-auto p-2 w-[200px] drop-shadow-md bg-white to-white bg-gray rounded-xl flex flex-col items-center justify-center hover:bg-gray-50 hover:scale-[1.1] transition-transform cursor-pointer">
+            <div className="flex flex-col items-center justify-center gap-2 h-[75px] overflow-hidden">
+                <Icon className="text-[darkgreen] text-1xl" />
+                <span className="text-xs font-semibold text-gray-500">{label}</span>
             </div>
         </div>
     )
@@ -418,7 +439,7 @@ const InfoHeader = ({ manufacturer, searchQuery, onSearch }: InfoHeaderProps) =>
                         <div className="flex gap-2">
                             <span>
                                 {manufacturer.exporter ? "International Markets including USA, Europe, Africa, Asia" : "Do not export"}</span>
-                            {[{ icon: IoTrainOutline, name: "train" }, { icon: IoAirplaneOutline, name: "air" }, { icon:IoCarOutline, name: "road" }, { icon: IoBoat, name: "cargo" }].map((icon, idx) => (
+                            {[{ icon: IoTrainOutline, name: "train" }, { icon: IoAirplaneOutline, name: "air" }, { icon: IoCarOutline, name: "road" }, { icon: IoBoat, name: "cargo" }].map((icon, idx) => (
                                 <icon.icon key={idx} className="inline-block ml-2" /> // use the if logic to map with manufacturer.export
                             ))}
                         </div>
@@ -491,7 +512,7 @@ const menuItems = [
 const AboutUs = ({ description }: { description: string }) => {
     return (<section className=" p-2 bg-white">
         <h3 className="font-bold text-lg mb-2">About Us</h3>
-        <p className="leading-[26px] text-md text-gray-700">{description}</p>
+        <p className="leading-[26px] text-sm text-gray-700">{description}</p>
         {/* <p className="leading-[26px] text-md text-gray-700">{"Scout Lifescience Pvt. Ltd. is one of the leading manufacturer supplier and distributor of pharmaceutical products such as GASTROINTESTINAL DRUG PELLETS, CAPSULES, GASTROINTESTINAL DRUG CAPSULES, PAIN MANAGEMENTS DRUG PELLETS & BLENDED PELLETS etc. throughout the nation. We are an ethical drug supplier that believes in providing high-quality medical solutions for various health issues. Our strength is our skilled and professional team that is backed up by modern machinery and innovative technology. And because of that, we are capable of providing high-quality drugs regardless of the size of the order. Our quality control team keeps an eye on every aspect of the manufacturing process from purchase of raw material to dispatch of orders enabling us to become the most ethical franchise provider of PCD Pharma for anti-allergies pharma products. Scout Lifescience Pvt. Ltd. is an ISO 9001:2015 and GMP certified global pharmaceutical company with involved in the areas of product marketing & manufacturing. Our focus on specialty segments in India and simultaneous opening of newer markets abroad will help us achieve a niche in global pharmaceutical arena. We are firmly establishing our brands in each market for sustained growth. Tecnex Pharma has established strong capability of providing latest formulations & will always be one step ahead. Scout Lifescience was incorporated in 2020 but has since established itself as a vibrant marketing organization & now proudly is one of the leading pharmaceutical companies in India. The Company is backed by a team of professional's takes complete responsibilities & dedication in Human Health Care. We provide health care solutions in various therapeutic segments with specialized focus on Analgesics, Antibiotic & Anti-Infective, Anticold & Antiallergic and Antipsychotic Drugs. Apart from these, our range also includes Cardiovascular Drugs, Gastro & Antiemetic & Anti Ulcerant, Haematirics, Hormones, Neurology Supplements and Nutritional Supplements."}</p> */}
     </section>)
 }
@@ -499,13 +520,10 @@ const AboutUs = ({ description }: { description: string }) => {
 const Categories = () => {
     return (<section className=" p-2 bg-white">
         <h3 className="font-bold text-lg mb-2">Categories</h3>
-        <div className="p-4 grid grid-cols-3 gap-4">
+        <div className="p-4 grid grid-cols-[repeat(4,1fr)] gap-4">
             {PHARMA_CATEGORIES.map(item => (
                 <CategoryCircle key={item.id} label={item.name} icon={FaLeaf} />)
             )}
-            {/* <CategoryCircle label={"C1"} icon={FaLeaf} />
-            <CategoryCircle label={"C2"} icon={FaLeaf} />
-            <CategoryCircle label={"C3"} icon={FaLeaf} /> */}
         </div>
     </section>)
 }

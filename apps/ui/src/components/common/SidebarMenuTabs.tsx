@@ -81,7 +81,7 @@ const CarouselSideMenuTabs = ({ sideMenuItems, label }: CarouselSideMenuTabsProp
         </div>
         <div
           ref={conatinerRef}
-          className="min-h-0 overflow-y-auto p-2 overflow-x-hidden custom-scrollbar scroll-smooth flex flex-col gap-2"
+          className="min-h-0 overflow-y-auto p-2 overflow-x-hidden scrollbar-hide scroll-smooth flex flex-col gap-2"
         >
           {sideMenuItems?.map((item, index) => (
             <div key={`side-menu-item-${index}`} ref={sectionRefs[index]}>
