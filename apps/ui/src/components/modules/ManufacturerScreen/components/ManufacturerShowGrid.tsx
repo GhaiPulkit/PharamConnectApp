@@ -1,6 +1,7 @@
 'use client';
 
 import PrimaryButton from "@/components/common/PrimaryButton";
+import { Manufacturer } from "@/data/manufacturer";
 import { Button, Card, Grid } from "@chakra-ui/react";
 import { CiLocationOn } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
@@ -8,9 +9,10 @@ import { FaStar } from "react-icons/fa";
 
 export const ManufacturerShowGrid = ({ manufacturers, navigateToManufacturer }: { manufacturers: any, navigateToManufacturer: (id: number) => any }) => {
 
+    console.log('manufacturers', manufacturers);
     return <Grid templateColumns='repeat(3, 1fr)' gap={8}>
 
-        {manufacturers?.map(({ empty = false, id, compositionAvailable = [], name, description, avatar, products = 0, location }: any, idx: number) => (
+        {Array.isArray(manufacturers) && manufacturers.map(({ empty = false, id, compositionAvailable = [], name, description, avatar, products = 0, location }: any, idx: number) => (
 
             !empty ? (
                 <div className='flex flex-col gap-2 bg-white !border-1 !border-gray-100 p-[20px] rounded-md drop-shadow-xl' key={`manufacturer-${idx}`}>

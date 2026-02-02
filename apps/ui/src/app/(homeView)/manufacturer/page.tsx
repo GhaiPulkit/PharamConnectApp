@@ -120,10 +120,6 @@ export default function ManufacturerPage() {
         setFilteredProducts((found as Manufacturer)?.products || []);
     }, [manufacturers, queryparam]);
 
-    useEffect(() => {
-        console.log("Manufacturer data:", manufacturer);
-        console.log("Products data:", filteredProducts);
-    }, [manufacturer]);
 
     const handleSearch = (query: string) => {
         const trimmedQuery = query.trim();
@@ -208,80 +204,14 @@ export default function ManufacturerPage() {
                     <section className="w-full !border-b h-[auto] p-2">
                         <InfoHeader
                             manufacturer={manufacturer}
-                            searchQuery={searchQuery}
-                            onSearch={handleSearch}
+                            // searchQuery={searchQuery}
+                            // onSearch={handleSearch}
                         />
 
                     </section>
-                    {/* <section className="w-full bg-white p-4 mt-4 hidden">
-                        <Tabs>
-                            <TabList>
-                                <Tab>About Us</Tab>
-                                <Tab>Categories</Tab>
-                                <Tab>Products</Tab>
-                                <Tab>Compositions</Tab>
-                            </TabList>
-                            <TabPanels>
-                                <TabPanel>
-                                    <h3 className="font-bold text-lg mb-2">About Us</h3>
-                                    <p className="leading-[26px] text-md text-gray-700">{"Scout Lifescience Pvt. Ltd. is one of the leading manufacturer supplier and distributor of pharmaceutical products such as GASTROINTESTINAL DRUG PELLETS, CAPSULES, GASTROINTESTINAL DRUG CAPSULES, PAIN MANAGEMENTS DRUG PELLETS & BLENDED PELLETS etc. throughout the nation. We are an ethical drug supplier that believes in providing high-quality medical solutions for various health issues. Our strength is our skilled and professional team that is backed up by modern machinery and innovative technology. And because of that, we are capable of providing high-quality drugs regardless of the size of the order. Our quality control team keeps an eye on every aspect of the manufacturing process from purchase of raw material to dispatch of orders enabling us to become the most ethical franchise provider of PCD Pharma for anti-allergies pharma products. Scout Lifescience Pvt. Ltd. is an ISO 9001:2015 and GMP certified global pharmaceutical company with involved in the areas of product marketing & manufacturing. Our focus on specialty segments in India and simultaneous opening of newer markets abroad will help us achieve a niche in global pharmaceutical arena. We are firmly establishing our brands in each market for sustained growth. Tecnex Pharma has established strong capability of providing latest formulations & will always be one step ahead. Scout Lifescience was incorporated in 2020 but has since established itself as a vibrant marketing organization & now proudly is one of the leading pharmaceutical companies in India. The Company is backed by a team of professional's takes complete responsibilities & dedication in Human Health Care. We provide health care solutions in various therapeutic segments with specialized focus on Analgesics, Antibiotic & Anti-Infective, Anticold & Antiallergic and Antipsychotic Drugs. Apart from these, our range also includes Cardiovascular Drugs, Gastro & Antiemetic & Anti Ulcerant, Haematirics, Hormones, Neurology Supplements and Nutritional Supplements."}</p>
-                                </TabPanel>
-                                <TabPanel>
-                                    <h3 className="font-bold text-lg mb-2">Categories</h3>
-                                    <div className="p-4 grid grid-cols-3 gap-4">
-                                        {manufacturer.product_types?.map(type => (
-                                            <CategoryCircle key={type.id} label={type.name} icon={FaLeaf} />
-                                        ))}
-                                    </div>
-                                </TabPanel>
-                                <TabPanel>
-                                    <h3 className="font-bold text-lg mb-2">Products</h3>
-                                    <div className="p-4 grid grid-cols-4 gap-4">
-                                        {manufacturer.best_sellers?.map(product => (
-                                            <ProductBox key={product.id} name={product.name} />
-                                        ))}
-                                    </div>
-                                </TabPanel>
-                                <TabPanel>
-                                    <h3 className="font-bold text-lg mb-2">Compositions Available</h3>
-                                    <div className="space-y-2">
-                                        {manufacturer.compositionAvailable?.map(comp => (
-                                            <div key={comp.id} className="p-2 bg-gray-50 rounded">
-                                                <p className="font-semibold">{comp.composition}</p>
-                                                <p className="text-sm text-gray-600">{comp.category}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </TabPanel>
-                            </TabPanels>
-                        </Tabs>
-                    </section> */}
-                    {isSearching ? (
-                        <>
-                            <Products products={filteredProducts} searchQuery={searchQuery.toUpperCase()} />
-                        </>
-                    )
-                     : (<>
-                        <section className="w-full bg-green p-2">
-                            <CarouselSideMenuTabs sideMenuItems={sideMenuItems} />
-                        </section>
-                        <section className="h-full w-full mt-4 flex flex-col gap-8">
-                            {/* <section className=" p-2 bg-white">
-                                <h3 className="font-bold text-lg mb-2">Compositions Available</h3>
-                                {manufacturer.compositionAvailable?.map((composition, index) => (
-                                    composition.composition?.map((item, itemIndex) => (
-                                        <p key={`${index}-${itemIndex}`} className="text-gray-700">
-                                        {item || 'N/A'}
-                                        </p>
-                                    ))
-                                ))}
-
-                            </section> */}
-                            <section className=" p-2 bg-white">
-                                <h3 className="font-bold text-lg mb-2">Testimonials</h3>
-                                <p className="text-gray-700">{'N/A'}</p>
-                            </section>
-                        </section></>)}
+                    <section className="w-full bg-green p-2 h-auto">
+                        <CarouselSideMenuTabs sideMenuItems={sideMenuItems} />
+                    </section>
                 </div>
             </div>
 
@@ -317,91 +247,8 @@ const ProductBox = ({ name, description, onClick, icon }: { name: string; descri
         </div>)
 };
 
-const CompositionList = ({ label }: { label: string }) => {
-    return (
-        <li className="text-sm text-gray-800 leading-relaxed border-b border-gray-100 py-1">
-            • {label}
-        </li>
-    );
-};
 
-type FormData = {
-  businessType: string;
-  city: string;
-  urgency: number;
-  contactWindow: string;
-  hasLicenses: string;
-  volumeTier: string;
-  productFocus: string[];
-  packaging: string[];
-  budgetTier: string;
-  name: string;
-  mobile: string;
-  email: string;
-  firm: string;
-  experienceRoles: string[];
-  drugLicenseStatus: string;
-};
-
-interface InfoHeaderProps {
-    manufacturer: Manufacturer | any;
-    searchQuery: string;
-    onSearch: (query: string) => void;
-}
-
-const InfoHeader = ({ manufacturer, searchQuery, onSearch }: InfoHeaderProps) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [step, setStep] = useState(1);
-    const totalSteps = 4;
-    const BUSINESS_TYPES = [
-        "Distributor",
-        "Pharmacy",
-        "Hospital",
-        "Clinic",
-    ];
-    const PACKAGING_PREFERENCES = [
-        "Blister",
-        "Bottle",
-        "Strip",
-        "Bulk",
-    ];
-    const EXPERIENCE_ROLES = [
-        'Pharmacy Operations', 
-        'Sales & Distribution', 
-        'Regulatory Compliance', 
-        'Quality Control'
-    ];
-
-    const [formData, setFormData] = useState<FormData>({
-        businessType: "",
-        city: "",
-        urgency: 1,
-        contactWindow: "",
-        hasLicenses: "",
-        volumeTier: "",
-        productFocus: [], 
-        packaging: [],      
-        budgetTier: "",
-        name: "",
-        mobile: "",
-        firm: "",
-        email: "",
-        experienceRoles:[],
-        drugLicenseStatus: ""
-    });
-
-
-    const updateField = (field: Partial<typeof formData>) => {
-        setFormData((prev) => ({ ...prev, ...field }));
-    };
-
-    const progress = (step / totalSteps) * 100;
-
-    const submitOpportunity = () => {
-        console.log("FINAL DATA 👉", formData);
-        onClose();
-        setStep(1); // reset after submit (optional)
-    };
+const InfoHeader = ({ manufacturer }: { manufacturer: any }) => {
     return (
         <div id="info-wrapper" className="">
             <div className=" p-2 rounded-lg grid grid-cols-[75%_1fr] gap-2">
@@ -471,16 +318,16 @@ const InfoHeader = ({ manufacturer, searchQuery, onSearch }: InfoHeaderProps) =>
                             type="text"
                             placeholder="Search Products..."
                             className="w-full h-full px-2 rounded-md"
-                            value={searchQuery}
-                            onChange={(e) => onSearch(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && onSearch(searchQuery)}
+                            // value={searchQuery}
+                            // onChange={(e) => onSearch(e.target.value)}
+                            // onKeyDown={(e) => e.key === 'Enter' && onSearch(searchQuery)}
                         />
 
                     </div>
                     <div className="flex gap-2">
-                        <Button className="!bg-[purple] rounded-md !text-white !px-2 !py-2 !no-wrap" onClick={onOpen}>Request Form</Button>
+                        <Button className="!bg-[purple] rounded-md !text-white !px-2 !py-2 !no-wrap" onClick={() => console.log("Request Form clicked")}>Request Form</Button>
                         <Button className="!bg-[purple] rounded-md !text-white !px-2 !py-2 !no-wrap">Brochure</Button>
-                        <CreateOpportunityModal 
+                        {/* <CreateOpportunityModal 
                             isOpen={isOpen}
                             onClose={onClose}
                             step={step}
@@ -493,7 +340,7 @@ const InfoHeader = ({ manufacturer, searchQuery, onSearch }: InfoHeaderProps) =>
                             BUSINESS_TYPES={BUSINESS_TYPES}
                             PACKAGING_PREFERENCES={PACKAGING_PREFERENCES}
                             EXPERIENCE_ROLES={EXPERIENCE_ROLES}
-                        />
+                        /> */}
                         {/* <button className="">Download Brochure</button> */}
                     </div>
                 </div>
@@ -503,17 +350,11 @@ const InfoHeader = ({ manufacturer, searchQuery, onSearch }: InfoHeaderProps) =>
     )
 }
 
-const menuItems = [
-    { label: 'Profile', action: () => { console.log('Profile clicked'); } },
-    { label: 'Settings', action: () => { console.log('Settings clicked'); } },
-    { label: 'Logout', action: () => { console.log('Logout clicked'); } },
-];
 
 const AboutUs = ({ description }: { description: string }) => {
     return (<section className=" p-2 bg-white">
         <h3 className="font-bold text-lg mb-2">About Us</h3>
-        <p className="leading-[26px] text-sm text-gray-700">{description}</p>
-        {/* <p className="leading-[26px] text-md text-gray-700">{"Scout Lifescience Pvt. Ltd. is one of the leading manufacturer supplier and distributor of pharmaceutical products such as GASTROINTESTINAL DRUG PELLETS, CAPSULES, GASTROINTESTINAL DRUG CAPSULES, PAIN MANAGEMENTS DRUG PELLETS & BLENDED PELLETS etc. throughout the nation. We are an ethical drug supplier that believes in providing high-quality medical solutions for various health issues. Our strength is our skilled and professional team that is backed up by modern machinery and innovative technology. And because of that, we are capable of providing high-quality drugs regardless of the size of the order. Our quality control team keeps an eye on every aspect of the manufacturing process from purchase of raw material to dispatch of orders enabling us to become the most ethical franchise provider of PCD Pharma for anti-allergies pharma products. Scout Lifescience Pvt. Ltd. is an ISO 9001:2015 and GMP certified global pharmaceutical company with involved in the areas of product marketing & manufacturing. Our focus on specialty segments in India and simultaneous opening of newer markets abroad will help us achieve a niche in global pharmaceutical arena. We are firmly establishing our brands in each market for sustained growth. Tecnex Pharma has established strong capability of providing latest formulations & will always be one step ahead. Scout Lifescience was incorporated in 2020 but has since established itself as a vibrant marketing organization & now proudly is one of the leading pharmaceutical companies in India. The Company is backed by a team of professional's takes complete responsibilities & dedication in Human Health Care. We provide health care solutions in various therapeutic segments with specialized focus on Analgesics, Antibiotic & Anti-Infective, Anticold & Antiallergic and Antipsychotic Drugs. Apart from these, our range also includes Cardiovascular Drugs, Gastro & Antiemetic & Anti Ulcerant, Haematirics, Hormones, Neurology Supplements and Nutritional Supplements."}</p> */}
+        <p className="leading-[26px] text-sm text-gray-700">{description || '-'}</p>
     </section>)
 }
 
@@ -641,10 +482,11 @@ const Compositions = ({ manufacturer }: {manufacturer: Manufacturer}) => {
                 "
             >
                 {uniqueCompositionNames.map((name, index) => (
-                    <CompositionList
-                        key={name}   // stable key now
-                        label={name}
-                    />
+                    <p key={index}>{name}</p>
+                    // <CompositionList
+                    //     key={name}   // stable key now
+                    //     label={name}
+                    // />
                 ))}
             </ul>
         </section>
