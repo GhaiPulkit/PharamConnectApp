@@ -39,9 +39,9 @@ export default function ManufacturerView({ props }: { props: any }) {
     return (<>
         <OTPModal isOpen={isOpen} onClose={onClose} onCloseCallback={() => showResults} />
         <div className=" w-full flex flex-col gap-2">
-            <div className="banner bg-gray-300 p-2 h-[200px] w-full bg-cover bg-center" style={{ backgroundImage: "url('./images/top-view-variety-tablets-painkillers-with-copy-space.jpg')" }}>
+            {/* <div className="banner bg-gray-300 p-2 h-[200px] w-full bg-cover bg-center" style={{ backgroundImage: "url('./images/top-view-variety-tablets-painkillers-with-copy-space.jpg')" }}>
                 <h1> TOP MAnufa</h1>
-            </div>
+            </div> */}
             <div className="relative w-full px-2 py-1 flex h-[100px]">
                 <div className="flex justify-center items-center w-full">
                     <h1 className="w-full !text-center">Top Manufacturers</h1>

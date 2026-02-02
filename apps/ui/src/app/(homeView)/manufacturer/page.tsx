@@ -48,8 +48,8 @@ export default function ManufacturerPage() {
     const [isSearching, setIsSearching] = useState(false);
     const [manufacturer, setManufacturer] = useState<Manufacturer | undefined>();
     const queryparam = useSearchParams();
-    const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
-    // const manufacturers = ManufacturerListStatic; // Access transformed state
+    // const manufacturers = useSelector((state: RootState) => state.app.manufacturerList); // Access transformed state
+    const manufacturers = ManufacturerListStatic; // Access transformed state
 
     // fallback sample data when context has no manufacturers
     const sampleManufacturers = [
@@ -143,11 +143,13 @@ export default function ManufacturerPage() {
         setIsSearching(true);
     };
 
+    // Tobe removed after testing
     useEffect(() => {
         console.log(searchQuery)
         console.log(filteredProducts)
         console.log(isSearching)
     }, [searchQuery, filteredProducts, isSearching])
+
     if (!manufacturer) return <NoRecordFound />;
 
 
@@ -178,12 +180,9 @@ export default function ManufacturerPage() {
                                             {item || 'N/A'}
                                         </div>
                                     </>
-
                                 ))
                             ))}
                         </div>
-
-
                     </section>
                 </section>
             )
@@ -191,16 +190,16 @@ export default function ManufacturerPage() {
         }
     ]
     return (<>
-        <div className=" w-full h-full grid grid-rows-[auto_1fr] overflow-y-hidden">
-            <div className="h-[200px] w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-                <span className="!text-white"> Manufacturer Banner</span>
-            </div>
-            <div className="w-full bg-white grid grid-cols-[auto_1fr] mx-auto max-w-[1200px] -mt-[150px] z-10 rounded-lg gap-2 overflow-y-auto">
+        <div className=" w-full h-full grid grid-rows-[auto_1fr] overflow-y-hidden p-2">
+            <div className="w-full bg-white grid grid-cols-[auto_1fr] mx-auto max-w-[1200px] z-10 rounded-lg gap-2 overflow-y-auto">
                 <div className="w-auto h-full flex flex-col p-2">
                     {/* Todo : Add Image */}
                 </div>
-                <div className="w-full grid grid-rows-[auto_1fr] h-full overflow-y-auto">
-
+                <div className="w-full grid grid-rows-[auto_1fr] h-full overflow-y-auto pt-2">
+                <div className="rounded-xl overflow-hidden relative h-[250px] w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-center object-fit flex items-center justify-center"
+                style={{ backgroundImage: "url('./images/tpm_image.jpg')" }}>
+                <div className="absolute inset-0 bg-black opacity-20"></div>
+                </div>
                     <section className="w-full !border-b h-[auto] p-2">
                         <InfoHeader
                             manufacturer={manufacturer}
@@ -370,72 +369,72 @@ const Categories = () => {
 }
 
 const Products = ({ products, searchQuery }: { products?: Manufacturer['products'], searchQuery?: string}) => {
-     if (!products || products.length === 0) {
-        return (
-            <section className="p-2 bg-white">
-                <h3 className="font-bold text-lg mb-2">Products</h3>
-                <p>No products found having {searchQuery}</p>
-            </section>
-        );
-    }
-    // code to add dynamic product data
-    if (products.length > 0 ) {
-        return (
-            <section className="p-2 bg-white">
-                <h3 className="font-bold text-lg mb-2">{searchQuery} - Products</h3>
-                <div className="p-4 grid grid-cols-3 gap-4 h-[auto]">
-                    {products.map(p => (
-                        <ProductBox
-                            key={p.p_id}
-                            name={p.p_name}
-                            description={p.composition.map((c, idx) => (
-                               <div key={idx} className="text-sm text-gray-600">
-                                    • {c}
-                                </div> 
-                            ))}
-                        />
-                    ))}
-                </div>
-            </section>
-        );
-    }
-    // return (<section className=" p-2 bg-white">
-    //     <h3 className="font-bold text-lg mb-2">Products</h3>
-    //     <div className="p-4 grid grid-cols-3 gap-4 h-[auto]">
-    //         {/* Analgesics & Antipyretics */}
-    //         <ProductBox name="Sun-Parcet 500" description="Paracetamol 500mg - Fast acting relief for fever and pain" />
-    //         <ProductBox name="Sun-Fenac Plus" description="Diclofenac Sodium 50mg + Paracetamol 325mg" />
-    //         <ProductBox name="Nimu-Sun Gold" description="Nimesulide 100mg + Paracetamol 325mg Tablet" />
+    //  if (!products || products.length === 0) {
+    //     return (
+    //         <section className="p-2 bg-white">
+    //             <h3 className="font-bold text-lg mb-2">Products</h3>
+    //             <p>No products found having {searchQuery}</p>
+    //         </section>
+    //     );
+    // }
+    // // code to add dynamic product data
+    // if (products.length > 0 ) {
+    //     return (
+    //         <section className="p-2 bg-white">
+    //             <h3 className="font-bold text-lg mb-2">{searchQuery} - Products</h3>
+    //             <div className="p-4 grid grid-cols-3 gap-4 h-[auto]">
+    //                 {products.map(p => (
+    //                     <ProductBox
+    //                         key={p.p_id}
+    //                         name={p.p_name}
+    //                         description={p.composition.map((c, idx) => (
+    //                            <div key={idx} className="text-sm text-gray-600">
+    //                                 • {c}
+    //                             </div> 
+    //                         ))}
+    //                     />
+    //                 ))}
+    //             </div>
+    //         </section>
+    //     );
+    // }
+    return (<section className=" p-2 bg-white">
+        <h3 className="font-bold text-lg mb-2">Products</h3>
+        <div className="p-4 grid grid-cols-3 gap-4 h-[auto]">
+            {/* Analgesics & Antipyretics */}
+            <ProductBox name="Sun-Parcet 500" description="Paracetamol 500mg - Fast acting relief for fever and pain" />
+            <ProductBox name="Sun-Fenac Plus" description="Diclofenac Sodium 50mg + Paracetamol 325mg" />
+            <ProductBox name="Nimu-Sun Gold" description="Nimesulide 100mg + Paracetamol 325mg Tablet" />
 
-    //         {/* Antibiotics & Anti-Infectives */}
-    //         <ProductBox name="Amoxy-Sun 500" description="Amoxicillin 500mg Broad Spectrum Antibiotic" />
-    //         <ProductBox name="Sun-Clav 625" description="Amoxicillin 500mg + Potassium Clavulanate 125mg" />
-    //         <ProductBox name="Azith-Sun 500" description="Azithromycin 500mg USP - 3 Day Course" />
-    //         <ProductBox name="Cef-Sun 200" description="Cefixime 200mg Dispersible Tablet" />
-    //         <ProductBox name="Oflox-Sun OZ" description="Ofloxacin 200mg + Ornidazole 500mg" />
+            {/* Antibiotics & Anti-Infectives */}
+            <ProductBox name="Amoxy-Sun 500" description="Amoxicillin 500mg Broad Spectrum Antibiotic" />
+            <ProductBox name="Sun-Clav 625" description="Amoxicillin 500mg + Potassium Clavulanate 125mg" />
+            <ProductBox name="Azith-Sun 500" description="Azithromycin 500mg USP - 3 Day Course" />
+            <ProductBox name="Cef-Sun 200" description="Cefixime 200mg Dispersible Tablet" />
+            <ProductBox name="Oflox-Sun OZ" description="Ofloxacin 200mg + Ornidazole 500mg" />
 
-    //         {/* Cardiovascular & Anti-Diabetic */}
-    //         <ProductBox name="Telmi-Sun 40" description="Telmisartan 40mg - Blood Pressure Management" />
-    //         <ProductBox name="Amlod-Sun 5" description="Amlodipine 5mg Calcium Channel Blocker" />
-    //         <ProductBox name="Glim-Sun M2" description="Glimepiride 2mg + Metformin 500mg SR" />
+            {/* Cardiovascular & Anti-Diabetic */}
+            <ProductBox name="Telmi-Sun 40" description="Telmisartan 40mg - Blood Pressure Management" />
+            <ProductBox name="Amlod-Sun 5" description="Amlodipine 5mg Calcium Channel Blocker" />
+            <ProductBox name="Glim-Sun M2" description="Glimepiride 2mg + Metformin 500mg SR" />
 
-    //         {/* Gastrointestinal */}
-    //         <ProductBox name="Pant-Sun 40" description="Pantoprazole 40mg Gastro-Resistant Tablets" />
-    //         <ProductBox name="Sun-DSR" description="Pantoprazole 40mg + Domperidone 30mg Sustained Release" />
-    //         <ProductBox name="Om-Sun 20" description="Omeprazole 20mg Antacid Capsules" />
-    //         <ProductBox name="Gel-Sun Antacid" description="Magnesium Hydroxide + Aluminium Hydroxide Gel" />
+            {/* Gastrointestinal */}
+            <ProductBox name="Pant-Sun 40" description="Pantoprazole 40mg Gastro-Resistant Tablets" />
+            <ProductBox name="Sun-DSR" description="Pantoprazole 40mg + Domperidone 30mg Sustained Release" />
+            <ProductBox name="Om-Sun 20" description="Omeprazole 20mg Antacid Capsules" />
+            <ProductBox name="Gel-Sun Antacid" description="Magnesium Hydroxide + Aluminium Hydroxide Gel" />
 
-    //         {/* Vitamins & Supplements */}
-    //         <ProductBox name="Sun-Vit Multivitamin" description="Essential Vitamins, Minerals & Antioxidants" />
-    //         <ProductBox name="Cal-Sun D3" description="Calcium Carbonate 500mg + Vitamin D3 250 IU" />
-    //         <ProductBox name="B-Sun Complex" description="Vitamin B-Complex with B12 and Vitamin C" />
+            {/* Vitamins & Supplements */}
+            <ProductBox name="Sun-Vit Multivitamin" description="Essential Vitamins, Minerals & Antioxidants" />
+            <ProductBox name="Cal-Sun D3" description="Calcium Carbonate 500mg + Vitamin D3 250 IU" />
+            <ProductBox name="B-Sun Complex" description="Vitamin B-Complex with B12 and Vitamin C" />
 
-    //         {/* Respiratory & Allergy */}
-    //         <ProductBox name="Lev-Sun M" description="Levocetirizine 5mg + Montelukast 10mg" />
-    //         <ProductBox name="Cough-Sun Expectorant" description="Terbutaline + Guaiphenesin + Bromhexine Syrup" />
+            {/* Respiratory & Allergy */}
+            <ProductBox name="Lev-Sun M" description="Levocetirizine 5mg + Montelukast 10mg" />
+            <ProductBox name="Cough-Sun Expectorant" description="Terbutaline + Guaiphenesin + Bromhexine Syrup" />
 
-    //     </div>
-    // </section>)
+        </div>
+    </section>)
 }
 
 const extractCompositionName = (value: string) => {

@@ -57,7 +57,7 @@ export default function HomePage() {
     return (<>
         <Flex direction={'column'} gap={'1rem'} className="w-full mx-auto h-full px-4 py-4">
             <div className="grid grid-cols-2 gap-8">
-                <VStack alignItems="flex-start" spacing={8} className="p-[2rem] ">
+                <VStack alignItems="flex-start" spacing={8} className="w-auto p-[2rem]">
                     <div className="">
                         <h1 className="flex items-center gap-2"><Image src="/logos/logo.png" alt="PharmaGrid Logo" boxSize="40px" />PharmaGrid </h1>
                         <span className="text-sm font-medium text-gray-500">Connecting Manufacturers, Distributors & Healthcare Businesses.</span>
@@ -101,7 +101,7 @@ export default function HomePage() {
                     </div>
                 </VStack>
                 <VStack>
-                    <div className="w-full p-[2rem] rounded-4xl backdrop-blur-xl bg-[#ffffff40] !border-[white] !border-[1px]  drop-shadow-lg">
+                    <div className="w-full mx-auto p-[2rem] rounded-4xl backdrop-blur-xl bg-[#ffffff40] !border-[white] !border-[1px]  drop-shadow-lg">
                         <div className="flex">
                             <label className="!text-xl !font-bold p-4 flex-grow">Tell us what you are looking for?</label>
                             {/* <div className="flex">{SEARCH_OPTIONS_LIST.map(([key, value], idx: number) => {
