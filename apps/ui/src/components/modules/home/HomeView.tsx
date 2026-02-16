@@ -1,5 +1,5 @@
 'use client';
-import Banner from '@/app/home/components/Banner';
+import Banner from '@/app/_home/components/Banner';
 import { Box, AbsoluteCenter, Button, Divider, VStack, Flex, FormControl, FormLabel, Center, Card, Image, Input, useDisclosure, Select, Grid } from '@chakra-ui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { CiLocationOn } from 'react-icons/ci';
@@ -10,7 +10,7 @@ import View from './QuestionnaireView';
 import { cn } from '../../../../utils';
 import { useAppPrimaryContext } from '@/context/AppContext';
 import { useRouter } from 'next/navigation';
-import SectionWrapper from '@/app/home/components/SectionWrapper';
+import SectionWrapper from '@/app/_home/components/SectionWrapper';
 
 
 const HomeView: React.FC = () => {
